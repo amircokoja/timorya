@@ -1,0 +1,145 @@
+# .NET Core-specific files
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.nuspec
+*.cache
+*.log
+*.snl
+*.suo
+*.user
+*.userosscache
+*.sln.ide
+*.sln.docstates
+*.csproj.user
+
+# Visual Studio-specific files
+.vscode/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.ide
+*.vsconfig
+
+# Rider-specific files
+.idea/
+*.sln.iml
+
+# Build and package artifacts
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+packages/
+TestResults/
+NUnitTestAdapter/
+*.vspx
+*.vspx*
+*.vspkg
+*.vspkg*
+
+# Resharper files
+_ReSharper*/
+**/JetBrains.ReSharper.*
+*.DotSettings.user
+resharper.xml
+
+# Entity Framework migrations
+# Migrations/
+
+# ASP.NET Core specific files
+appsettings*.json
+secrets.json
+secret-manager/
+
+# Log and cache files
+logs/
+*.log
+*.tlog
+*.cache
+
+# Dependency directories
+node_modules/
+bower_components/
+wwwroot/lib/
+wwwroot/dist/
+
+# Docker files
+**/[Dd]ockerfile
+**/[Dd]ocker-compose*
+**/docker-compose.override.*
+**/docker-compose.debug.yml
+**/docker-compose.vs.debug.yml
+**/docker-compose.vs.release.yml
+
+# Environment and config files
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Azure specific files
+azure-pipelines.yml
+**/ServiceFabricBackup/
+**/ServiceFabricBackupArchive/
+**/ServiceFabricProject/
+
+# SQL Server localdb files
+*.mdf
+*.ldf
+
+# Rider and IntelliJ-based IDE files
+.idea/
+
+# Backup and temporary files
+*.bak
+*.swp
+*.swo
+*.swn
+*.bak
+*.tmp
+*.old
+*~
+
+# Generated and published output
+publish/
+*.publishsettings
+*.publish.xml
+
+# JetBrains Rider project-specific
+.idea/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux system files
+*~
+.nfs*
+
+# Coverage files
+coverage/
+*.coverage
+*.coverlet
+coverage-results/
+
+# CI/CD specific
+build/
+CI/
+deployment/
+temp/
