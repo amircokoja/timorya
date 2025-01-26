@@ -56,4 +56,11 @@ public class UsersController(ISender sender) : ControllerBase
 
         return Ok(result.Value);
     }
+
+    [HttpGet("test")]
+    [Authorize]
+    public IActionResult GetTestData()
+    {
+        return Ok(new { Message = "Hello World" });
+    }
 }

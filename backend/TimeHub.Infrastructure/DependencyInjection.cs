@@ -28,6 +28,8 @@ public static class DependencyInjection
 
         AddOpenApi(services);
 
+        AddCORSConfig(services, configuration);
+
         hostBuilder.ConfigureHttps(configuration);
 
         return services;
@@ -99,5 +101,24 @@ public static class DependencyInjection
         services.AddScoped<IJwtService, JwtService>();
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+    }
+
+    private static void AddCORSConfig(IServiceCollection services, IConfiguration configuration)
+    {
+        var environment = configuration["ASPNETCORE_ENVIRONMENT"];
+
+        if (environment == "Development")
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    "AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    }
+                );
+            });
+        }
     }
 }

@@ -8,6 +8,8 @@ import { AppleIcon } from "../../components/icons/apple-icon";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../../components/ui/input";
 import CustomLink from "../../components/ui/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 type FormValues = {
   email: string;
@@ -16,6 +18,16 @@ type FormValues = {
 };
 
 export default function Register() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      router.replace("/dashboard");
+    }
+  }, [router]);
+
   const methods = useForm<FormValues>({
     mode: "onBlur",
     defaultValues: {

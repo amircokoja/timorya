@@ -8,6 +8,9 @@ import { AppleIcon } from "../../components/icons/apple-icon";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../../components/ui/input";
 import CustomLink from "../../components/ui/link";
+import { usePost } from "@/src/hooks/use-post";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 type FormValues = {
   email: string;
@@ -15,6 +18,23 @@ type FormValues = {
 };
 
 export default function Login() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      router.replace("/dashboard");
+    }
+  }, [router]);
+
+  const { mutateAsync: loginUserAsync } = usePost<
+    FormValues,
+    { accessToken: string }
+  >({
+    url: "/users/login",
+  });
+
   const methods = useForm<FormValues>({
     mode: "onBlur",
     defaultValues: {
@@ -28,8 +48,12 @@ export default function Login() {
     formState: { errors },
   } = methods;
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Form Data:", data);
+  const onSubmit = async (data: FormValues) => {
+    const response = await loginUserAsync(data);
+    if (response.accessToken) {
+      localStorage.setItem("accessToken", response.accessToken);
+      router.push("/dashboard");
+    }
   };
 
   return (
