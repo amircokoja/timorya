@@ -11,6 +11,9 @@ import CustomLink from "../../components/ui/link";
 import { usePost } from "@/src/hooks/use-post";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { AxiosError } from "axios";
+import { ApiError } from "@/src/models/abstractions/api-error";
 
 type FormValues = {
   email: string;
@@ -49,7 +52,14 @@ export default function Login() {
   } = methods;
 
   const onSubmit = async (data: FormValues) => {
-    const response = await loginUserAsync(data);
+    const response = await loginUserAsync(data, {
+      onError: (error: AxiosError<ApiError>) => {
+        if (error.response?.data?.name) {
+          toast.error(error.response.data.name);
+        }
+      },
+    });
+
     if (response.accessToken) {
       localStorage.setItem("accessToken", response.accessToken);
       router.push("/dashboard");
@@ -58,6 +68,7 @@ export default function Login() {
 
   return (
     <AuthLayout>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="col-span-6 mx-auto w-full rounded-lg bg-white shadow sm:max-w-lg md:mt-0 xl:p-0">
         <div className="space-y-4 p-6 sm:p-8 lg:space-y-6">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 sm:text-2xl">

@@ -4,10 +4,12 @@ import {
   UseMutationOptions,
 } from "@tanstack/react-query";
 import api from "../services/api";
+import { AxiosError } from "axios";
+import { ApiError } from "../models/abstractions/api-error";
 
 interface UsePostOptions<TRequest, TResponse> {
   url: string;
-  options?: UseMutationOptions<TResponse, unknown, TRequest>;
+  options?: UseMutationOptions<TResponse, AxiosError<ApiError>, TRequest>;
 }
 
 export function usePost<TRequest, TResponse>({
@@ -21,7 +23,7 @@ export function usePost<TRequest, TResponse>({
     return response.data;
   };
 
-  return useMutation<TResponse, unknown, TRequest>({
+  return useMutation<TResponse, AxiosError<ApiError>, TRequest>({
     mutationFn,
     ...options,
   });
