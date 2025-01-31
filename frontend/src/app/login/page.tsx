@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { ApiError } from "@/src/models/abstractions/api-error";
+import { errorExtractor } from "@/src/services/error-extractor";
 
 type FormValues = {
   email: string;
@@ -54,9 +55,8 @@ export default function Login() {
   const onSubmit = async (data: FormValues) => {
     const response = await loginUserAsync(data, {
       onError: (error: AxiosError<ApiError>) => {
-        if (error.response?.data?.name) {
-          toast.error(error.response.data.name);
-        }
+        const errorMessage = errorExtractor(error);
+        toast.error(errorMessage);
       },
     });
 

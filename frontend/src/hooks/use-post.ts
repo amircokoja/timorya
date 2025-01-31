@@ -5,11 +5,11 @@ import {
 } from "@tanstack/react-query";
 import api from "../services/api";
 import { AxiosError } from "axios";
-import { ApiError } from "../models/abstractions/api-error";
+import { CustomApiError } from "../models/abstractions/api-error";
 
 interface UsePostOptions<TRequest, TResponse> {
   url: string;
-  options?: UseMutationOptions<TResponse, AxiosError<ApiError>, TRequest>;
+  options?: UseMutationOptions<TResponse, AxiosError<CustomApiError>, TRequest>;
 }
 
 export function usePost<TRequest, TResponse>({
@@ -23,7 +23,7 @@ export function usePost<TRequest, TResponse>({
     return response.data;
   };
 
-  return useMutation<TResponse, AxiosError<ApiError>, TRequest>({
+  return useMutation<TResponse, AxiosError<CustomApiError>, TRequest>({
     mutationFn,
     ...options,
   });

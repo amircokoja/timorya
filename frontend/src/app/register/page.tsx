@@ -23,6 +23,7 @@ import {
   lastNameValidation,
   passwordValidation,
 } from "../data/validation-values/register-user-validations";
+import { errorExtractor } from "@/src/services/error-extractor";
 
 export type RegistrationForm = {
   email: string;
@@ -76,9 +77,8 @@ export default function Register() {
         router.push("/login");
       },
       onError: (error: AxiosError<ApiError>) => {
-        if (error.response?.data?.name) {
-          toast.error(error.response.data.name);
-        }
+        const errorMessage = errorExtractor(error);
+        toast.error(errorMessage);
       },
     });
   };
