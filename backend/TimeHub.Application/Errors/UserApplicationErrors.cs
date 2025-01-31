@@ -8,4 +8,6 @@ public static class UserApplicationErrors
         new("User.PasswordMismatch", "The provided passwords do not match.");
     public static readonly Error InvalidCredentials =
         new("User.InvalidCredentials", "Invalid credentials.");
+    public static readonly Error EmailAlreadyExists =
+        new("User.EmailAlreadyExists", "A user with the provided email already exists.");
 }

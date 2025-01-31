@@ -10,8 +10,6 @@ export default function Dashboard() {
     url: "/users/test",
   });
 
-  console.log(data);
-
   const router = useRouter();
 
   useEffect(() => {

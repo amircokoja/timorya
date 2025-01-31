@@ -11,9 +11,9 @@ public record Password(string Value)
             return Result.Failure<Password>(UserErrors.PasswordCannotBeEmpty);
         }
 
-        if (password.Length < 8)
+        if (password.Length < 6)
         {
-            return Result.Failure<Password>(UserErrors.PasswordMustBeAtLeast8CharactersLong);
+            return Result.Failure<Password>(UserErrors.PasswordMustBeAtLeast6CharactersLong);
         }
 
         return Result.Success(new Password(HashPassword(password)));

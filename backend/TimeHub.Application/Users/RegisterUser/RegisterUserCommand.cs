@@ -6,7 +6,6 @@ public sealed record RegisterUserCommand(
     string FirstName,
     string LastName,
     string Email,
-    string Role,
     string Password,
     string ConfirmPassword
 ) : ICommand<RegisterUserResponse>;

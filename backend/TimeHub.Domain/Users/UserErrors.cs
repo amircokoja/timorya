@@ -6,10 +6,10 @@ public static class UserErrors
 {
     public static readonly Error PasswordCannotBeEmpty =
         new("User.PasswordCannotBeEmpty", "Password cannot be empty");
-    public static readonly Error PasswordMustBeAtLeast8CharactersLong =
+    public static readonly Error PasswordMustBeAtLeast6CharactersLong =
         new(
-            "User.PasswordMustBeAtLeast8CharactersLong",
-            "Password must be at least 8 characters long"
+            "User.PasswordMustBeAtLeast6CharactersLong",
+            "Password must be at least 6 characters long"
         );
     public static readonly Error AlreadyPartOfOrganization =
         new("User.AlreadyPartOfOrganization", "User is already part of this organization");

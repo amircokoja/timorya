@@ -1,5 +1,5 @@
 export const baseStyles =
-  "inline-flex items-center justify-center w-full rounded-lg px-5 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4";
+  "inline-flex items-center justify-center w-full rounded-lg px-5 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
 
 export const colorVariants: Record<string, string> = {
   blue: "text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300",

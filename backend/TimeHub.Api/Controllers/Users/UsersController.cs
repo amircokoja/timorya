@@ -24,7 +24,6 @@ public class UsersController(ISender sender) : ControllerBase
             request.FirstName,
             request.LastName,
             request.Email,
-            request.Role,
             request.Password,
             request.ConfirmPassword
         );

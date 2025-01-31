@@ -13,7 +13,6 @@ internal sealed class RegisterUserCommandHandler(
 {
     private readonly IUserRepository _userRepository = userRepository;
     private readonly IOrganizationRepository _organizationRepository = organizationRepository;
-
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public async Task<Result<RegisterUserResponse>> Handle(
@@ -21,6 +20,13 @@ internal sealed class RegisterUserCommandHandler(
         CancellationToken cancellationToken
     )
     {
+        var dbUser = await _userRepository.GetByEmailAsync(request.Email);
+
+        if (dbUser is not null)
+        {
+            return Result.Failure<RegisterUserResponse>(UserApplicationErrors.EmailAlreadyExists);
+        }
+
         if (request.Password != request.ConfirmPassword)
         {
             return Result.Failure<RegisterUserResponse>(UserApplicationErrors.PasswordMismatch);

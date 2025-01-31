@@ -23,6 +23,13 @@ type FormValues = {
 export default function Login() {
   const router = useRouter();
 
+  const { mutateAsync: loginUserAsync } = usePost<
+    FormValues,
+    { accessToken: string }
+  >({
+    url: "/users/login",
+  });
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
@@ -30,13 +37,6 @@ export default function Login() {
       router.replace("/dashboard");
     }
   }, [router]);
-
-  const { mutateAsync: loginUserAsync } = usePost<
-    FormValues,
-    { accessToken: string }
-  >({
-    url: "/users/login",
-  });
 
   const methods = useForm<FormValues>({
     mode: "onBlur",
@@ -99,19 +99,19 @@ export default function Login() {
               onSubmit={handleSubmit(onSubmit)}
             >
               <Input
-                name="email"
                 label="Email"
                 type="email"
                 placeholder="Enter your email"
                 error={errors.email?.message}
+                {...methods.register("email")}
               />
 
               <Input
-                name="password"
                 label="Password"
                 type="password"
                 placeholder="••••••••"
                 error={errors.password?.message}
+                {...methods.register("password")}
               />
               <div className="flex justify-end">
                 <CustomLink href="#" text="Forgot password?" />
