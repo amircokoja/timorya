@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Exceptions;
-using TimeHub.Domain.Abstractions;
 using TimeHub.Domain.Users;
 
 namespace TimeHub.Infrastructure;
 
-public sealed class ApplicationDbContext : DbContext, IUnitOfWork
+public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
@@ -16,6 +16,7 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Organization> Organizations { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -15,8 +15,11 @@ public sealed class User : Entity
     public Email Email { get; private set; }
 
     public Password Password { get; private set; }
+
     public int CurrentOrganizationId { get; private set; }
+
     public Organization CurrentOrganization { get; private set; }
+
     public IReadOnlyCollection<UserOrganization> UserOrganizations =>
         _userOrganizations.AsReadOnly();
 
@@ -40,10 +43,10 @@ public sealed class User : Entity
 
     public Result AddToOrganization(Organization organization, Role role)
     {
-        // if (_userOrganizations.Any(uo => uo.OrganizationId == organization?.Id))
-        // {
-        //     return Result.Failure(UserErrors.AlreadyPartOfOrganization);
-        // }
+        if (_userOrganizations.Any(uo => uo.OrganizationId == organization?.Id))
+        {
+            return Result.Failure(UserErrors.AlreadyPartOfOrganization);
+        }
 
         _userOrganizations.Add(new UserOrganization(this, organization, role));
 

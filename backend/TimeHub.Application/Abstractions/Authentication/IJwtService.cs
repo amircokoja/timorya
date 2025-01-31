@@ -5,4 +5,5 @@ namespace TimeHub.Application.Abstractions.Authentication;
 public interface IJwtService
 {
     string GenerateJwtToken(int userId, string email, int organizationId, Role? role);
+    string GenerateRefreshToken();
 }

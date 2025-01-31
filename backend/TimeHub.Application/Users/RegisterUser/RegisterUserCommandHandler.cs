@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Abstractions.Messaging;
 using TimeHub.Application.Errors;
 using TimeHub.Domain.Abstractions;
@@ -5,22 +7,20 @@ using TimeHub.Domain.Users;
 
 namespace TimeHub.Application.Users.RegisterUser;
 
-internal sealed class RegisterUserCommandHandler(
-    IUserRepository userRepository,
-    IOrganizationRepository organizationRepository,
-    IUnitOfWork unitOfWork
-) : ICommandHandler<RegisterUserCommand, RegisterUserResponse>
+internal sealed class RegisterUserCommandHandler(IApplicationDbContext context)
+    : ICommandHandler<RegisterUserCommand, RegisterUserResponse>
 {
-    private readonly IUserRepository _userRepository = userRepository;
-    private readonly IOrganizationRepository _organizationRepository = organizationRepository;
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IApplicationDbContext _context = context;
 
     public async Task<Result<RegisterUserResponse>> Handle(
         RegisterUserCommand request,
         CancellationToken cancellationToken
     )
     {
-        var dbUser = await _userRepository.GetByEmailAsync(request.Email);
+        var dbUser = await _context
+            .Set<User>()
+            .Include(u => u.UserOrganizations)
+            .FirstOrDefaultAsync(u => u.Email == new Email(request.Email), cancellationToken);
 
         if (dbUser is not null)
         {
@@ -51,10 +51,12 @@ internal sealed class RegisterUserCommandHandler(
             organization
         );
 
-        _organizationRepository.Add(organization);
-        _userRepository.Add(user, organization);
+        _context.Set<Organization>().Add(organization);
+        _context.Set<Role>().Attach(Role.Owner);
+        user.AddToOrganization(organization, Role.Owner);
+        _context.Set<User>().Add(user);
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         return new RegisterUserResponse(user);
     }

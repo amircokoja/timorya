@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using TimeHub.Application.Abstractions.Authentication;
+using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Abstractions.Messaging;
 using TimeHub.Application.Errors;
 using TimeHub.Domain.Abstractions;
@@ -6,20 +8,21 @@ using TimeHub.Domain.Users;
 
 namespace TimeHub.Application.Users.LoginUser;
 
-internal sealed class LoginUserCommandHandler(
-    IUserRepository userRepository,
-    IJwtService jwtService
-) : ICommandHandler<LoginUserCommand, LoginUserResponse>
+internal sealed class LoginUserCommandHandler(IApplicationDbContext context, IJwtService jwtService)
+    : ICommandHandler<LoginUserCommand, LoginUserResponse>
 {
-    private readonly IUserRepository _userRepository = userRepository;
     private readonly IJwtService _jwtService = jwtService;
+    private readonly IApplicationDbContext _context = context;
 
     public async Task<Result<LoginUserResponse>> Handle(
         LoginUserCommand request,
         CancellationToken cancellationToken
     )
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email);
+        var user = await _context
+            .Set<User>()
+            .Include(u => u.UserOrganizations)
+            .FirstOrDefaultAsync(u => u.Email == new Email(request.Email), cancellationToken);
 
         if (user == null || !user.VerifyPassword(request.Password))
         {
@@ -38,6 +41,12 @@ internal sealed class LoginUserCommandHandler(
             role
         );
 
-        return new LoginUserResponse(token);
+        // Saving refresh token to the database
+        var refreshTokenValue = _jwtService.GenerateRefreshToken();
+        var refreshToken = new RefreshToken(refreshTokenValue, user.Id, DateTime.UtcNow.AddDays(7));
+        _context.Set<RefreshToken>().Add(refreshToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return new LoginUserResponse(token, refreshTokenValue);
     }
 }

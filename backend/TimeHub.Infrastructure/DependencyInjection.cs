@@ -6,11 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using TimeHub.Application.Abstractions.Authentication;
-using TimeHub.Domain.Abstractions;
-using TimeHub.Domain.Users;
+using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Infrastructure.Authentication;
 using TimeHub.Infrastructure.Extensions;
-using TimeHub.Infrastructure.Repositories;
 
 namespace TimeHub.Infrastructure;
 
@@ -60,10 +58,9 @@ public static class DependencyInjection
             )
         );
 
-        services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-
-        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IApplicationDbContext>(provider =>
+            provider.GetRequiredService<ApplicationDbContext>()
+        );
     }
 
     private static void AddAuthentication(IServiceCollection services, IConfiguration configuration)

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeHub.Api.Controllers.Users.Models;
 using TimeHub.Application.Users.LoginUser;
+using TimeHub.Application.Users.LoginUserWithRefreshToken;
 using TimeHub.Application.Users.RegisterUser;
 using TimeHub.Domain.Abstractions;
 
@@ -45,6 +46,24 @@ public class UsersController(ISender sender) : ControllerBase
     )
     {
         var command = new LoginUserCommand(request.Email, request.Password);
+
+        Result<LoginUserResponse> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("login-with-refresh-token")]
+    public async Task<IActionResult> LoginWithRefreshToken(
+        [FromBody] LoginUserWithRefreshTokenRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new LoginUserWithRefreshTokenCommand(request.RefreshToken);
 
         Result<LoginUserResponse> result = await _sender.Send(command, cancellationToken);
 

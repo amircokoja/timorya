@@ -15,6 +15,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { ApiError } from "@/src/models/abstractions/api-error";
 import { errorExtractor } from "@/src/services/error-extractor";
+import { LoginUserResponse } from "@/src/models/users/login-user-response";
 
 type FormValues = {
   email: string;
@@ -26,7 +27,7 @@ export default function Login() {
 
   const { mutateAsync: loginUserAsync } = usePost<
     FormValues,
-    { accessToken: string }
+    LoginUserResponse
   >({
     url: "/users/login",
   });
@@ -60,8 +61,9 @@ export default function Login() {
       },
     });
 
-    if (response.accessToken) {
+    if (response.accessToken && response.refreshToken) {
       localStorage.setItem("accessToken", response.accessToken);
+      localStorage.setItem("refreshToken", response.refreshToken);
       router.push("/dashboard");
     }
   };
