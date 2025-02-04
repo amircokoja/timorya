@@ -1,6 +1,26 @@
 export const baseStyles =
-  "inline-flex items-center whitespace-nowrap justify-center w-full rounded-lg px-5 py-2.5 text-center text-sm font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
+  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-center text-sm font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
 
+// Define size styles for text + icon or just icon
+export const sizeVariants: Record<
+  string,
+  { default: string; iconOnly: string }
+> = {
+  sm: {
+    default: "px-3 py-1.5 text-xs",
+    iconOnly: "w-8 h-8 p-1",
+  },
+  md: {
+    default: "px-4 py-2 text-sm",
+    iconOnly: "w-10 h-10 p-1.5",
+  },
+  lg: {
+    default: "px-5 py-2.5 text-base",
+    iconOnly: "w-12 h-12 p-2",
+  },
+};
+
+// Define color styles
 export const colorVariants: Record<string, string> = {
   blue: "text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-300",
   red: "text-white bg-red-600 hover:bg-red-700 focus:ring-red-300",
@@ -37,6 +57,14 @@ export const getButtonStyles = (
     : variant === "outline"
       ? outlineVariants[color]
       : ghostVariants[color];
+};
+
+// Function to get size styles
+export const getSizeStyles = (
+  size: keyof typeof sizeVariants,
+  hasText: boolean,
+) => {
+  return hasText ? sizeVariants[size].default : sizeVariants[size].iconOnly;
 };
 
 export type ButtonColor = keyof typeof colorVariants;

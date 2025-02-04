@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Button from "@/src/components/ui/button";
 import { useGet } from "@/src/hooks/use-get";
+import AppLayout from "@/src/components/layouts/app-layout/app-layout";
 
 export default function Dashboard() {
   const { data } = useGet({
@@ -21,17 +21,8 @@ export default function Dashboard() {
   }, [router]);
 
   return (
-    <div className="max-w-md p-10">
-      Dashboard page
-      <Button
-        style={{ marginTop: "20px" }}
-        text="Logout"
-        color="white"
-        onClick={() => {
-          localStorage.removeItem("accessToken");
-          router.replace("/login");
-        }}
-      />
-    </div>
+    <>
+      <AppLayout>content</AppLayout>
+    </>
   );
 }
