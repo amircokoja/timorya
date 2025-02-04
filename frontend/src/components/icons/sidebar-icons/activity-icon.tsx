@@ -10,8 +10,8 @@ export const ActivityIcon = () => {
       <path
         d="M4.4 11H7.33333L9.53333 4.4L12.4667 17.6L14.6667 11H17.6"
         stroke="#374151"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

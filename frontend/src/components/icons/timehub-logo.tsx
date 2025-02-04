@@ -28,8 +28,8 @@ export const TimeHubLogo = () => {
           y2="16.4761"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#016EFD" />
-          <stop offset="1" stop-color="#014297" />
+          <stop stopColor="#016EFD" />
+          <stop offset="1" stopColor="#014297" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_1074_11"
@@ -39,8 +39,8 @@ export const TimeHubLogo = () => {
           y2="16.4761"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#016EFD" />
-          <stop offset="1" stop-color="#014297" />
+          <stop stopColor="#016EFD" />
+          <stop offset="1" stopColor="#014297" />
         </linearGradient>
       </defs>
     </svg>
