@@ -15,6 +15,7 @@ export interface SidebarGroupType {
 export interface SidebarItemType {
   icon: () => JSX.Element;
   label: string;
+  href: string;
 }
 
 export const GeneralSidebarGroup: SidebarGroupType = {
@@ -23,10 +24,12 @@ export const GeneralSidebarGroup: SidebarGroupType = {
     {
       label: "Dashboard",
       icon: DashboardIcon,
+      href: "/app/dashboard",
     },
     {
       label: "Calendar",
       icon: CalendarIcon,
+      href: "/app/calendar",
     },
   ],
 };
@@ -37,10 +40,12 @@ export const ToolsSidebarGroup: SidebarGroupType = {
     {
       label: "Reports",
       icon: ReportsIcon,
+      href: "/app/reports",
     },
     {
       label: "Activity",
       icon: ActivityIcon,
+      href: "/app/activity",
     },
   ],
 };
@@ -49,20 +54,24 @@ export const SupportSidebarGroup: SidebarGroupType = {
   title: "Support",
   items: [
     {
-      label: "Projects",
-      icon: ProjectsIcon,
-    },
-    {
       label: "Clients",
       icon: ClientsIcon,
+      href: "/app/clients",
+    },
+    {
+      label: "Projects",
+      icon: ProjectsIcon,
+      href: "/app/projects",
     },
     {
       label: "Members",
       icon: MembersIcon,
+      href: "/app/members",
     },
     {
       label: "Settings",
       icon: SettingsIcon,
+      href: "/app/settings",
     },
   ],
 };

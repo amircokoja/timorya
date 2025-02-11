@@ -36,7 +36,7 @@ export default function Login() {
     const token = localStorage.getItem("accessToken");
 
     if (token) {
-      router.replace("/dashboard");
+      router.replace("/app/dashboard");
     }
   }, [router]);
 
@@ -64,7 +64,7 @@ export default function Login() {
     if (response.accessToken && response.refreshToken) {
       localStorage.setItem("accessToken", response.accessToken);
       localStorage.setItem("refreshToken", response.refreshToken);
-      router.push("/dashboard");
+      router.push("/app/dashboard");
     }
   };
 

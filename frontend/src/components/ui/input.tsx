@@ -26,7 +26,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {...(register ? register(name, registerOptions) : {})} // Use register only if available
           ref={ref}
           {...props}
-          className={`block w-full rounded-lg border ${
+          className={`block w-full rounded-lg border text-sm ${
             error ? "border-red-500" : "border-gray-300"
           } bg-gray-50 p-2.5 text-gray-900 focus:border-blue-600 focus:ring-blue-600`}
         />

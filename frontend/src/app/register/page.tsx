@@ -48,7 +48,7 @@ export default function Register() {
     const token = localStorage.getItem("accessToken");
 
     if (token) {
-      router.replace("/dashboard");
+      router.replace("/app/dashboard");
     }
   }, [router]);
 

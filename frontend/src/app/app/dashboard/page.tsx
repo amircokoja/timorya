@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useGet } from "@/src/hooks/use-get";
-import AppLayout from "@/src/components/layouts/app-layout/app-layout";
 
 export default function Dashboard() {
   const { data } = useGet({
@@ -20,9 +19,5 @@ export default function Dashboard() {
     }
   }, [router]);
 
-  return (
-    <>
-      <AppLayout>content</AppLayout>
-    </>
-  );
+  return <>dashboard</>;
 }
