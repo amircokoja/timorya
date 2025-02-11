@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Exceptions;
+using TimeHub.Domain.Clients;
 using TimeHub.Domain.Users;
 
 namespace TimeHub.Infrastructure;
@@ -17,6 +18,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Organization> Organizations { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Client> Clients { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

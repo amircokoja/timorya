@@ -3,6 +3,7 @@ using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Abstractions.Messaging;
 using TimeHub.Application.Errors;
 using TimeHub.Domain.Abstractions;
+using TimeHub.Domain.Shared;
 using TimeHub.Domain.Users;
 
 namespace TimeHub.Application.Users.RegisterUser;

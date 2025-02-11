@@ -1,4 +1,5 @@
 using TimeHub.Domain.Abstractions;
+using TimeHub.Domain.Shared;
 
 namespace TimeHub.Domain.Users;
 

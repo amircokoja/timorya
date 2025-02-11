@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TimeHub.Domain.Shared;
 using TimeHub.Domain.Users;
 
 namespace TimeHub.Infrastructure.Configurations;
