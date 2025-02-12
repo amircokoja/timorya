@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { usePost } from "@/src/hooks/use-post";
 import { AxiosError } from "axios";
-import toast, { Toaster } from "react-hot-toast";
 import { RegisterUserResponse } from "@/src/models/users/register-user-response";
 import { ApiError } from "@/src/models/abstractions/api-error";
 import {
@@ -24,6 +23,7 @@ import {
   passwordValidation,
 } from "../data/validation-values/register-user-validations";
 import { errorExtractor } from "@/src/services/error-extractor";
+import { useToastStore } from "@/src/store/toast-store";
 
 export type RegistrationForm = {
   email: string;
@@ -36,6 +36,7 @@ export type RegistrationForm = {
 
 export default function Register() {
   const router = useRouter();
+  const { showToast } = useToastStore();
 
   const { mutateAsync: registerUserAsync, isPending } = usePost<
     RegistrationForm,
@@ -73,19 +74,18 @@ export default function Register() {
   const onSubmit = async (data: RegistrationForm) => {
     await registerUserAsync(data, {
       onSuccess: () => {
-        toast.success("Account created successfully. Please login.");
+        showToast("Account created successfully. Please login.", "success");
         router.push("/login");
       },
       onError: (error: AxiosError<ApiError>) => {
         const errorMessage = errorExtractor(error);
-        toast.error(errorMessage);
+        showToast(errorMessage, "error");
       },
     });
   };
 
   return (
     <AuthLayout>
-      <Toaster position="top-center" reverseOrder={false} />
       <div className="col-span-6 mx-auto w-full rounded-lg bg-white shadow sm:max-w-lg md:mt-0 xl:p-0">
         <div className="space-y-4 p-6 sm:p-8 lg:space-y-6">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 sm:text-2xl">

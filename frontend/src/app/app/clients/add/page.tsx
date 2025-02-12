@@ -6,9 +6,17 @@ import {
   lastNameValidation,
 } from "@/src/app/data/validation-values/client-form-validation";
 import Breadcrumbs from "@/src/components/ui/breadcrumbs";
+import Button from "@/src/components/ui/button";
 import ColorSelector from "@/src/components/ui/color-selector";
 import Input from "@/src/components/ui/input";
 import Select from "@/src/components/ui/select";
+import { usePost } from "@/src/hooks/use-post";
+import { ApiError } from "@/src/models/abstractions/api-error";
+import { ClientDto } from "@/src/models/clients/client-dto";
+import { errorExtractor } from "@/src/services/error-extractor";
+import { useToastStore } from "@/src/store/toast-store";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 
 export type ClientsForm = {
@@ -21,6 +29,15 @@ export type ClientsForm = {
 };
 
 export default function AddClient() {
+  const { showToast } = useToastStore();
+  const router = useRouter();
+  const { mutateAsync: createClientAsync, isPending } = usePost<
+    ClientsForm,
+    ClientDto
+  >({
+    url: "/clients",
+  });
+
   const methods = useForm<ClientsForm>({
     mode: "onBlur",
     defaultValues: {
@@ -39,11 +56,19 @@ export default function AddClient() {
   } = methods;
 
   const onSubmit = async (data: ClientsForm) => {
-    console.log(data);
+    await createClientAsync(data, {
+      onSuccess: () => {
+        showToast("Client successfully created.", "success");
+        router.push("/app/clients");
+      },
+      onError: (error: AxiosError<ApiError>) => {
+        const errorMessage = errorExtractor(error);
+        showToast(errorMessage, "error");
+      },
+    });
   };
 
   const handleColorChange = (color: string) => {
-    // console.log(color);
     methods.setValue("color", color);
   };
 
@@ -122,12 +147,9 @@ export default function AddClient() {
                 />
               </div>
             </div>
-            <button
-              type="submit"
-              className="mt-4 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-200 sm:mt-6"
-            >
-              Add user
-            </button>
+            <div className="mt-6">
+              <Button text="Add user" type="submit" />
+            </div>
           </form>
         </FormProvider>
       </div>
