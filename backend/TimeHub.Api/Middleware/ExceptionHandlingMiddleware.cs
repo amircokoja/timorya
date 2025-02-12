@@ -60,6 +60,14 @@ internal sealed class ExceptionHandlingMiddleware
                     "One or more validation errors has occurred",
                     validationException.Errors
                 ),
+            UnauthorizedAccessException _
+                => new ExceptionDetails(
+                    StatusCodes.Status401Unauthorized,
+                    "Unauthorized",
+                    "Unauthorized",
+                    "You are not authorized to perform this action",
+                    null
+                ),
             _
                 => new ExceptionDetails(
                     StatusCodes.Status500InternalServerError,

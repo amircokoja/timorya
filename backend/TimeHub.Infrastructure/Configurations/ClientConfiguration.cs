@@ -39,7 +39,7 @@ internal sealed class ClientConfiguration : IEntityTypeConfiguration<Client>
         builder
             .Property(client => client.Color)
             .HasMaxLength(200)
-            .HasConversion(color => color.Code, value => new Color(value));
+            .HasConversion(color => color.Value, value => new Color(value));
 
         builder
             .HasOne(client => client.Organization)

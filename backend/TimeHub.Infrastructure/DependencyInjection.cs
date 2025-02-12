@@ -7,7 +7,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using TimeHub.Application.Abstractions.Authentication;
 using TimeHub.Application.Abstractions.Interfaces;
+using TimeHub.Application.Users;
 using TimeHub.Infrastructure.Authentication;
+using TimeHub.Infrastructure.Entities.Users;
 using TimeHub.Infrastructure.Extensions;
 
 namespace TimeHub.Infrastructure;
@@ -98,6 +100,9 @@ public static class DependencyInjection
         services.AddScoped<IJwtService, JwtService>();
 
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+
+        services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
     }
 
     private static void AddCORSConfig(IServiceCollection services, IConfiguration configuration)

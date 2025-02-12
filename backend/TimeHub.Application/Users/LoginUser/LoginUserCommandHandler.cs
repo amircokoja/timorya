@@ -23,6 +23,7 @@ internal sealed class LoginUserCommandHandler(IApplicationDbContext context, IJw
         var user = await _context
             .Set<User>()
             .Include(u => u.UserOrganizations)
+            .ThenInclude(uo => uo.Role)
             .FirstOrDefaultAsync(u => u.Email == new Email(request.Email), cancellationToken);
 
         if (user == null || !user.VerifyPassword(request.Password))
