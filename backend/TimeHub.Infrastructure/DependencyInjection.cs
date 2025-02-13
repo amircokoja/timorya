@@ -28,7 +28,7 @@ public static class DependencyInjection
 
         AddOpenApi(services);
 
-        AddCORSConfig(services, configuration);
+        AddCORSConfig(services);
 
         hostBuilder.ConfigureHttps(configuration);
 
@@ -105,22 +105,17 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserService, CurrentUserService>();
     }
 
-    private static void AddCORSConfig(IServiceCollection services, IConfiguration configuration)
+    private static void AddCORSConfig(IServiceCollection services)
     {
-        var environment = configuration["ASPNETCORE_ENVIRONMENT"];
-
-        if (environment == "Development")
+        services.AddCors(options =>
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy(
-                    "AllowAll",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                    }
-                );
-            });
-        }
+            options.AddPolicy(
+                "AllowAll",
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                }
+            );
+        });
     }
 }
