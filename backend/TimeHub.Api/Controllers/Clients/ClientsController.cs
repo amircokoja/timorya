@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeHub.Api.Controllers.Clients.Models;
 using TimeHub.Application.Clients.CreateClient;
+using TimeHub.Application.Clients.GetClients;
 using TimeHub.Application.Clients.Shared;
 using TimeHub.Domain.Abstractions;
 
@@ -31,6 +32,22 @@ public class ClientController(ISender sender) : ControllerBase
         );
 
         Result<ClientDto> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    {
+        var query = new GetClientsQuery();
+
+        Result<List<ClientDto>> result = await _sender.Send(query, cancellationToken);
 
         if (result.IsFailure)
         {
