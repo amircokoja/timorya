@@ -4,9 +4,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useToastStore } from "@/src/store/toast-store";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools/production";
 
 const queryClient = new QueryClient();
-
 export default function Providers({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -36,6 +36,7 @@ export default function Providers({
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" reverseOrder={false} />
       {children}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }

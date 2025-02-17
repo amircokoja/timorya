@@ -7,7 +7,7 @@ import ClientsTable from "./clients-table";
 export default function ClientsContent() {
   return (
     <section className="p-3 sm:p-5">
-      <div className="relative overflow-hidden bg-white">
+      <div className="overflow-hidden bg-white">
         <div className="flex flex-col items-center justify-between space-y-3 p-2 py-4 md:flex-row md:space-x-4 md:space-y-0">
           <div className="w-full md:w-1/3">
             <form className="flex items-center">

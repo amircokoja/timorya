@@ -12,7 +12,7 @@ interface ButtonProps
   text?: string;
   color?: ButtonColor;
   variant?: ButtonVariant;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   icon?: React.ReactNode;
 }
 

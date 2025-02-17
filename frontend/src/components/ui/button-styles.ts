@@ -1,11 +1,15 @@
 export const baseStyles =
-  "inline-flex items-center justify-center whitespace-nowrap rounded-lg text-center text-sm font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
+  "relative inline-flex items-center justify-center whitespace-nowrap rounded-lg text-center text-sm font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
 
 // Define size styles for text + icon or just icon
 export const sizeVariants: Record<
   string,
   { default: string; iconOnly: string }
 > = {
+  xs: {
+    default: "px-2.5 py-1 text-xxs",
+    iconOnly: "w-7 h-7 p-0.5",
+  },
   sm: {
     default: "px-3 py-1.5 text-xs",
     iconOnly: "w-8 h-8 p-1",

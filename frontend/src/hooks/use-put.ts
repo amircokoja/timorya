@@ -1,17 +1,30 @@
-import { useMutation, UseMutationOptions } from "@tanstack/react-query";
+import {
+  MutationFunction,
+  useMutation,
+  UseMutationOptions,
+} from "@tanstack/react-query";
 import api from "../services/api";
+import { AxiosError } from "axios";
+import { CustomApiError } from "../models/abstractions/api-error";
 
-interface UsePutOptions<T> {
+interface UsePutOptions<TRequest, TResponse> {
   url: string;
-  options?: UseMutationOptions<T, unknown, T, unknown>;
+  options?: UseMutationOptions<TResponse, AxiosError<CustomApiError>, TRequest>;
 }
 
-export function usePut<T>({ url, options }: UsePutOptions<T>) {
-  return useMutation<T, unknown, T>({
-    mutationFn: async (data) => {
-      const { data: response } = await api.put<T>(url, data);
-      return response;
-    },
+export function usePut<TRequest, TResponse>({
+  url,
+  options,
+}: UsePutOptions<TRequest, TResponse>) {
+  const mutationFn: MutationFunction<TResponse, TRequest> = async (
+    data: TRequest,
+  ) => {
+    const response = await api.put<TResponse>(url, data);
+    return response.data;
+  };
+
+  return useMutation<TResponse, AxiosError<CustomApiError>, TRequest>({
+    mutationFn,
     ...options,
   });
 }
