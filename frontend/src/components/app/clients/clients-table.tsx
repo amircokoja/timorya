@@ -4,20 +4,52 @@ import Dropdown from "../../ui/dropdown";
 import Button from "../../ui/button";
 import { ThreeDotsIcon } from "../../icons/three-dots-icon";
 import { useRouter } from "next/navigation";
+import { useDelete } from "@/src/hooks/use-delete";
+import { useQueryClient } from "@tanstack/react-query";
+import { useToastStore } from "@/src/store/toast-store";
+import { AxiosError } from "axios";
+import { errorExtractor } from "@/src/services/error-extractor";
+import { CustomApiError } from "@/src/models/abstractions/api-error";
 
 export default function ClientsTable() {
+  const { showToast } = useToastStore();
+
   const router = useRouter();
   const { data: clients } = useGet<ClientDto[]>({
     url: "clients",
   });
 
+  const { mutateAsync: deleteClientAsync } = useDelete<boolean>({
+    options: {},
+  });
+
+  const queryClient = useQueryClient();
+
   const handleEdit = (client: ClientDto) => {
     router.push(`/app/clients/edit/${client.id}`);
   };
 
-  const handleDelete = (client: ClientDto) => {
-    console.log("Delete");
-    console.log(client);
+  const handleDelete = async (client: ClientDto) => {
+    const url = "clients/" + client.id;
+
+    await deleteClientAsync(url, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["clients/" + client.id],
+          exact: true,
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["clients"],
+        });
+
+        showToast("Client successfully deleted", "success");
+        router.push("/app/clients");
+      },
+      onError: (error: AxiosError<CustomApiError>) => {
+        const errorMessage = errorExtractor(error);
+        showToast(errorMessage, "error");
+      },
+    });
   };
 
   return (

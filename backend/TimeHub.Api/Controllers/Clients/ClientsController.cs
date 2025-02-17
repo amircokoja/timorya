@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeHub.Api.Controllers.Clients.Models;
 using TimeHub.Application.Clients.CreateClient;
+using TimeHub.Application.Clients.DeleteClient;
 using TimeHub.Application.Clients.GetClient;
 using TimeHub.Application.Clients.GetClients;
 using TimeHub.Application.Clients.Shared;
@@ -97,6 +98,22 @@ public class ClientController(ISender sender) : ControllerBase
         );
 
         Result<ClientDto> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteClientCommand(id);
+
+        Result<bool> result = await _sender.Send(command, cancellationToken);
 
         if (result.IsFailure)
         {
