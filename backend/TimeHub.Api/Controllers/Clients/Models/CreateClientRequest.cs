@@ -1,6 +1,6 @@
 namespace TimeHub.Api.Controllers.Clients.Models;
 
-public class CreateClientRequest
+public class UpsertClientRequest
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

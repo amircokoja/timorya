@@ -1,11 +1,13 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using TimeHub.Application.Abstractions.Authentication;
+using TimeHub.Application.Abstractions.Authorization.Handlers;
 using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Users;
 using TimeHub.Infrastructure.Authentication;
@@ -25,6 +27,8 @@ public static class DependencyInjection
         AddPersistence(services, configuration);
 
         AddAuthentication(services, configuration);
+
+        AddAuthorization(services);
 
         AddOpenApi(services);
 
@@ -103,6 +107,12 @@ public static class DependencyInjection
 
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+    }
+
+    private static void AddAuthorization(IServiceCollection services)
+    {
+        services.AddScoped<IResourceAuthorizationService, ResourceAuthorizationService>();
+        services.AddScoped<IAuthorizationHandler, ClientAuthorizationHandler>();
     }
 
     private static void AddCORSConfig(IServiceCollection services)

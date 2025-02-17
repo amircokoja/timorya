@@ -25,6 +25,7 @@ internal sealed class LoginUserWithRefreshTokenCommandHandler(
             .Set<RefreshToken>()
             .Include(rt => rt.User)
             .ThenInclude(u => u.UserOrganizations)
+            .ThenInclude(u => u.Role)
             .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken, cancellationToken);
 
         if (refreshToken == null || refreshToken.ExpiresOnUtc < DateTime.UtcNow)

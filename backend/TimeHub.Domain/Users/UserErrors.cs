@@ -13,4 +13,7 @@ public static class UserErrors
         );
     public static readonly Error AlreadyPartOfOrganization =
         new("User.AlreadyPartOfOrganization", "User is already part of this organization");
+
+    public static readonly Error NotAuthorized =
+        new("User.NotAuthorized", "User is not authorized to perform this action");
 }

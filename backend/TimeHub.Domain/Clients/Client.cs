@@ -40,4 +40,21 @@ public sealed class Client : Entity
             Organization = organization,
         };
     }
+
+    public void Update(
+        string firstName,
+        string lastName,
+        string email,
+        string address,
+        string currency,
+        string color
+    )
+    {
+        FirstName = new FirstName(firstName);
+        LastName = new LastName(lastName);
+        Email = new Email(email);
+        Address = new Address(address);
+        Currency = new Currency(currency);
+        Color = new Color(color);
+    }
 }
