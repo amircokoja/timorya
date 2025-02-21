@@ -1,6 +1,7 @@
 "use client";
 
 import ClientForm from "@/src/components/app/clients/client-form";
+import { LoadingIcon } from "@/src/components/icons/loading-icon";
 import Breadcrumbs from "@/src/components/ui/breadcrumbs";
 import { useGet } from "@/src/hooks/use-get";
 import { ClientDto } from "@/src/models/clients/client-dto";
@@ -42,7 +43,13 @@ export default function EditClient({ params }: Params) {
       />
       <div className="mx-auto max-w-2xl px-4 py-8 lg:py-16">
         <h2 className="mb-4 text-xl font-bold text-gray-900">Edit client</h2>
-        {isLoading ? <p>Loading...</p> : <ClientForm client={data} />}
+        {isLoading ? (
+          <div className="flex h-32 items-center justify-center">
+            <LoadingIcon />
+          </div>
+        ) : (
+          <ClientForm client={data} />
+        )}
       </div>
     </section>
   );

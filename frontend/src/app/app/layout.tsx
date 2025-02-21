@@ -7,9 +7,5 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <AppLayout>
-      <div className="p-5">{children}</div>
-    </AppLayout>
-  );
+  return <AppLayout>{children}</AppLayout>;
 }

@@ -1,12 +1,44 @@
+import { useGet } from "@/src/hooks/use-get";
 import { PlusIcon } from "../../icons/plus-icon";
 import { SearchIcon } from "../../icons/search-icon";
 import Input from "../../ui/input";
 import LinkButton from "../../ui/link-button";
 import ClientsTable from "./clients-table";
+import { ClientDto } from "@/src/models/clients/client-dto";
+import { LoadingIcon } from "../../icons/loading-icon";
 
 export default function ClientsContent() {
+  const { data: clients, isFetching } = useGet<ClientDto[]>({
+    url: "clients",
+  });
+
+  const generateClientContent = () => {
+    return (
+      <>
+        {clients?.length === 0 ? (
+          <section className="bg-white">
+            <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
+              <div className="mx-auto max-w-screen-sm text-center">
+                <p className="mb-4 text-3xl font-bold tracking-tight text-gray-900 md:text-2xl">
+                  No clients found.
+                </p>
+                <p className="mb-4 text-base font-light text-gray-500">
+                  You have no clients, please add a new client to get started.
+                </p>
+              </div>
+            </div>
+          </section>
+        ) : (
+          <div className="overflow-x-auto">
+            <ClientsTable clients={clients!} />
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
-    <section className="p-3 sm:p-5">
+    <section>
       <div className="overflow-hidden bg-white">
         <div className="flex flex-col items-center justify-between space-y-3 p-2 py-4 md:flex-row md:space-x-4 md:space-y-0">
           <div className="w-full md:w-1/3">
@@ -30,9 +62,13 @@ export default function ClientsContent() {
             />
           </div>
         </div>
-        <div className="overflow-x-auto">
-          <ClientsTable />
-        </div>
+        {isFetching ? (
+          <div className="flex h-32 items-center justify-center">
+            <LoadingIcon />
+          </div>
+        ) : (
+          generateClientContent()
+        )}
       </div>
     </section>
   );

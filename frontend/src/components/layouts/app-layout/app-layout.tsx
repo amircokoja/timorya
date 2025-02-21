@@ -47,12 +47,21 @@ export default function AppLayout({ children }: Props) {
         </div>
       </aside>
 
-      <div className={classNames(isSidebarOpen ? "sm:ml-64" : "")}>
+      <div
+        className={classNames(
+          "flex min-h-screen flex-col",
+          isSidebarOpen ? "sm:ml-64" : "",
+        )}
+      >
         <AppNavbar
           handleSidebarToggle={handleToggleSidebar}
           isSidebarOpen={isSidebarOpen}
         />
-        {children}
+        <div className="flex flex-1 bg-gray-100 p-5">
+          <div className="flex-1 overflow-auto rounded-lg border border-gray-200 bg-white p-8">
+            {children}
+          </div>
+        </div>
       </div>
     </>
   );
