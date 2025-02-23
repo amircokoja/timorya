@@ -2,3 +2,5 @@
 
 # Https certificate
 https-cert.pfx
+
+.env

@@ -1,3 +1,4 @@
+using Scalar.AspNetCore;
 using TimeHub.Api.Extensions;
 using TimeHub.Application;
 using TimeHub.Infrastructure;
@@ -22,6 +23,11 @@ if (app.Environment.IsDevelopment())
     });
 
     app.UseCors("AllowAll");
+
+    app.MapScalarApiReference(options =>
+    {
+        options.Servers = Array.Empty<ScalarServer>();
+    });
 }
 
 app.MapControllers();

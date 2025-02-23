@@ -7,11 +7,12 @@
     <EFStartupProject>.</EFStartupProject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0"/>
+    <PackageReference Include="Scalar.AspNetCore" Version="2.0.18"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../TimeHub.Application/TimeHub.Application.csproj" />
-    <ProjectReference Include="../TimeHub.Infrastructure/TimeHub.Infrastructure.csproj" />
+    <ProjectReference Include="../TimeHub.Application/TimeHub.Application.csproj"/>
+    <ProjectReference Include="../TimeHub.Infrastructure/TimeHub.Infrastructure.csproj"/>
   </ItemGroup>
 </Project>
