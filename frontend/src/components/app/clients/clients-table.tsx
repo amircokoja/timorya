@@ -1,4 +1,3 @@
-import { useGet } from "@/src/hooks/use-get";
 import { ClientDto } from "@/src/models/clients/client-dto";
 import Dropdown from "../../ui/dropdown";
 import Button from "../../ui/button";
