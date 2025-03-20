@@ -1,4 +1,5 @@
 using TimeHub.Domain.Abstractions;
+using TimeHub.Domain.Projects;
 using TimeHub.Domain.Shared;
 using TimeHub.Domain.Users;
 
@@ -18,6 +19,9 @@ public sealed class Client : Entity
     // foreign key
     public int OrganizationId { get; private set; }
     public Organization Organization { get; private set; }
+
+    // navigation property
+    public ICollection<Project> Projects { get; private set; }
 
     public static Client Create(
         FirstName firstName,
