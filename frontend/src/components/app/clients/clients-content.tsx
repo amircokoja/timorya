@@ -6,11 +6,26 @@ import LinkButton from "../../ui/link-button";
 import ClientsTable from "./clients-table";
 import { ClientDto } from "@/src/models/clients/client-dto";
 import { LoadingIcon } from "../../icons/loading-icon";
+import { useState } from "react";
 
 export default function ClientsContent() {
   const { data: clients, isFetching } = useGet<ClientDto[]>({
     url: "clients",
   });
+
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value.toLowerCase());
+  };
+
+  const filteredClients = clients?.filter(
+    (client) =>
+      client.email.toLowerCase().includes(searchText) ||
+      `${client.firstName} ${client.lastName}`
+        .toLowerCase()
+        .includes(searchText),
+  );
 
   const generateClientContent = () => {
     return (
@@ -30,7 +45,7 @@ export default function ClientsContent() {
           </section>
         ) : (
           <div className="overflow-x-auto">
-            <ClientsTable clients={clients!} />
+            <ClientsTable clients={filteredClients!} />
           </div>
         )}
       </>
@@ -45,6 +60,7 @@ export default function ClientsContent() {
             <form className="flex items-center">
               <div className="relative w-full">
                 <Input
+                  onChange={handleSearch}
                   icon={<SearchIcon />}
                   type="text"
                   id="simple-search"
