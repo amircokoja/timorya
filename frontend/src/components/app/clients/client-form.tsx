@@ -67,9 +67,6 @@ export default function ClientForm({ client }: Props) {
             queryKey: ["clients/" + client.id],
             exact: true,
           });
-          queryClient.invalidateQueries({
-            queryKey: ["clients"],
-          });
 
           handleSuccess();
         },
@@ -90,6 +87,9 @@ export default function ClientForm({ client }: Props) {
   };
 
   const handleSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["clients"],
+    });
     const message = client
       ? "Client successfully updated."
       : "Client successfully created.";
