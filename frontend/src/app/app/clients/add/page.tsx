@@ -17,9 +17,8 @@ export default function AddClient() {
     <section className="bg-white">
       <Breadcrumbs
         items={[
-          { label: "Home", href: "/app/dashboard" },
           { label: "Clients", href: "/app/clients" },
-          { label: "Add new client", href: "/app/clients/add" },
+          { label: "Add client", href: "/app/clients/add" },
         ]}
       />
       <div className="mx-auto max-w-2xl px-4 py-8 lg:py-16">

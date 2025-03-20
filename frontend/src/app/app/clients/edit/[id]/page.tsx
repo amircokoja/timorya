@@ -36,7 +36,6 @@ export default function EditClient({ params }: Params) {
     <section className="bg-white">
       <Breadcrumbs
         items={[
-          { label: "Home", href: "/app/dashboard" },
           { label: "Clients", href: "/app/clients" },
           { label: "Edit client", href: "/app/clients/edit/" },
         ]}
