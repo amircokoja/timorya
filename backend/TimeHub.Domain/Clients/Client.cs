@@ -61,4 +61,6 @@ public sealed class Client : Entity
         Currency = new Currency(currency);
         Color = new Color(color);
     }
+
+    public string GetFullName() => $"{FirstName} {LastName}";
 }

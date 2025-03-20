@@ -16,5 +16,25 @@ public sealed class Project : Entity
 
     // foreign key
     public int? ClientId { get; private set; }
-    public Client Client { get; private set; }
+    public Client? Client { get; private set; }
+
+    public static Project Create(
+        ProjectName name,
+        Color color,
+        bool isPublic,
+        bool isBillable,
+        decimal? hourlyRate,
+        Client? client
+    )
+    {
+        return new Project
+        {
+            Name = name,
+            Color = color,
+            IsPublic = isPublic,
+            IsBillable = isBillable,
+            HourlyRate = hourlyRate,
+            Client = client,
+        };
+    }
 }
