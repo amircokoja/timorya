@@ -16,7 +16,7 @@ export default function SidebarItem({ item }: Props) {
   const isActivePath = pathname.startsWith(item.href) && pathname !== "/";
 
   const linkClasses = classNames(
-    "group flex items-center rounded-lg border p-2 hover:bg-gray-100",
+    "group flex items-center rounded-lg border p-2 hover:bg-gray-100 mb-1",
     {
       "bg-gray-50 border-gray-200 text-blue-600": isActivePath,
       "border-transparent text-gray-500": !isActivePath,
