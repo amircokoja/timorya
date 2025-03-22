@@ -1,6 +1,7 @@
 using TimeHub.Domain.Abstractions;
 using TimeHub.Domain.Clients;
 using TimeHub.Domain.Shared;
+using TimeHub.Domain.Users;
 
 namespace TimeHub.Domain.Projects;
 
@@ -17,12 +18,15 @@ public sealed class Project : Entity
     // foreign key
     public int? ClientId { get; private set; }
     public Client? Client { get; private set; }
+    public int OrganizationId { get; private set; }
+    public Organization Organization { get; private set; }
 
     public static Project Create(
         ProjectName name,
         Color color,
         bool isPublic,
         bool isBillable,
+        Organization organization,
         decimal? hourlyRate,
         Client? client
     )
@@ -35,6 +39,7 @@ public sealed class Project : Entity
             IsBillable = isBillable,
             HourlyRate = hourlyRate,
             Client = client,
+            Organization = organization,
         };
     }
 }

@@ -14,6 +14,11 @@ public class ProjectDto
     public int? ClientId { get; set; }
     public string ClientName { get; set; } = string.Empty;
 
+    public static ProjectDto From(Project project)
+    {
+        return From(project, project.Client);
+    }
+
     public static ProjectDto From(Project project, Client? client)
     {
         return new ProjectDto

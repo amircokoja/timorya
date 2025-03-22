@@ -54,6 +54,7 @@ internal sealed class CreateProjectCommandHandler(
             new Color(request.Color),
             request.IsPublic,
             request.IsBillable,
+            organization,
             request.HourlyRate,
             client
         );

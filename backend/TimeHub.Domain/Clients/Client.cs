@@ -62,5 +62,5 @@ public sealed class Client : Entity
         Color = new Color(color);
     }
 
-    public string GetFullName() => $"{FirstName} {LastName}";
+    public string GetFullName() => $"{FirstName.Value} {LastName.Value}";
 }

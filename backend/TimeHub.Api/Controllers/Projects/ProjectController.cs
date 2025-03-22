@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeHub.Api.Controllers.Projects.Models;
 using TimeHub.Application.Projects.CreateProject;
+using TimeHub.Application.Projects.GetProjects;
 using TimeHub.Application.Projects.Shared;
 using TimeHub.Domain.Abstractions;
 
@@ -13,6 +14,22 @@ namespace TimeHub.Api.Controllers.Projects;
 public class ProjectController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    {
+        var query = new GetProjectsQuery();
+
+        Result<List<ProjectDto>> result = await _sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
 
     [Authorize]
     [HttpPost]
