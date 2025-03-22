@@ -1,18 +1,18 @@
 "use client";
 
-import ClientsTable from "@/src/components/app/clients/clients-table";
+import ProjectsTable from "@/src/components/app/projects/projects-table";
 import { LoadingIcon } from "@/src/components/icons/loading-icon";
 import { PlusIcon } from "@/src/components/icons/plus-icon";
 import { SearchIcon } from "@/src/components/icons/search-icon";
 import Input from "@/src/components/ui/input";
 import LinkButton from "@/src/components/ui/link-button";
 import { useGet } from "@/src/hooks/use-get";
-import { ClientDto } from "@/src/models/clients/client-dto";
+import { ProjectDto } from "@/src/models/projects/project-dto";
 import { useState } from "react";
 
 export default function Projects() {
-  const { data: clients, isFetching } = useGet<ClientDto[]>({
-    url: "clients",
+  const { data: projects, isFetching: isFetching } = useGet<ProjectDto[]>({
+    url: "projects",
   });
 
   const [searchText, setSearchText] = useState("");
@@ -21,18 +21,14 @@ export default function Projects() {
     setSearchText(event.target.value.toLowerCase());
   };
 
-  const filteredClients = clients?.filter(
-    (client) =>
-      client.email.toLowerCase().includes(searchText) ||
-      `${client.firstName} ${client.lastName}`
-        .toLowerCase()
-        .includes(searchText),
+  const filteredProjects = projects?.filter((project) =>
+    project.name.toLowerCase().includes(searchText),
   );
 
-  const generateClientContent = () => {
+  const generateContent = () => {
     return (
       <>
-        {clients?.length === 0 ? (
+        {projects?.length === 0 ? (
           <section className="bg-white">
             <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
               <div className="mx-auto max-w-screen-sm text-center">
@@ -47,7 +43,7 @@ export default function Projects() {
           </section>
         ) : (
           <div className="overflow-x-auto">
-            <ClientsTable clients={filteredClients!} />
+            <ProjectsTable projects={filteredProjects!} />
           </div>
         )}
       </>
@@ -85,7 +81,7 @@ export default function Projects() {
             <LoadingIcon />
           </div>
         ) : (
-          generateClientContent()
+          generateContent()
         )}
       </div>
     </section>
