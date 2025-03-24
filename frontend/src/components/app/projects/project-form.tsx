@@ -60,7 +60,6 @@ export default function ProjectForm({ project }: Props) {
 
   const {
     handleSubmit,
-    watch,
     formState: { errors },
   } = methods;
 

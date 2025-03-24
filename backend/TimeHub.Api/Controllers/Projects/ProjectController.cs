@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeHub.Api.Controllers.Projects.Models;
 using TimeHub.Application.Projects.CreateProject;
+using TimeHub.Application.Projects.DeleteProject;
 using TimeHub.Application.Projects.GetProject;
 using TimeHub.Application.Projects.GetProjects;
 using TimeHub.Application.Projects.Shared;
@@ -97,6 +98,22 @@ public class ProjectController(ISender sender) : ControllerBase
         );
 
         Result<ProjectDto> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteProjectCommand(id);
+
+        Result<bool> result = await _sender.Send(command, cancellationToken);
 
         if (result.IsFailure)
         {
