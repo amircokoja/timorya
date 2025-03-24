@@ -14,7 +14,7 @@ import { useToastStore } from "@/src/store/toast-store";
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 export type ProjectForm = {
@@ -60,25 +60,31 @@ export default function ProjectForm({ project }: Props) {
 
   const {
     handleSubmit,
+    watch,
     formState: { errors },
   } = methods;
 
   const onSubmit = async (data: ProjectForm) => {
-    console.log(data);
     if (project) {
-      await updateProjectAsync(data, {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ["projects/" + project.id],
-            exact: true,
-          });
+      await updateProjectAsync(
+        {
+          ...data,
+          clientId: data?.clientId || undefined,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: ["projects/" + project.id],
+              exact: true,
+            });
 
-          handleSuccess();
+            handleSuccess();
+          },
+          onError: (error: AxiosError<ApiError>) => {
+            handleError(error);
+          },
         },
-        onError: (error: AxiosError<ApiError>) => {
-          handleError(error);
-        },
-      });
+      );
     } else {
       await createProjectAsync(
         {
@@ -129,6 +135,19 @@ export default function ProjectForm({ project }: Props) {
       })),
     ];
   }, [clients]);
+
+  useEffect(() => {
+    if (clients && project) {
+      methods.reset({
+        name: project.name || "",
+        isPublic: project.isPublic || false,
+        isBillable: project.isBillable || false,
+        hourlyRate: project.hourlyRate || undefined,
+        clientId: project.clientId,
+        color: project.color || "bg-blue-600",
+      });
+    }
+  }, [clients, project, methods]);
 
   return (
     <FormProvider {...methods}>
