@@ -96,7 +96,7 @@ public static class DependencyInjection
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(jwtSettings.Key)
-                        )
+                        ),
                     };
                 }
             });
@@ -113,6 +113,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IResourceAuthorizationService, ResourceAuthorizationService>();
         services.AddScoped<IAuthorizationHandler, ClientAuthorizationHandler>();
+        services.AddScoped<IAuthorizationHandler, ProjectAuthorizationHandler>();
     }
 
     private static void AddCORSConfig(IServiceCollection services)

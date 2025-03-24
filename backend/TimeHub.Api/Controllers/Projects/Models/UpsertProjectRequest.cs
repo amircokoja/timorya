@@ -1,6 +1,6 @@
 namespace TimeHub.Api.Controllers.Projects.Models;
 
-public class CreateProjectRequest
+public class UpsertProjectRequest
 {
     public string Name { get; set; }
     public string Color { get; set; }

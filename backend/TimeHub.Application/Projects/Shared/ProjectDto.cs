@@ -12,7 +12,7 @@ public class ProjectDto
     public bool IsBillable { get; set; }
     public decimal? HourlyRate { get; set; }
     public int? ClientId { get; set; }
-    public string ClientName { get; set; } = string.Empty;
+    public string? ClientName { get; set; }
 
     public static ProjectDto From(Project project)
     {
@@ -30,7 +30,7 @@ public class ProjectDto
             IsBillable = project.IsBillable,
             HourlyRate = project.HourlyRate,
             ClientId = project.ClientId,
-            ClientName = client?.GetFullName() ?? string.Empty,
+            ClientName = client?.GetFullName() ?? null,
         };
     }
 }

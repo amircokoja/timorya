@@ -42,4 +42,21 @@ public sealed class Project : Entity
             Organization = organization,
         };
     }
+
+    public void Update(
+        string name,
+        string color,
+        bool isPublic,
+        bool isBillable,
+        decimal? hourlyRate,
+        Client? client
+    )
+    {
+        Name = new ProjectName(name);
+        Color = new Color(color);
+        IsPublic = isPublic;
+        IsBillable = isBillable;
+        HourlyRate = hourlyRate;
+        Client = client;
+    }
 }
