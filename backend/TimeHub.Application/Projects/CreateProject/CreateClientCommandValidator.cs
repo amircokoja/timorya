@@ -9,9 +9,5 @@ internal sealed class CreateProjectCommandValidator : AbstractValidator<CreatePr
         RuleFor(c => c.Name).NotEmpty().MinimumLength(3).MaximumLength(50);
 
         RuleFor(c => c.Color).NotEmpty().MinimumLength(3).MaximumLength(50);
-
-        RuleFor(c => c.IsPublic).NotEmpty();
-
-        RuleFor(c => c.IsBillable).NotEmpty();
     }
 }
