@@ -8,8 +8,9 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   }[];
   removeFirstOption?: boolean;
   name: string;
-  label: string;
+  label?: string;
   error?: string;
+  additionalClasses?: string;
   registerOptions?: object; // Allow custom validation rules
 }
 
@@ -22,6 +23,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
       removeFirstOption,
       options,
       registerOptions,
+      additionalClasses,
       ...props
     },
     ref,
@@ -31,19 +33,23 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
     return (
       <div>
-        <label
-          htmlFor={name}
-          className="mb-2 block text-sm font-medium text-gray-900"
-        >
-          {label}
-        </label>
+        {label && (
+          <label
+            htmlFor={name}
+            className="mb-2 block text-sm font-medium text-gray-900"
+          >
+            {label}
+          </label>
+        )}
         <div className="relative">
           <select
             id={name}
-            className={`block w-full appearance-none rounded-lg border p-2.5 text-sm 
-            ${error ? "border-red-500" : "border-gray-300"} 
-            bg-gray-50 focus:border-blue-500 focus:ring-blue-500 
-            ${selectedValue ? "text-gray-900" : "text-gray-400"}`}
+            className={`block w-full appearance-none rounded-lg border p-2.5 text-sm
+            ${error ? "border-red-500" : "border-gray-300"}
+            bg-gray-50 focus:border-blue-500 focus:ring-blue-500
+            ${selectedValue ? "text-gray-900" : "text-gray-400"}
+            ${additionalClasses ?? ""}
+            `}
             {...props}
             {...(register ? register(name, registerOptions) : {})}
             ref={ref}
