@@ -1,6 +1,7 @@
 using TimeHub.Domain.Abstractions;
 using TimeHub.Domain.Clients;
 using TimeHub.Domain.Shared;
+using TimeHub.Domain.TimeLogs;
 using TimeHub.Domain.Users;
 
 namespace TimeHub.Domain.Projects;
@@ -20,6 +21,8 @@ public sealed class Project : Entity
     public Client? Client { get; private set; }
     public int OrganizationId { get; private set; }
     public Organization Organization { get; private set; }
+
+    public ICollection<TimeLog> TimeLogs { get; private set; }
 
     public static Project Create(
         ProjectName name,

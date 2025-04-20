@@ -3,6 +3,7 @@ using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Exceptions;
 using TimeHub.Domain.Clients;
 using TimeHub.Domain.Projects;
+using TimeHub.Domain.TimeLogs;
 using TimeHub.Domain.Users;
 
 namespace TimeHub.Infrastructure;
@@ -21,6 +22,7 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Client> Clients { get; set; }
     public DbSet<Project> Projects { get; set; }
+    public DbSet<TimeLog> TimeLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

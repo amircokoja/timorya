@@ -1,5 +1,6 @@
 using TimeHub.Domain.Abstractions;
 using TimeHub.Domain.Shared;
+using TimeHub.Domain.TimeLogs;
 
 namespace TimeHub.Domain.Users;
 
@@ -21,6 +22,8 @@ public sealed class User : Entity
 
     public Organization CurrentOrganization { get; private set; }
 
+    public ICollection<TimeLog> TimeLogs { get; private set; }
+
     public IReadOnlyCollection<UserOrganization> UserOrganizations =>
         _userOrganizations.AsReadOnly();
 
@@ -38,7 +41,7 @@ public sealed class User : Entity
             LastName = lastName,
             Email = email,
             Password = password,
-            CurrentOrganization = organization
+            CurrentOrganization = organization,
         };
     }
 
