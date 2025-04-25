@@ -21,7 +21,10 @@ public class TimeLogController(ISender sender) : ControllerBase
     {
         var query = new GetTimeLogsQuery();
 
-        Result<IReadOnlyList<TimeLogGroup>> result = await _sender.Send(query, cancellationToken);
+        Result<IReadOnlyList<TimeLogWeekGroup>> result = await _sender.Send(
+            query,
+            cancellationToken
+        );
 
         if (result.IsFailure)
         {
