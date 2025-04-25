@@ -1,12 +1,11 @@
 import Input from "@/src/components/ui/input";
 import Button from "@/src/components/ui/button";
 import { PlayIcon } from "@/src/components/icons/play-icon";
-import { ClockIcon } from "@/src/components/icons/clock-icon";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { StopIcon } from "../../icons/stop-icon";
+import { StopIcon } from "../../../icons/stop-icon";
 import { ProjectDto } from "@/src/models/projects/project-dto";
 import { useGet } from "@/src/hooks/use-get";
-import Select from "../../ui/select";
+import Select from "../../../ui/select";
 import { FormProvider, useForm } from "react-hook-form";
 import { usePost } from "@/src/hooks/use-post";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,7 +15,7 @@ import { ApiError } from "@/src/models/abstractions/api-error";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { TimeLogCreateDto } from "@/src/models/time-logs/time-log-create-dto";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
-import { formatTime } from "./utils";
+import TimeCounter from "./time-counter";
 
 interface LogForm {
   description: string;
@@ -126,6 +125,8 @@ export default function TimeLogger() {
         showToast(errorMessage, "error");
       },
     });
+
+    reset();
   };
 
   return (
@@ -147,11 +148,14 @@ export default function TimeLogger() {
               {...methods.register("projectId")}
             />
           </div>
-          <div className="flex items-center justify-center gap-2 px-4">
-            <ClockIcon />
-            <p className="w-[60px] text-center text-sm">
-              {formatTime(seconds)}
-            </p>
+          <div className="px-4">
+            <TimeCounter
+              seconds={seconds}
+              startDate={startDate ?? new Date()}
+              setStartDate={setStartDate}
+              setSeconds={setSeconds}
+              isRunning={isRunning}
+            />
           </div>
           <div className="flex w-full  shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 pl-4 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
             <Button

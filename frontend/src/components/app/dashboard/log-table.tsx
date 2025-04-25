@@ -13,7 +13,8 @@ export default function LogTable({ logGroup }: Props) {
   const total = logGroup.timeLogs.reduce((acc, log) => acc + log.seconds, 0);
 
   return (
-    <div className="mt-4 overflow-auto rounded-lg border border-gray-200">
+    <>
+      {" "}
       <div className="flex justify-between bg-gray-100 px-4">
         <p className="py-4 text-sm">
           {generateDateValue(new Date(logGroup.date))}
@@ -76,6 +77,6 @@ export default function LogTable({ logGroup }: Props) {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }
