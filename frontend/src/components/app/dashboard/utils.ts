@@ -38,3 +38,15 @@ export const generateDateValue = (date: Date) => {
     year: "numeric",
   });
 };
+
+export const updateTimeForDate = (date: Date, time: string): Date => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const updatedDate = new Date(date);
+  updatedDate.setHours(hours, minutes, 0, 0);
+  return updatedDate;
+};
+
+export const getTimeDifferenceInSeconds = (start: Date, end: Date): number => {
+  const diffInMilliseconds = end.getTime() - start.getTime();
+  return Math.floor(diffInMilliseconds / 1000);
+};

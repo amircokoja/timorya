@@ -14,6 +14,7 @@ interface ButtonProps
   variant?: ButtonVariant;
   size?: "xs" | "sm" | "md" | "lg";
   icon?: React.ReactNode;
+  additionalClasses?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,10 +23,11 @@ const Button: React.FC<ButtonProps> = ({
   variant = "solid",
   size = "md",
   icon,
+  additionalClasses,
   ...props
 }) => {
   const hasText = !!text;
-  const buttonClass = `${baseStyles} ${getButtonStyles(color, variant)} ${getSizeStyles(size, hasText)}`;
+  const buttonClass = `${baseStyles} ${getButtonStyles(color, variant)} ${getSizeStyles(size, hasText)} ${additionalClasses}`;
 
   return (
     <button className={buttonClass} {...props}>

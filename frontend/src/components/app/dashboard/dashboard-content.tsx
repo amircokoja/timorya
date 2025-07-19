@@ -5,6 +5,7 @@ import DashboardWeek from "./dashboard-week";
 
 export default function DashboardContent() {
   const { data } = useGet<TimeLogWeekGroup[]>({ url: "/time-logs" });
+
   return (
     <>
       <TimeLogger />
