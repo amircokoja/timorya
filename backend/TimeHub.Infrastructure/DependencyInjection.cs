@@ -114,6 +114,7 @@ public static class DependencyInjection
         services.AddScoped<IResourceAuthorizationService, ResourceAuthorizationService>();
         services.AddScoped<IAuthorizationHandler, ClientAuthorizationHandler>();
         services.AddScoped<IAuthorizationHandler, ProjectAuthorizationHandler>();
+        services.AddScoped<IAuthorizationHandler, TimeLogAuthorizationHandler>();
     }
 
     private static void AddCORSConfig(IServiceCollection services)

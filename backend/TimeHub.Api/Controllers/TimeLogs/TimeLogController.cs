@@ -5,6 +5,7 @@ using TimeHub.Api.Controllers.TimeLogs.Models;
 using TimeHub.Application.TimeLogs.CreateTimeLog;
 using TimeHub.Application.TimeLogs.GetTimeLogs;
 using TimeHub.Application.TimeLogs.Shared;
+using TimeHub.Application.TimeLogs.UpdateTimeLog;
 using TimeHub.Domain.Abstractions;
 
 namespace TimeHub.Api.Controllers.TimeLogs;
@@ -42,6 +43,33 @@ public class TimeLogController(ISender sender) : ControllerBase
     )
     {
         var command = new CreateTimeLogCommand(
+            request.Description,
+            request.Start,
+            request.End,
+            request.Seconds,
+            request.ProjectId
+        );
+
+        Result<TimeLogDto> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(
+        [FromRoute] int id,
+        [FromBody] CreateTimeLogRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new UpdateTimeLogCommand(
+            id,
             request.Description,
             request.Start,
             request.End,

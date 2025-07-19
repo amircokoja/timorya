@@ -42,4 +42,19 @@ public class TimeLog : Entity
             Project = project,
         };
     }
+
+    public void Update(
+        TimeLogDescription description,
+        DateTime start,
+        DateTime end,
+        int seconds,
+        Project? project = null
+    )
+    {
+        Description = description;
+        Start = start;
+        End = end;
+        Seconds = seconds;
+        Project = project;
+    }
 }
