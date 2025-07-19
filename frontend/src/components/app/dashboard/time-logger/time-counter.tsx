@@ -1,5 +1,5 @@
 import { ClockIcon } from "@/src/components/icons/clock-icon";
-import { formatTime } from "../utils";
+import { formatSeconds } from "../utils";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useClickAway } from "react-use";
 import Input from "@/src/components/ui/input";
@@ -90,7 +90,9 @@ export default function TimeCounter({
           onClick={handleTimeClick}
         >
           <ClockIcon />
-          <p className="w-[60px] text-center text-sm">{formatTime(seconds)}</p>
+          <p className="w-[60px] text-center text-sm">
+            {formatSeconds(seconds)}
+          </p>
         </div>
 
         {isMenuOpen && isRunning && (

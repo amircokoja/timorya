@@ -1,4 +1,5 @@
 import { Dropdown as FlowbiteDropdown } from "flowbite-react";
+import { FloatingProps } from "flowbite-react/components/Floating";
 import React, { ReactElement } from "react";
 
 interface DropdownItem {
@@ -7,19 +8,23 @@ interface DropdownItem {
   onClick?: () => void;
 }
 
-interface Props {
+interface Props extends Omit<Partial<FloatingProps>, "trigger"> {
   items: DropdownItem[];
   trigger: ReactElement;
 }
 
-const Dropdown: React.FC<Props> = ({ items, trigger }: Props) => {
+const Dropdown: React.FC<Props> = ({ items, trigger }: Props, ...rest) => {
   return (
     <FlowbiteDropdown
-      className="z-50"
-      label="Dropdown"
+      label={""}
       dismissOnClick={true}
-      renderTrigger={() => trigger}
-      placement={"bottom-end"}
+      renderTrigger={() =>
+        React.cloneElement(trigger, {
+          className: `${trigger.props.className ?? ""} z-50`,
+        })
+      }
+      placement="bottom-start"
+      {...rest}
     >
       {items.map((item) => (
         <FlowbiteDropdown.Item

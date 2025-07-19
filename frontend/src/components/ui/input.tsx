@@ -6,11 +6,15 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   icon?: React.ReactNode;
+  additionalClasses?: string;
   registerOptions?: object; // Allow custom validation rules
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ name, label, error, registerOptions, ...props }, ref) => {
+  (
+    { name, label, error, registerOptions, additionalClasses, ...props },
+    ref,
+  ) => {
     const formContext = useFormContext();
     const register = formContext ? formContext.register : undefined;
     const hasIcon = !!props.icon;
@@ -40,6 +44,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               "block w-full rounded-lg border bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600",
               error ? "border-red-500" : "border-gray-300",
               hasIcon ? "pl-10" : "",
+              additionalClasses ?? "",
             )}
           />
         </div>

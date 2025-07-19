@@ -1,6 +1,6 @@
 import { TimeLogWeekGroup } from "@/src/models/time-logs/time-log-week-group";
 import LogTable from "./log-table";
-import { formatTime } from "./utils";
+import { formatSeconds } from "./utils";
 
 interface Props {
   weekGroup: TimeLogWeekGroup;
@@ -17,13 +17,13 @@ export default function DashboardWeek({ weekGroup }: Props) {
 
   return (
     <>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-2 flex items-center justify-between">
         <p className="text-sm">{weekGroup.week}</p>
         <div>
           <p className="text-xs text-gray-400">
             Week total:{" "}
             <span className="text-sm font-semibold text-gray-600">
-              {formatTime(weekTotal)}
+              {formatSeconds(weekTotal)}
             </span>
           </p>
         </div>

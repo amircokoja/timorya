@@ -1,7 +1,7 @@
 export const ClockIcon = () => {
   return (
     <svg
-      className="size-[20px] text-gray-800"
+      className="size-[18px] text-gray-700"
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       width="24"
