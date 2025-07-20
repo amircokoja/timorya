@@ -58,7 +58,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
                     {item.label}
                   </Link>
                 ) : (
-                  <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                  <span className="ms-1 text-sm font-medium text-gray-500 md:ms-2">
                     {item.label}
                   </span>
                 )}

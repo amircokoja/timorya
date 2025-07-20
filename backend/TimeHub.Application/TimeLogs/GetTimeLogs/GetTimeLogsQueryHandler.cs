@@ -63,18 +63,6 @@ internal sealed class GetTimeLogsQueryHandler(
             }
         }
 
-        // var grouped = splitLogs
-        //     .GroupBy(x => x.Date)
-        //     .Select(g => new TimeLogGroup
-        //     {
-        //         Date = g.Key,
-        //         TimeLogs = g.Select(x => x.Log).ToList(),
-        //     })
-        //     .OrderByDescending(g => g.Date)
-        //     .ToList();
-
-        // return Result.Success<IReadOnlyList<TimeLogGroup>>(grouped);
-
         var groupedByDate = splitLogs
             .GroupBy(x => x.Date)
             .Select(g => new TimeLogGroup

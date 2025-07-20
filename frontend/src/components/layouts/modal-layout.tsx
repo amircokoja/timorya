@@ -51,7 +51,7 @@ const ModalLayout: React.FC<ModalProps> = ({
             additionalClasses="cursor-pointer text-gray-400 hover:text-gray-600 focus:outline-none"
             icon={
               <svg
-                className="h-[18px] w-[18px] text-gray-800 dark:text-white"
+                className="h-[18px] w-[18px] text-gray-800"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
