@@ -6,6 +6,7 @@ import { formatSeconds, formatTime } from "./utils";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import { useEffect, useState } from "react";
 import EditLogItemModal from "../../modals/edit-log-item-modal";
+import DeleteLogItemModal from "../../modals/delete-log-item-modal";
 
 interface Props {
   logItem: TimeLogDto;
@@ -15,13 +16,16 @@ export default function LogItem({ logItem }: Props) {
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   useEffect(() => {
     setStartTime(formatTime(logItem.start));
     setEndTime(formatTime(logItem.end));
   }, [logItem]);
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    setOpenDeleteModal(true);
+  };
 
   const handleEdit = () => {
     setOpenEditModal(true);
@@ -78,6 +82,12 @@ export default function LogItem({ logItem }: Props) {
         logItem={logItem}
         isOpen={openEditModal}
         onClose={() => setOpenEditModal(false)}
+      />
+
+      <DeleteLogItemModal
+        logItem={logItem}
+        isOpen={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
       />
     </>
   );

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeHub.Api.Controllers.TimeLogs.Models;
 using TimeHub.Application.TimeLogs.CreateTimeLog;
+using TimeHub.Application.TimeLogs.DeleteTimeLog;
 using TimeHub.Application.TimeLogs.GetTimeLogs;
 using TimeHub.Application.TimeLogs.Shared;
 using TimeHub.Application.TimeLogs.UpdateTimeLog;
@@ -78,6 +79,22 @@ public class TimeLogController(ISender sender) : ControllerBase
         );
 
         Result<TimeLogDto> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteTimeLogCommand(id);
+
+        Result<bool> result = await _sender.Send(command, cancellationToken);
 
         if (result.IsFailure)
         {
