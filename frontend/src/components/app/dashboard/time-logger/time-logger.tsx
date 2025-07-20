@@ -157,7 +157,7 @@ export default function TimeLogger() {
               isRunning={isRunning}
             />
           </div>
-          <div className="flex w-full  shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 pl-4 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
+          <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 pl-4 md:w-auto md:flex-row md:items-center md:space-y-0 md:space-x-3">
             <Button
               text={isRunning ? "Stop" : "Start"}
               color={isRunning ? "red" : "blue"}

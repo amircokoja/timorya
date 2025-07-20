@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TimeHub.Application.Abstractions.Common;
 using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Abstractions.Messaging;
 using TimeHub.Application.TimeLogs.Shared;
@@ -11,23 +12,31 @@ namespace TimeHub.Application.TimeLogs.GetTimeLogs;
 internal sealed class GetTimeLogsQueryHandler(
     IApplicationDbContext context,
     ICurrentUserService currentUserService
-) : IQueryHandler<GetTimeLogsQuery, IReadOnlyList<TimeLogWeekGroup>>
+) : IQueryHandler<GetTimeLogsQuery, PaginatedResult<TimeLogWeekGroup>>
 {
     private readonly IApplicationDbContext _context = context;
     private readonly ICurrentUserService _currentUserService = currentUserService;
 
-    public async Task<Result<IReadOnlyList<TimeLogWeekGroup>>> Handle(
+    public async Task<Result<PaginatedResult<TimeLogWeekGroup>>> Handle(
         GetTimeLogsQuery request,
         CancellationToken cancellationToken
     )
     {
         var user = _currentUserService.GetCurrentUser();
 
+        var totalCount = await _context
+            .Set<TimeLog>()
+            .Where(c => c.UserId == user.UserId)
+            .CountAsync(cancellationToken);
+
+        var skip = (request.Page - 1) * request.PageSize;
         var timeLogs = await _context
             .Set<TimeLog>()
             .Include(c => c.Project)
             .Where(c => c.UserId == user.UserId)
             .OrderByDescending(c => c.End)
+            .Skip(skip)
+            .Take(request.PageSize)
             .ToListAsync(cancellationToken);
 
         var splitLogs = new List<(DateOnly Date, TimeLogDto Log)>();
@@ -82,18 +91,28 @@ internal sealed class GetTimeLogsQueryHandler(
             .OrderByDescending(g => g.Dates.Max(d => d.Date)) // sort by most recent date in the week
             .ToList();
 
-        return Result.Success<IReadOnlyList<TimeLogWeekGroup>>(groupedByWeek);
+        return Result.Success(
+            PaginatedResult<TimeLogWeekGroup>.Create(
+                request.Page,
+                totalCount,
+                request.PageSize,
+                groupedByWeek
+            )
+        );
     }
 
     private static string GetWeekLabel(DateOnly date)
     {
         var today = DateOnly.FromDateTime(DateTime.Today);
 
-        var startOfThisWeek = today.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+        // Ensure Monday is always the start of the week, even if today is Sunday (DayOfWeek = 0)
+        int todayOffset = ((int)today.DayOfWeek + 6) % 7;
+        var startOfThisWeek = today.AddDays(-todayOffset);
         var startOfLastWeek = startOfThisWeek.AddDays(-7);
         var endOfLastWeek = startOfThisWeek.AddDays(-1);
 
-        var startOfCurrent = date.AddDays(-(int)date.DayOfWeek + (int)DayOfWeek.Monday);
+        int dateOffset = ((int)date.DayOfWeek + 6) % 7;
+        var startOfCurrent = date.AddDays(-dateOffset);
         var endOfCurrent = startOfCurrent.AddDays(6);
 
         if (date >= startOfThisWeek && date <= startOfThisWeek.AddDays(6))

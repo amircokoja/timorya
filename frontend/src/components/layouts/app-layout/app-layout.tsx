@@ -5,6 +5,7 @@ import Button from "../../ui/button";
 import AppNavbar from "./app-navbar";
 import classNames from "classnames";
 import Sidebar from "./sidebar/sidebar";
+import Link from "next/link";
 
 interface Props {
   children: React.ReactNode;
@@ -32,9 +33,9 @@ export default function AppLayout({ children }: Props) {
         <div className="h-full overflow-y-auto">
           <div className="border-b border-gray-200 bg-white px-4 py-2.5 lg:px-6">
             <div className="flex h-[50px] items-center justify-between">
-              <a href="/" className="relative top-0.5">
+              <Link href="/" className="relative top-0.5">
                 <TimeHubLogo />
-              </a>
+              </Link>
               <Button
                 color="white"
                 icon={<BackIcon />}
@@ -58,7 +59,7 @@ export default function AppLayout({ children }: Props) {
           isSidebarOpen={isSidebarOpen}
         />
         <div className="flex flex-1 bg-gray-100 p-5">
-          <div className="flex-1 overflow-auto rounded-lg border border-gray-200 bg-white p-8">
+          <div className="flex flex-1 flex-col overflow-auto rounded-lg border border-gray-200 bg-white p-8">
             {children}
           </div>
         </div>

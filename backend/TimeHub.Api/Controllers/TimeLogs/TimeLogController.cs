@@ -19,15 +19,15 @@ public class TimeLogController(ISender sender) : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> Get(CancellationToken cancellationToken)
+    public async Task<IActionResult> Get(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken = default
+    )
     {
-        var query = new GetTimeLogsQuery();
+        var query = new GetTimeLogsQuery(page, pageSize);
 
-        Result<IReadOnlyList<TimeLogWeekGroup>> result = await _sender.Send(
-            query,
-            cancellationToken
-        );
-
+        var result = await _sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
