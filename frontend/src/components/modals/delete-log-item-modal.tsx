@@ -42,13 +42,13 @@ const DeleteLogItemModal: React.FC<ModalProps> = ({
 
   return (
     <ModalLayout isOpen={isOpen} onClose={onClose} title="Delete time log">
-      <div className="p-4 text-center">
+      <div className="p-10 text-center">
         <p className="mb-1 text-sm text-gray-600">
           You are about to delete this time log.
         </p>
         <p className="text-sm text-gray-600">Do you want to proceed?</p>
       </div>
-      <div className="flex justify-end p-4">
+      <div className="flex justify-end">
         <Button
           text="Cancel"
           onClick={onClose}

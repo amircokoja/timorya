@@ -5,12 +5,13 @@ import classNames from "classnames";
 
 interface Props {
   item: SidebarItemType;
+  closeSidebar: () => void;
 }
 
 const generateIconColor = (isActivePath: boolean) =>
   isActivePath ? "#2563eb" : "#374151";
 
-export default function SidebarItem({ item }: Props) {
+export default function SidebarItem({ item, closeSidebar: close }: Props) {
   const pathname = usePathname();
 
   const isActivePath = pathname.startsWith(item.href) && pathname !== "/";
@@ -23,9 +24,15 @@ export default function SidebarItem({ item }: Props) {
     },
   );
 
+  const closeSidebar = () => {
+    if (window.matchMedia("(max-width: 640px)").matches) {
+      close();
+    }
+  };
+
   return (
     <li>
-      <Link href={item.href} className={linkClasses}>
+      <Link href={item.href} className={linkClasses} onClick={closeSidebar}>
         <item.icon color={generateIconColor(isActivePath)} />
         <span className="ms-3 text-sm">{item.label}</span>
       </Link>

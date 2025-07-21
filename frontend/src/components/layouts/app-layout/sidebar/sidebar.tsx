@@ -1,21 +1,18 @@
-import {
-  GeneralSidebarGroup,
-  SupportSidebarGroup,
-  // ToolsSidebarGroup,
-} from "./sidebar-data";
+import { GeneralSidebarGroup, SupportSidebarGroup } from "./sidebar-data";
 import SidebarGroup from "./sidebar-group";
 
-export default function Sidebar() {
+interface Props {
+  closeSidebar: () => void;
+}
+
+export default function Sidebar({ closeSidebar }: Props) {
   return (
     <>
       <div>
-        <SidebarGroup group={GeneralSidebarGroup} />
+        <SidebarGroup group={GeneralSidebarGroup} closeSidebar={closeSidebar} />
       </div>
-      {/* <div className="border-t border-gray-200">
-        <SidebarGroup group={ToolsSidebarGroup} />
-      </div> */}
       <div className="border-t border-gray-200">
-        <SidebarGroup group={SupportSidebarGroup} />
+        <SidebarGroup group={SupportSidebarGroup} closeSidebar={closeSidebar} />
       </div>
     </>
   );

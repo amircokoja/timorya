@@ -55,7 +55,7 @@ export default function ProjectsTable({ projects }: Props) {
   return (
     <div className="overflow-auto rounded-lg border border-gray-200">
       <table className="w-full text-left text-sm text-gray-500">
-        <thead className="bg-gray-50 text-xs uppercase text-gray-700">
+        <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
           <tr>
             <th scope="col" className="px-4 py-3">
               Project name
@@ -73,10 +73,13 @@ export default function ProjectsTable({ projects }: Props) {
         </thead>
         <tbody>
           {projects?.map((project) => (
-            <tr className="border-b" key={project.id}>
+            <tr
+              className="border-b border-gray-200 last:border-b-0"
+              key={project.id}
+            >
               <th
                 scope="row"
-                className="whitespace-nowrap px-4 py-3 font-medium text-gray-900"
+                className="px-4 py-3 font-medium whitespace-nowrap text-gray-900"
               >
                 {project.name}
               </th>
