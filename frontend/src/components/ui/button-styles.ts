@@ -1,5 +1,5 @@
 export const baseStyles =
-  "relative inline-flex items-center justify-center whitespace-nowrap rounded-lg text-center text-sm font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
+  "cursor-pointer relative inline-flex items-center justify-center whitespace-nowrap rounded-lg text-center text-sm font-medium focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed";
 
 // Define size styles for text + icon or just icon
 export const sizeVariants: Record<

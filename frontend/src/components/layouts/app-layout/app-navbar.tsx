@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import Image from "next/image";
+import Button from "../../ui/button";
+import Dropdown from "../../ui/dropdown";
 
 interface Props {
   isSidebarOpen: boolean;
@@ -14,9 +15,16 @@ export default function AppNavbar({
     "inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200",
     isSidebarOpen ? "block sm:hidden" : "",
   );
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    window.location.href = "/login";
+  };
+
   return (
     <header className="border-b border-gray-200 antialiased">
-      <nav className=" bg-white px-4 py-2.5 lg:px-6">
+      <nav className="bg-white px-4 py-2.5 lg:px-6">
         <div className="flex h-[50px] items-center justify-between">
           <div>
             <button
@@ -45,38 +53,36 @@ export default function AppNavbar({
           </div>
 
           <div className="flex items-center justify-between lg:order-2">
-            <button
-              type="button"
-              data-dropdown-toggle="notification-dropdown"
-              className="mr-1 rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:ring-4 focus:ring-gray-300"
-            >
-              <span className="sr-only">View notifications</span>
-              <svg
-                className="size-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 14 20"
-              >
-                <path d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              className="mx-3 flex rounded-full bg-gray-800 text-sm focus:ring-4 focus:ring-gray-300 md:mr-0"
-              id="user-menu-button"
-              aria-expanded="false"
-              data-dropdown-toggle="dropdown"
-            >
-              <span className="sr-only">Open user menu</span>
-              <Image
-                className="size-8 rounded-full"
-                src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                alt="user photo"
-                width={32}
-                height={32}
-              />
-            </button>
+            <Dropdown
+              trigger={
+                <Button
+                  size="sm"
+                  icon={
+                    <svg
+                      className="h-6 w-6 text-gray-800 dark:text-white"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  }
+                />
+              }
+              items={[
+                {
+                  label: "Log out",
+                  onClick: () => handleLogout(),
+                },
+              ]}
+            />
           </div>
         </div>
       </nav>
