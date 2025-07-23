@@ -1,0 +1,230 @@
+// create variable for color
+$calendar-gray-color: #808080;
+
+.timehub-calendar {
+  // header
+  .rbc-time-header-content {
+    height: 80px;
+
+    .rbc-time-header-cell {
+      height: 80px;
+      .rbc-header button {
+        position: relative;
+        top: -1px;
+      }
+    }
+  }
+
+  .rbc-time-view {
+    border-radius: 10px;
+  }
+
+  .rbc-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .calendar-day-name {
+      font-size: 12px;
+      font-weight: 400;
+      color: $calendar-gray-color;
+      margin-right: 4px; // Adds space between day-name and day-num
+    }
+
+    .calendar-day-num {
+      font-size: 12px;
+      font-weight: 500;
+      color: #000;
+    }
+  }
+
+  // Time for week
+  .rbc-time-column .rbc-timeslot-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom-color: rgb(237, 237, 237);
+    border-left-color: rgb(237, 237, 237);
+    color: $calendar-gray-color;
+  }
+  .rbc-timeslot-group .rbc-time-slot:first-child {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+  }
+  .rbc-timeslot-group .rbc-time-slot:nth-child(2) {
+    display: none;
+  }
+
+  // gutter width
+  .rbc-time-header-gutter {
+    padding: 0 20px;
+  }
+  .rbc-time-gutter .rbc-timeslot-group {
+    padding: 0 20px;
+  }
+
+  // buttons
+  .rbc-btn-group {
+    button {
+      font-size: 12px;
+    }
+
+    button:hover {
+      background: rgb(241, 241, 241);
+    }
+  }
+
+  // right button group
+  .rbc-btn-group:nth-child(3) {
+    background-color: rgb(239, 239, 239);
+    padding: 3px;
+    border-radius: 6px;
+
+    button {
+      border: none;
+    }
+
+    button:not(:last-child) {
+      margin-right: 5px;
+    }
+
+    button.rbc-active {
+      background-color: rgb(255, 255, 255);
+      border-radius: 5px;
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px;
+    }
+
+    button:active {
+      background-color: rgb(255, 255, 255);
+      border-radius: 5px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 4px;
+    }
+  }
+
+  // event
+  .rbc-today {
+    background-color: transparent;
+  }
+
+  .custom-calendar-event {
+    height: 100%;
+    width: 100%;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 0;
+    .custom-calendar-content {
+      width: 100%;
+      padding: 5px;
+      height: 100%;
+      background-color: #ffedd5;
+      color: #a64524;
+      border-radius: 6px;
+      .event-title {
+        font-size: 12px;
+        font-weight: 400 !important;
+        margin-bottom: 2px;
+      }
+
+      .event-time {
+        font-size: 12px;
+        font-weight: 300;
+      }
+    }
+  }
+
+  .rbc-slot-selection {
+    background-color: #ffedd5ae;
+    color: #a64524;
+    border-radius: 6px;
+    width: calc(100% - 10px);
+    opacity: 0.7;
+  }
+
+  .rbc-event {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #a64524;
+    border: none !important;
+    padding: 0;
+    border-radius: 0;
+
+    .rbc-event-label {
+      display: none;
+    }
+  }
+
+  .rbc-event:focus {
+    outline: none;
+  }
+
+  .rbc-event.rbc-selected {
+    outline: none;
+    background-color: transparent;
+
+    .custom-calendar-content {
+      background-color: darken(#ffedd5, 6%) !important;
+    }
+  }
+
+  // current time indicator
+  .rbc-current-time-indicator {
+    height: 2px;
+    background-color: #a64524;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 13px;
+      height: 13px;
+      background-color: #a64524;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // resizable
+  .rbc-addons-dnd-resizable {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Fix */
+
+.rbc-row.rbc-time-header-cell {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.rbc-allday-cell {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Remove any custom flexbox wrappers that aren't standard HTML */
+.rbc-allday-cell > flex,
+.rbc-time-header-cell > flex {
+  display: flex;
+  width: 100%;
+  flex: 1;
+}
+
+/* Ensure child elements within each cell align properly */
+.rbc-allday-cell .rbc-row-bg,
+.rbc-time-header-cell .rbc-row-bg {
+  width: 100%;
+  display: flex;
+}
+
+.rbc-allday-cell .rbc-row-bg .rbc-day-bg,
+.rbc-time-header-cell .rbc-header {
+  flex: 1 0 0%;
+  min-width: 0;
+}

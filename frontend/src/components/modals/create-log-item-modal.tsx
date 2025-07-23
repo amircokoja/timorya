@@ -12,15 +12,16 @@ import {
   updateTimeForDate,
 } from "../app/dashboard/utils";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
-import { usePut } from "@/src/hooks/use-put";
 import { TimeLogCreateDto } from "@/src/models/time-logs/time-log-create-dto";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
 import { useQueryClient } from "@tanstack/react-query";
 import { isValidTimeFormat } from "../app/dashboard/time-logger/utils";
+import { usePost } from "@/src/hooks/use-post";
 
 interface ModalProps {
-  logItem: TimeLogDto;
+  start: Date;
+  end: Date;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -32,17 +33,21 @@ interface LogItemForm {
   description: string;
 }
 
-const EditLogItemModal: React.FC<ModalProps> = ({
-  logItem,
+const CreateLogItemModal: React.FC<ModalProps> = ({
+  // logItem,
+  start,
+  end,
   isOpen,
   onClose,
 }) => {
   const queryClient = useQueryClient();
   const { showToast } = useToastStore();
-  const { mutateAsync: updateTimeLogAsync } = usePut<
+  const { mutateAsync: createTimeLogAsync } = usePost<
     TimeLogCreateDto,
     TimeLogDto
-  >();
+  >({
+    url: "/time-logs",
+  });
 
   const { data: projects, isFetching } = useGet<ProjectDto[]>({
     url: "projects",
@@ -57,26 +62,34 @@ const EditLogItemModal: React.FC<ModalProps> = ({
     },
   });
 
+  useEffect(() => {
+    if (isOpen) {
+      methods.reset({
+        startTime: formatTime(start) ?? "",
+        endTime: formatTime(end) ?? "",
+        projectId: 0,
+        description: "",
+      });
+    }
+  }, [isOpen, start, end, methods]);
+
   const {
     handleSubmit,
     formState: { errors },
   } = methods;
 
   const onSubmit = async (data: LogItemForm) => {
-    const newStartDate = updateTimeForDate(logItem.start, data.startTime);
-    const newEndDate = updateTimeForDate(logItem.end, data.endTime);
+    const newStartDate = updateTimeForDate(start, data.startTime);
+    const newEndDate = updateTimeForDate(end, data.endTime);
     const seconds = getTimeDifferenceInSeconds(newStartDate, newEndDate);
 
-    await updateTimeLogAsync(
+    await createTimeLogAsync(
       {
-        url: "/time-logs/" + logItem.id,
-        data: {
-          description: data.description,
-          start: newStartDate,
-          end: newEndDate,
-          projectId: data.projectId || undefined,
-          seconds,
-        },
+        description: data.description,
+        start: newStartDate,
+        end: newEndDate,
+        projectId: data.projectId || undefined,
+        seconds,
       },
       {
         onSuccess: () => {
@@ -85,7 +98,7 @@ const EditLogItemModal: React.FC<ModalProps> = ({
               typeof query.queryKey?.[0] === "string" &&
               query.queryKey[0].startsWith("/time-logs"),
           });
-          showToast("Log updated successfully", "success");
+          showToast("Log created successfully", "success");
           onClose();
         },
         onError: (error) => {
@@ -109,19 +122,8 @@ const EditLogItemModal: React.FC<ModalProps> = ({
     ];
   }, [projects]);
 
-  useEffect(() => {
-    if (logItem && projects) {
-      methods.reset({
-        startTime: formatTime(logItem.start),
-        endTime: formatTime(logItem.end),
-        projectId: logItem.projectId,
-        description: logItem.description,
-      });
-    }
-  }, [logItem, projects, methods]);
-
   return (
-    <ModalLayout isOpen={isOpen} onClose={onClose} title="Edit time log">
+    <ModalLayout isOpen={isOpen} onClose={onClose} title="Create time log">
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -172,7 +174,7 @@ const EditLogItemModal: React.FC<ModalProps> = ({
             />
           </div>
           <div className="mt-6">
-            <Button disabled={isFetching} text="Update log" type="submit" />
+            <Button disabled={isFetching} text="Create log" type="submit" />
           </div>
         </form>
       </FormProvider>
@@ -180,4 +182,4 @@ const EditLogItemModal: React.FC<ModalProps> = ({
   );
 };
 
-export default EditLogItemModal;
+export default CreateLogItemModal;

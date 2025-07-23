@@ -41,9 +41,7 @@ export default function ProjectForm({ project }: Props) {
     url: "/projects",
   });
 
-  const { mutateAsync: updateProjectAsync } = usePut<ProjectForm, ProjectDto>({
-    url: "/projects/" + project?.id,
-  });
+  const { mutateAsync: updateProjectAsync } = usePut<ProjectForm, ProjectDto>();
 
   const methods = useForm<ProjectForm>({
     mode: "onBlur",
@@ -65,10 +63,14 @@ export default function ProjectForm({ project }: Props) {
 
   const onSubmit = async (data: ProjectForm) => {
     if (project) {
+      const url = "/projects/" + project?.id;
       await updateProjectAsync(
         {
-          ...data,
-          clientId: data?.clientId || undefined,
+          url,
+          data: {
+            ...data,
+            clientId: data?.clientId || undefined,
+          },
         },
         {
           onSuccess: () => {
@@ -194,7 +196,7 @@ export default function ProjectForm({ project }: Props) {
                 className="peer sr-only"
                 {...methods.register("isBillable")}
               />
-              <div className="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-0.5 after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full "></div>
+              <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 after:absolute after:start-[2px] after:top-0.5 after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"></div>
               <span className="ms-3 text-sm font-medium text-gray-900">
                 Yes
               </span>
@@ -217,7 +219,7 @@ export default function ProjectForm({ project }: Props) {
                 className="peer sr-only"
                 {...methods.register("isPublic")}
               />
-              <div className="peer relative h-6 w-11 rounded-full bg-gray-200 after:absolute after:start-[2px] after:top-0.5 after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-4 peer-focus:ring-blue-300 rtl:peer-checked:after:-translate-x-full "></div>
+              <div className="peer relative h-6 w-11 rounded-full bg-gray-200 peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 after:absolute after:start-[2px] after:top-0.5 after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white rtl:peer-checked:after:-translate-x-full"></div>
               <span className="ms-3 text-sm font-medium text-gray-900">
                 Yes
               </span>

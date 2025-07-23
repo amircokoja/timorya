@@ -114,8 +114,9 @@ export default function TimeLogger() {
     await createTimeLogAsync(request, {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["/time-logs"],
-          exact: true,
+          predicate: (query) =>
+            typeof query.queryKey?.[0] === "string" &&
+            query.queryKey[0].startsWith("/time-logs"),
         });
         showToast("Time log created successfully", "success");
         reset();

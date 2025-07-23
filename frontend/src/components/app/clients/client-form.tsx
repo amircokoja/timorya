@@ -37,9 +37,7 @@ export default function ClientForm({ client }: Props) {
     url: "/clients",
   });
 
-  const { mutateAsync: updateClientAsync } = usePut<ClientsForm, ClientDto>({
-    url: "/clients/" + client?.id,
-  });
+  const { mutateAsync: updateClientAsync } = usePut<ClientsForm, ClientDto>();
 
   const methods = useForm<ClientsForm>({
     mode: "onBlur",
@@ -61,19 +59,23 @@ export default function ClientForm({ client }: Props) {
 
   const onSubmit = async (data: ClientsForm) => {
     if (client) {
-      await updateClientAsync(data, {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ["clients/" + client.id],
-            exact: true,
-          });
+      const url = "/clients/" + client?.id;
+      await updateClientAsync(
+        { url, data },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: ["clients/" + client.id],
+              exact: true,
+            });
 
-          handleSuccess();
+            handleSuccess();
+          },
+          onError: (error: AxiosError<ApiError>) => {
+            handleError(error);
+          },
         },
-        onError: (error: AxiosError<ApiError>) => {
-          handleError(error);
-        },
-      });
+      );
     } else {
       await createClientAsync(data, {
         onSuccess: () => {

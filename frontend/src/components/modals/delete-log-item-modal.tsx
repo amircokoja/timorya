@@ -29,7 +29,9 @@ const DeleteLogItemModal: React.FC<ModalProps> = ({
     deleteTimeLogAsync(url, {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["/time-logs"],
+          predicate: (query) =>
+            typeof query.queryKey?.[0] === "string" &&
+            query.queryKey[0].startsWith("/time-logs"),
         });
         showToast("Time log deleted successfully", "success");
         onClose();

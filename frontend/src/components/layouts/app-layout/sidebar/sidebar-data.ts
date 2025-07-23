@@ -1,9 +1,11 @@
 // import { ActivityIcon } from "@/src/components/icons/sidebar-icons/activity-icon";
 // import { CalendarIcon } from "@/src/components/icons/sidebar-icons/calendar-icon";
+import { CalendarIcon } from "@/src/components/icons/sidebar-icons/calendar-icon";
 import { ClientsIcon } from "@/src/components/icons/sidebar-icons/clients-icon";
 import { DashboardIcon } from "@/src/components/icons/sidebar-icons/dashboard-icon";
 // import { MembersIcon } from "@/src/components/icons/sidebar-icons/members-icon";
 import { ProjectsIcon } from "@/src/components/icons/sidebar-icons/projects-icon";
+import { JSX } from "react";
 // import { ReportsIcon } from "@/src/components/icons/sidebar-icons/reports-icon";
 // import { SettingsIcon } from "@/src/components/icons/sidebar-icons/settings-icon";
 
@@ -30,11 +32,11 @@ export const GeneralSidebarGroup: SidebarGroupType = {
       icon: DashboardIcon,
       href: "/app/dashboard",
     },
-    // {
-    //   label: "Calendar",
-    //   icon: CalendarIcon,
-    //   href: "/app/calendar",
-    // },
+    {
+      label: "Calendar",
+      icon: CalendarIcon,
+      href: "/app/calendar",
+    },
   ],
 };
 
