@@ -5,5 +5,6 @@ export interface TimeLogDto {
   end: Date;
   seconds: number;
   projectId?: number;
-  projectName: string;
+  projectName?: string;
+  projectColor?: string;
 }

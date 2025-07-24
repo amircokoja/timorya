@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { CustomApiError } from "@/src/models/abstractions/api-error";
 import { ProjectDto } from "@/src/models/projects/project-dto";
+import { getColorValue } from "@/src/utils/get-color-value";
 
 interface Props {
   projects: ProjectDto[];
@@ -85,7 +86,11 @@ export default function ProjectsTable({ projects }: Props) {
               </th>
               <td className="px-4 py-3">{project.clientName ?? "-"}</td>
               <td className="px-4 py-3">
-                {<div className={`size-4 rounded-sm ${project.color}`}></div>}
+                {
+                  <div
+                    className={`size-4 rounded-sm ${getColorValue(project.color)}`}
+                  ></div>
+                }
               </td>
               <td className="flex items-center justify-end px-4 py-3">
                 <Dropdown

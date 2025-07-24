@@ -1,3 +1,4 @@
+import { getColorValue } from "@/src/utils/get-color-value";
 import classNames from "classnames";
 
 interface Color {
@@ -5,7 +6,7 @@ interface Color {
   value: string;
 }
 
-const colors: Color[] = [
+export const colors: Color[] = [
   {
     name: "blue",
     value: "bg-blue-600",
@@ -61,12 +62,16 @@ const ColorSelector: React.FC<Props> = ({
       <div className="flex flex-wrap items-center">
         {colors.map((color) => (
           <button
-            onClick={() => handleColorChange(color.value)}
+            onClick={() => handleColorChange(color.name)}
             key={color.name}
             type="button"
-            className={classNames("mb-2 mr-2 size-6 rounded-sm", color.value, {
-              "border-4 border-gray-900": value === color.value,
-            })}
+            className={classNames(
+              "mr-2 mb-2 size-6 rounded-sm",
+              getColorValue(color.name),
+              {
+                "border-4 border-gray-900": value === color.name,
+              },
+            )}
           ></button>
         ))}
       </div>

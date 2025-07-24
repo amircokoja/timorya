@@ -80,6 +80,11 @@ $calendar-gray-color: #808080;
     padding: 3px;
     border-radius: 6px;
 
+    button:nth-child(1),
+    button:nth-child(4) {
+      display: none;
+    }
+
     button {
       border: none;
     }
@@ -112,12 +117,13 @@ $calendar-gray-color: #808080;
     padding-top: 2px;
     padding-bottom: 2px;
     border-radius: 0;
+
     .custom-calendar-content {
       width: 100%;
       padding: 5px;
       height: 100%;
-      background-color: #ffedd5;
-      color: #a64524;
+      background-color: #e2f2ff;
+      color: #035684;
       border-radius: 6px;
       .event-title {
         font-size: 12px;
@@ -129,6 +135,69 @@ $calendar-gray-color: #808080;
         font-size: 12px;
         font-weight: 300;
       }
+    }
+  }
+
+  // event colors
+  .custom-calendar-event.custom-event-blue {
+    .custom-calendar-content {
+      background-color: #e2f2ff;
+      color: #035684;
+    }
+  }
+  .custom-calendar-event.custom-event-purple {
+    .custom-calendar-content {
+      background-color: #ede9fe; /* very light purple */
+      color: #9463e9; /* medium purple */
+    }
+  }
+
+  .custom-calendar-event.custom-event-indigo {
+    .custom-calendar-content {
+      background-color: #e0e7ff; /* very light indigo */
+      color: #4f46e5; /* medium indigo */
+    }
+  }
+
+  .custom-calendar-event.custom-event-pink {
+    .custom-calendar-content {
+      background-color: #fbeaf4; /* very light pink */
+      color: #dc6c9f; /* medium pink */
+    }
+  }
+
+  .custom-calendar-event.custom-event-teal {
+    .custom-calendar-content {
+      background-color: #e1fff8; /* very light teal */
+      color: #42ab9f; /* medium teal */
+    }
+  }
+
+  .custom-calendar-event.custom-event-green {
+    .custom-calendar-content {
+      background-color: #d4f9dd; /* very light green */
+      color: #22a050; /* medium green */
+    }
+  }
+
+  .custom-calendar-event.custom-event-yellow {
+    .custom-calendar-content {
+      background-color: #fffbce; /* very light yellow */
+      color: #b88a28; /* medium yellow */
+    }
+  }
+
+  .custom-calendar-event.custom-event-orange {
+    .custom-calendar-content {
+      background-color: #ffedd5;
+      color: #a64524;
+    }
+  }
+
+  .custom-calendar-event.custom-event-red {
+    .custom-calendar-content {
+      background-color: #f7e4e4; /* very light red */
+      color: #d63939; /* medium red */
     }
   }
 
@@ -164,7 +233,8 @@ $calendar-gray-color: #808080;
     background-color: transparent;
 
     .custom-calendar-content {
-      background-color: darken(#ffedd5, 6%) !important;
+      opacity: 0.6;
+      // background-color: darken(#ffedd5, 6%) !important;
     }
   }
 

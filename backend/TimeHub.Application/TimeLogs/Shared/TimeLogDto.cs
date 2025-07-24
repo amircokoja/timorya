@@ -11,6 +11,7 @@ public class TimeLogDto
     public int Seconds { get; set; }
     public int? ProjectId { get; set; }
     public string? ProjectName { get; set; }
+    public string? ProjectColor { get; set; }
 
     public static TimeLogDto From(TimeLog timeLog)
     {
@@ -23,6 +24,7 @@ public class TimeLogDto
             Seconds = timeLog.Seconds,
             ProjectId = timeLog.ProjectId,
             ProjectName = timeLog.Project?.Name.Value,
+            ProjectColor = timeLog.Project?.Color.Value,
         };
     }
 }

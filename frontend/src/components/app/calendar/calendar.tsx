@@ -7,6 +7,7 @@ import moment from "moment";
 import withDragAndDrop, {
   EventInteractionArgs,
 } from "react-big-calendar/lib/addons/dragAndDrop";
+import classNames from "classnames";
 
 import "./calendar.scss";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -48,6 +49,7 @@ export default function Calendar({ onEventDrop, onSelectSlot }: Props) {
           end: new Date(timeLog.end),
           projectId: timeLog.projectId,
           seconds: timeLog.seconds,
+          projectColor: timeLog.projectColor || "blue",
           projectName: timeLog.projectName || "No project",
         })),
       ),
@@ -105,7 +107,12 @@ export default function Calendar({ onEventDrop, onSelectSlot }: Props) {
             <span dangerouslySetInnerHTML={{ __html: label }} />
           ),
           event: ({ event }) => (
-            <div className="custom-calendar-event">
+            <div
+              className={classNames(
+                "custom-calendar-event",
+                `custom-event-${event.projectColor ?? "red"}`,
+              )}
+            >
               <div className="custom-calendar-content">
                 <div className="event-title">
                   <strong>{event.description}</strong>

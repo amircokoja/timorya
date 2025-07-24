@@ -9,6 +9,7 @@ import { useToastStore } from "@/src/store/toast-store";
 import { AxiosError } from "axios";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { CustomApiError } from "@/src/models/abstractions/api-error";
+import { getColorValue } from "@/src/utils/get-color-value";
 
 interface Props {
   clients: ClientDto[];
@@ -85,7 +86,11 @@ export default function ClientsTable({ clients }: Props) {
               </th>
               <td className="px-4 py-3">{client.email}</td>
               <td className="px-4 py-3">
-                {<div className={`size-4 rounded-sm ${client.color}`}></div>}
+                {
+                  <div
+                    className={`size-4 rounded-sm ${getColorValue(client.color)}`}
+                  ></div>
+                }
               </td>
               <td className="flex items-center justify-end px-4 py-3">
                 <Dropdown

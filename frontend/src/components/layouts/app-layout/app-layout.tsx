@@ -50,7 +50,7 @@ export default function AppLayout({ children }: Props) {
 
       <div
         className={classNames(
-          "flex min-h-screen flex-1 flex-col",
+          "flex min-h-screen flex-col",
           isSidebarOpen ? "sm:ml-64" : "",
         )}
       >
@@ -58,9 +58,9 @@ export default function AppLayout({ children }: Props) {
           handleSidebarToggle={handleToggleSidebar}
           isSidebarOpen={isSidebarOpen}
         />
-        <div className="flex min-h-0 flex-1 bg-gray-100 p-2 md:p-5">
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white p-2 md:p-8">
-            <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+        <div className="flex flex-1 bg-gray-100 p-2 md:p-5">
+          <div className="flex flex-1 flex-col overflow-auto rounded-lg border border-gray-200 bg-white p-2 md:p-8">
+            {children}
           </div>
         </div>
       </div>

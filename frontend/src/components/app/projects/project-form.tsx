@@ -22,7 +22,7 @@ export type ProjectForm = {
   color: string;
   isPublic: boolean;
   isBillable: boolean;
-  hourlyRate: number;
+  hourlyRate?: number;
   clientId?: number;
 };
 
@@ -51,7 +51,7 @@ export default function ProjectForm({ project }: Props) {
       isBillable: project?.isBillable || false,
       hourlyRate: project?.hourlyRate || undefined,
       clientId: project?.clientId || undefined,
-      color: project?.color || "bg-blue-600",
+      color: project?.color || "blue",
     },
   });
   const queryClient = useQueryClient();
@@ -62,15 +62,23 @@ export default function ProjectForm({ project }: Props) {
   } = methods;
 
   const onSubmit = async (data: ProjectForm) => {
+    let normalizedHourlyRate: number | undefined = undefined;
+    if (typeof data.hourlyRate === "number" && !isNaN(data.hourlyRate)) {
+      normalizedHourlyRate = data.hourlyRate;
+    }
+
+    const normalizedData: ProjectForm = {
+      ...data,
+      hourlyRate: normalizedHourlyRate,
+      clientId: data?.clientId || undefined,
+    };
+
     if (project) {
       const url = "/projects/" + project?.id;
       await updateProjectAsync(
         {
           url,
-          data: {
-            ...data,
-            clientId: data?.clientId || undefined,
-          },
+          data: normalizedData,
         },
         {
           onSuccess: () => {
@@ -87,20 +95,14 @@ export default function ProjectForm({ project }: Props) {
         },
       );
     } else {
-      await createProjectAsync(
-        {
-          ...data,
-          clientId: data?.clientId || undefined,
+      await createProjectAsync(normalizedData, {
+        onSuccess: () => {
+          handleSuccess();
         },
-        {
-          onSuccess: () => {
-            handleSuccess();
-          },
-          onError: (error: AxiosError<ApiError>) => {
-            handleError(error);
-          },
+        onError: (error: AxiosError<ApiError>) => {
+          handleError(error);
         },
-      );
+      });
     }
   };
 
@@ -145,7 +147,7 @@ export default function ProjectForm({ project }: Props) {
         isBillable: project.isBillable || false,
         hourlyRate: project.hourlyRate || undefined,
         clientId: project.clientId,
-        color: project.color || "bg-blue-600",
+        color: project.color || "blue",
       });
     }
   }, [clients, project, methods]);
@@ -175,6 +177,7 @@ export default function ProjectForm({ project }: Props) {
 
           <Input
             label="Hourly rate"
+            type="number"
             error={errors.hourlyRate?.message}
             placeholder="Enter hourly rate"
             {...methods.register("hourlyRate")}

@@ -55,16 +55,7 @@ internal sealed class GetTimeLogsQueryHandler(
 
                 var seconds = (int)(rangeEnd - current).TotalSeconds;
 
-                var dto = new TimeLogDto
-                {
-                    Id = log.Id,
-                    Description = log.Description.Value,
-                    Start = current,
-                    End = rangeEnd,
-                    Seconds = seconds,
-                    ProjectId = log.ProjectId,
-                    ProjectName = log.Project?.Name.Value,
-                };
+                var dto = TimeLogDto.From(log);
 
                 splitLogs.Add((date, dto));
 
