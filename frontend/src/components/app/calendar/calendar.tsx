@@ -1,6 +1,8 @@
 import {
   Calendar as ReactBigCalendar,
   SlotInfo,
+  View,
+  Views,
   momentLocalizer,
 } from "react-big-calendar";
 import moment from "moment";
@@ -16,6 +18,7 @@ import { TimeLogWeekGroup } from "@/src/models/time-logs/time-log-week-group";
 import { useGet } from "@/src/hooks/use-get";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+import { useState } from "react";
 
 export interface CalendarEvent {
   id: number;
@@ -35,6 +38,7 @@ interface Props {
 }
 
 export default function Calendar({ onEventDrop, onSelectSlot }: Props) {
+  const [viewValue, setViewValue] = useState<View>(Views.DAY);
   const { data } = useGet<PaginatedResut<TimeLogWeekGroup>>({
     url: "/time-logs?page=" + 1 + "&pageSize=35",
   });
@@ -55,14 +59,27 @@ export default function Calendar({ onEventDrop, onSelectSlot }: Props) {
       ),
     ) || [];
 
+  const onViewChange = (event: string) => {
+    if (event === "day") {
+      setViewValue(Views.DAY);
+    } else {
+      setViewValue(Views.WEEK);
+    }
+  };
+
   return (
     <div
-      className="timehub-calendar"
+      className={classNames(
+        "timehub-calendar",
+        `timehub-calendar-${viewValue}`,
+      )}
       style={{ flex: 1, minHeight: 0, height: 500 }}
     >
       <DnDCalendar
         localizer={localizer}
         events={events}
+        view={viewValue}
+        onView={onViewChange}
         resizable={true}
         eventPropGetter={() => {
           return {
@@ -86,8 +103,9 @@ export default function Calendar({ onEventDrop, onSelectSlot }: Props) {
         }}
         selectable={true}
         startAccessor="start"
-        defaultView="week"
+        // defaultView="week"
         endAccessor="end"
+        scrollToTime={new Date(1970, 1, 1, 8, 0, 0)}
         formats={{
           timeGutterFormat: (date, culture, localizer) =>
             localizer ? localizer.format(date, "HH:mm", culture) : "", // 24-hour format

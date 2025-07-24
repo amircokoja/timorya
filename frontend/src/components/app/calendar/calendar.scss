@@ -1,13 +1,27 @@
 // create variable for color
 $calendar-gray-color: #808080;
 
+.timehub-calendar.timehub-calendar-day {
+  .rbc-time-view {
+    min-width: 0;
+  }
+}
+
 .timehub-calendar {
+  display: flex;
+  overflow-x: auto;
+
+  .rbc-calendar {
+    display: flex;
+    flex: 1;
+  }
   // header
   .rbc-time-header-content {
-    height: 80px;
+    border-color: rgb(237, 237, 237);
+
+    height: 40px;
 
     .rbc-time-header-cell {
-      height: 80px;
       .rbc-header button {
         position: relative;
         top: -1px;
@@ -16,7 +30,10 @@ $calendar-gray-color: #808080;
   }
 
   .rbc-time-view {
+    flex: 1;
+    border-color: rgb(237, 237, 237);
     border-radius: 10px;
+    min-width: 800px;
   }
 
   .rbc-header {
@@ -45,7 +62,13 @@ $calendar-gray-color: #808080;
     border-bottom-color: rgb(237, 237, 237);
     border-left-color: rgb(237, 237, 237);
     color: $calendar-gray-color;
+    min-height: 60px;
+
+    &:nth-child(24) {
+      border-bottom: 1px solid transparent !important;
+    }
   }
+
   .rbc-timeslot-group .rbc-time-slot:first-child {
     display: flex;
     align-items: center;
@@ -61,6 +84,10 @@ $calendar-gray-color: #808080;
   }
   .rbc-time-gutter .rbc-timeslot-group {
     padding: 0 20px;
+
+    @media (max-width: 768px) {
+      padding: 0;
+    }
   }
 
   // buttons
@@ -262,6 +289,21 @@ $calendar-gray-color: #808080;
     width: 100%;
     height: 100%;
   }
+
+  // disalbe all day row
+  .rbc-allday-cell {
+    display: none;
+  }
+
+  // right top border fix
+  .rbc-time-header.rbc-overflowing {
+    border-color: transparent;
+  }
+
+  // calendar big border fix
+  .rbc-time-content {
+    border-top: 0;
+  }
 }
 
 /* Fix */
@@ -297,4 +339,6 @@ $calendar-gray-color: #808080;
 .rbc-time-header-cell .rbc-header {
   flex: 1 0 0%;
   min-width: 0;
+  border-bottom-color: rgb(237, 237, 237) !important;
+  border-left-color: rgb(237, 237, 237) !important;
 }
