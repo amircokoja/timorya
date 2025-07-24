@@ -34,7 +34,6 @@ interface LogItemForm {
 }
 
 const CreateLogItemModal: React.FC<ModalProps> = ({
-  // logItem,
   start,
   end,
   isOpen,

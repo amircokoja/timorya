@@ -35,10 +35,15 @@ const DnDCalendar = withDragAndDrop(ReactBigCalendar<TimeLogDto>);
 interface Props {
   onEventDrop?: (event: EventInteractionArgs<TimeLogDto>) => void;
   onSelectSlot?: (slotInfo: SlotInfo) => void;
+  onSelectEvent?: (event: TimeLogDto) => void;
 }
 
-export default function Calendar({ onEventDrop, onSelectSlot }: Props) {
-  const [viewValue, setViewValue] = useState<View>(Views.DAY);
+export default function Calendar({
+  onEventDrop,
+  onSelectSlot,
+  onSelectEvent,
+}: Props) {
+  const [viewValue, setViewValue] = useState<View>(Views.WEEK);
   const { data } = useGet<PaginatedResut<TimeLogWeekGroup>>({
     url: "/time-logs?page=" + 1 + "&pageSize=35",
   });
@@ -101,6 +106,7 @@ export default function Calendar({ onEventDrop, onSelectSlot }: Props) {
             onSelectSlot(slotInfo);
           }
         }}
+        onSelectEvent={onSelectEvent}
         selectable={true}
         startAccessor="start"
         // defaultView="week"
