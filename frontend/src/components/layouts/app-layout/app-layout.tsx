@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { BackIcon } from "../../icons/back-icon";
-import { TimeHubLogo } from "../../icons/timehub-logo";
 import Button from "../../ui/button";
 import AppNavbar from "./app-navbar";
 import classNames from "classnames";
 import Sidebar from "./sidebar/sidebar";
 import Link from "next/link";
+import { TimoryaLogo } from "../../icons/timorya-logo";
 
 interface Props {
   children: React.ReactNode;
@@ -34,7 +34,7 @@ export default function AppLayout({ children }: Props) {
           <div className="border-b border-gray-200 bg-white px-4 py-2.5 lg:px-6">
             <div className="flex h-[50px] items-center justify-between">
               <Link href="/" className="relative top-0.5">
-                <TimeHubLogo />
+                <TimoryaLogo />
               </Link>
               <Button
                 color="white"

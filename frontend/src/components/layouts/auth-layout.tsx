@@ -1,4 +1,5 @@
-import Image from "next/image";
+import Link from "next/link";
+import { TimoryaLogo } from "../icons/timorya-logo";
 
 export default function AuthLayout({
   children,
@@ -8,22 +9,12 @@ export default function AuthLayout({
   return (
     <section className="flex min-h-screen items-center bg-gray-50">
       <div className="mx-auto max-w-screen-xl px-4 py-8 lg:grid lg:grid-cols-12 lg:gap-20 lg:py-16">
-        <div className="col-span-6 mr-auto hidden flex-col justify-between lg:flex xl:mb-0">
+        <div className="col-span-6 mr-auto hidden flex-col justify-center lg:flex xl:mb-0">
           <div>
-            <a
-              href="#"
-              className="mb-6 inline-flex items-center text-2xl font-semibold text-gray-900 lg:mb-10"
-            >
-              <Image
-                className="mr-2 size-8"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                alt="logo"
-                width={32}
-                height={32}
-              />
-              TimeHub
-            </a>
-            <div className="flex">
+            <Link href="/" className="relative top-0.5">
+              <TimoryaLogo />
+            </Link>
+            <div className="mt-10 flex">
               <svg
                 className="mr-2 size-5 shrink-0 text-blue-600"
                 fill="currentColor"
@@ -37,7 +28,7 @@ export default function AuthLayout({
                 ></path>
               </svg>
               <div>
-                <h3 className="mb-2 text-xl font-bold leading-none text-gray-900">
+                <h3 className="mb-2 text-xl leading-none font-bold text-gray-900">
                   Track time effortlessly
                 </h3>
                 <p className="mb-2 font-light text-gray-500">
@@ -60,7 +51,7 @@ export default function AuthLayout({
                 ></path>
               </svg>
               <div>
-                <h3 className="mb-2 text-xl font-bold leading-none text-gray-900">
+                <h3 className="mb-2 text-xl leading-none font-bold text-gray-900">
                   Boost productivity
                 </h3>
                 <p className="mb-2 font-light text-gray-500">
@@ -83,7 +74,7 @@ export default function AuthLayout({
                 ></path>
               </svg>
               <div>
-                <h3 className="mb-2 text-xl font-bold leading-none text-gray-900">
+                <h3 className="mb-2 text-xl leading-none font-bold text-gray-900">
                   Stay in control
                 </h3>
                 <p className="mb-2 font-light text-gray-500">
@@ -93,49 +84,11 @@ export default function AuthLayout({
               </div>
             </div>
           </div>
-          <nav>
-            <ul className="flex space-x-4">
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-gray-500 hover:text-gray-900 hover:underline"
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-gray-500 hover:text-gray-900 hover:underline"
-                >
-                  Term & Conditions
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-gray-500 hover:text-gray-900 hover:underline"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </nav>
         </div>
-        <div className="mb-6 text-center lg:hidden">
-          <a
-            href="#"
-            className="inline-flex items-center text-2xl font-semibold text-gray-900 lg:hidden"
-          >
-            <Image
-              className="mr-2 size-8"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-              alt="logo"
-              width={32}
-              height={32}
-            />
-            Flowbite
-          </a>
+        <div className="mb-6 flex justify-center lg:hidden">
+          <Link href="/" className="relative top-0.5">
+            <TimoryaLogo />
+          </Link>
         </div>
         {children}
       </div>

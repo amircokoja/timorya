@@ -88,28 +88,9 @@ export default function Register() {
     <AuthLayout>
       <div className="col-span-6 mx-auto w-full rounded-lg bg-white shadow sm:max-w-lg md:mt-0 xl:p-0">
         <div className="space-y-4 p-6 sm:p-8 lg:space-y-6">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 sm:text-2xl">
+          <h1 className="text-xl leading-tight font-bold tracking-tight text-gray-900 sm:text-2xl">
             Create your account
           </h1>
-          <div className="items-center space-y-3 sm:flex sm:space-x-4 sm:space-y-0">
-            <LinkButton
-              href="#"
-              color="white"
-              text="Sign up with Google"
-              icon={<GoogleIcon />}
-            />
-            <LinkButton
-              href="#"
-              color="white"
-              text="Sign up with Apple"
-              icon={<AppleIcon />}
-            />
-          </div>
-          <div className="flex items-center">
-            <div className="h-0.5 w-full bg-gray-200"></div>
-            <div className="px-5 text-center text-gray-500">or</div>
-            <div className="h-0.5 w-full bg-gray-200"></div>
-          </div>
           <FormProvider {...methods}>
             <form
               className="space-y-4 lg:space-y-6"
@@ -168,30 +149,7 @@ export default function Register() {
                   },
                 })}
               />
-              <div className="flex items-start">
-                <div className="flex h-5 items-center">
-                  <input
-                    {...methods.register("acceptTerms", {
-                      ...acceptTermsValidation,
-                    })}
-                    id="acceptTerms"
-                    aria-describedby="terms"
-                    type="checkbox"
-                    className="size-4 rounded border border-gray-300 bg-gray-50 focus:ring-4 focus:ring-blue-300"
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label
-                    htmlFor="acceptTerms"
-                    className="font-light text-gray-500 "
-                  >
-                    By signing up, you are creating a TimeHub account, and you
-                    agree to TimeHub&apos;s{" "}
-                    <CustomLink href="#" text="Terms of Use" /> and{" "}
-                    <CustomLink href="#" text="Privacy Policy" />.
-                  </label>
-                </div>
-              </div>
+
               <Button
                 text="Create your account"
                 type="submit"
@@ -208,3 +166,5 @@ export default function Register() {
     </AuthLayout>
   );
 }
+
+/* timorya */
