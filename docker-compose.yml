@@ -1,13 +1,13 @@
-name: timehub
+name: timorya
 services:
-  timehub-api:
-    container_name: timehub-api
+  timorya-api:
+    container_name: timorya-api
     build:
       context: ./backend
       dockerfile: Dockerfile
       args:
         - BUILD=Debug
-    image: timehub-api
+    image: timorya-api
     environment:
       - ASPNETCORE_HTTPS_PORT=6001
       - ASPNETCORE_ENVIRONMENT=Development
@@ -29,12 +29,12 @@ services:
     depends_on:
       - db
 
-  timehub-frontend:
-    container_name: timehub-frontend
+  timorya-frontend:
+    container_name: timorya-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: timehub-frontend
+    image: timorya-frontend
     environment:
       - NEXT_PUBLIC_API_URL=${API_URL}
     ports:

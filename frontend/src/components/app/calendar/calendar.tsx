@@ -75,8 +75,8 @@ export default function Calendar({
   return (
     <div
       className={classNames(
-        "timehub-calendar",
-        `timehub-calendar-${viewValue}`,
+        "timorya-calendar",
+        `timorya-calendar-${viewValue}`,
       )}
       style={{ flex: 1, minHeight: 0, height: 500 }}
     >

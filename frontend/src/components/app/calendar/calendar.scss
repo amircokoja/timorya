@@ -1,13 +1,13 @@
 // create variable for color
 $calendar-gray-color: #808080;
 
-.timehub-calendar.timehub-calendar-day {
+.timorya-calendar.timorya-calendar-day {
   .rbc-time-view {
     min-width: 0;
   }
 }
 
-.timehub-calendar {
+.timorya-calendar {
   display: flex;
   overflow-x: auto;
 
