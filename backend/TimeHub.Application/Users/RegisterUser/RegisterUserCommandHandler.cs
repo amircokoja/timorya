@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TimeHub.Application.Abstractions.Interfaces;
 using TimeHub.Application.Abstractions.Messaging;
+using TimeHub.Application.Common.Interfaces;
 using TimeHub.Application.Errors;
 using TimeHub.Domain.Abstractions;
 using TimeHub.Domain.Shared;
@@ -8,10 +9,15 @@ using TimeHub.Domain.Users;
 
 namespace TimeHub.Application.Users.RegisterUser;
 
-internal sealed class RegisterUserCommandHandler(IApplicationDbContext context)
-    : ICommandHandler<RegisterUserCommand, RegisterUserResponse>
+internal sealed class RegisterUserCommandHandler(
+    IApplicationDbContext context,
+    IEmailService emailService,
+    IEmailTemplateService emailTemplateService
+) : ICommandHandler<RegisterUserCommand, RegisterUserResponse>
 {
     private readonly IApplicationDbContext _context = context;
+    private readonly IEmailService _emailService = emailService;
+    private readonly IEmailTemplateService _emailTemplateService = emailTemplateService;
 
     public async Task<Result<RegisterUserResponse>> Handle(
         RegisterUserCommand request,
@@ -58,6 +64,21 @@ internal sealed class RegisterUserCommandHandler(IApplicationDbContext context)
         _context.Set<User>().Add(user);
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        // Move to event handler
+        try
+        {
+            var emailValue = _emailTemplateService.NewUserEmailContent(
+                request.Email,
+                request.FirstName + " " + request.LastName
+            );
+
+            await _emailService.SendEmailAsync(emailValue, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to send email: {ex.Message}");
+        }
 
         return new RegisterUserResponse(user);
     }

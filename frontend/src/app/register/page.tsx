@@ -2,9 +2,6 @@
 
 import AuthLayout from "../../components/layouts/auth-layout";
 import Button from "../../components/ui/button";
-import LinkButton from "../../components/ui/link-button";
-import { GoogleIcon } from "../../components/icons/google-icon";
-import { AppleIcon } from "../../components/icons/apple-icon";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../../components/ui/input";
 import CustomLink from "../../components/ui/link";
@@ -15,7 +12,6 @@ import { AxiosError } from "axios";
 import { RegisterUserResponse } from "@/src/models/users/register-user-response";
 import { ApiError } from "@/src/models/abstractions/api-error";
 import {
-  acceptTermsValidation,
   confirmPasswordValidation,
   emailValidation,
   firstNameValidation,
@@ -166,5 +162,3 @@ export default function Register() {
     </AuthLayout>
   );
 }
-
-/* timorya */

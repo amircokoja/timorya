@@ -9,8 +9,11 @@ using Microsoft.IdentityModel.Tokens;
 using TimeHub.Application.Abstractions.Authentication;
 using TimeHub.Application.Abstractions.Authorization.Handlers;
 using TimeHub.Application.Abstractions.Interfaces;
+using TimeHub.Application.Common.Interfaces;
 using TimeHub.Application.Users;
 using TimeHub.Infrastructure.Authentication;
+using TimeHub.Infrastructure.Common.Email;
+using TimeHub.Infrastructure.Common.Models;
 using TimeHub.Infrastructure.Entities.Users;
 using TimeHub.Infrastructure.Extensions;
 
@@ -35,6 +38,10 @@ public static class DependencyInjection
         AddCORSConfig(services);
 
         hostBuilder.ConfigureHttps(configuration);
+
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+        services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
         return services;
     }
