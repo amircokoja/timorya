@@ -61,4 +61,9 @@ public sealed class User : Entity
     {
         return Password.VerifyPassword(password, Password.Value);
     }
+
+    public void SetPassword(Password newPassword)
+    {
+        Password = newPassword;
+    }
 }

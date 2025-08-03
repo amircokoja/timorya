@@ -23,4 +23,9 @@ public static class UserErrors
         "User.NotAuthorized",
         "User is not authorized to perform this action"
     );
+
+    public static readonly Error InvalidToken = new(
+        "User.InvalidToken",
+        "The provided reset token is invalid"
+    );
 }

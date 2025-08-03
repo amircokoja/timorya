@@ -16,4 +16,14 @@ public class EmailContent(
     {
         return new EmailContent("Timorya", "info@timorya.com", subject, content);
     }
+
+    public static EmailContent Create(
+        string recipientName,
+        string recipientEmail,
+        string subject,
+        string content
+    )
+    {
+        return new EmailContent(recipientName, recipientEmail, subject, content);
+    }
 }

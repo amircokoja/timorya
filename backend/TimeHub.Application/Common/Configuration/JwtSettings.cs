@@ -1,4 +1,4 @@
-namespace TimeHub.Infrastructure.Authentication;
+namespace TimeHub.Application.Common.Configuration;
 
 public class JwtSettings
 {

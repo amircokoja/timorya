@@ -59,4 +59,13 @@ public class EmailTemplateService : IEmailTemplateService
 
         return EmailContent.CreateForMe("New Contact Form Submission", content);
     }
+
+    public EmailContent ForgotPassword(string email, string resetLink)
+    {
+        var template = GetEmailTemplate("ForgotPassword");
+        var values = new Dictionary<string, string> { { "ResetLink", resetLink } };
+        var content = PopulateTemplate(template, values);
+
+        return EmailContent.Create(email, email, "Forgot Password", content);
+    }
 }

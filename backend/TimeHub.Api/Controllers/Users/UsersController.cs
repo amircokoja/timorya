@@ -1,10 +1,11 @@
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeHub.Api.Controllers.Users.Models;
+using TimeHub.Application.Users.ForgotPassword;
 using TimeHub.Application.Users.LoginUser;
 using TimeHub.Application.Users.LoginUserWithRefreshToken;
 using TimeHub.Application.Users.RegisterUser;
+using TimeHub.Application.Users.ResetPasswordWithToken;
 using TimeHub.Domain.Abstractions;
 
 namespace TimeHub.Api.Controllers.Users;
@@ -75,10 +76,36 @@ public class UsersController(ISender sender) : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("test")]
-    [Authorize]
-    public IActionResult GetTestData()
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(
+        [FromBody] ForgotPasswordRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        return Ok(new { Message = "Hello World" });
+        var command = new ForgotPasswordCommand(request.Email);
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
+    }
+
+    [HttpPost("reset-password-with-token")]
+    public async Task<IActionResult> ResetPasswordWithToken(
+        [FromBody] ResetPasswordWithTokenRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var query = new ResetPasswordWithTokenCommand(request.Token, request.NewPassword);
+        Result<Unit> result = await _sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok();
     }
 }

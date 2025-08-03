@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TimeHub.Application.Abstractions.Authentication;
+using TimeHub.Application.Common.Configuration;
 using TimeHub.Domain.Users;
 
 namespace TimeHub.Infrastructure.Authentication;
@@ -23,7 +24,7 @@ public class JwtService(IOptions<JwtSettings> options) : IJwtService
             new(JwtRegisteredClaimNames.Email, email),
             new(JwtCustomClaimNames.Organization, organizationId.ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new(JwtRegisteredClaimNames.Exp, expires.ToString())
+            new(JwtRegisteredClaimNames.Exp, expires.ToString()),
         };
 
         if (role != null)

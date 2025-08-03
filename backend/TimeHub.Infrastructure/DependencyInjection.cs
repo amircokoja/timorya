@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using TimeHub.Application.Abstractions.Authentication;
 using TimeHub.Application.Abstractions.Authorization.Handlers;
 using TimeHub.Application.Abstractions.Interfaces;
+using TimeHub.Application.Common.Configuration;
 using TimeHub.Application.Common.Interfaces;
 using TimeHub.Application.Users;
 using TimeHub.Infrastructure.Authentication;
