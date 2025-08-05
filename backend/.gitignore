@@ -70,7 +70,6 @@ wwwroot/lib/
 wwwroot/dist/
 
 # Docker files
-**/[Dd]ockerfile
 **/[Dd]ocker-compose*
 **/docker-compose.override.*
 **/docker-compose.debug.yml
