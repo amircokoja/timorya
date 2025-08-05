@@ -4,3 +4,5 @@
 https-cert.pfx
 
 .env
+.env.production
+.env.development

@@ -6,28 +6,17 @@ services:
       context: ./backend
       dockerfile: Dockerfile
       args:
-        - BUILD=Debug
+        - BUILD=Release
     image: timorya-api
-    environment:
-      - ASPNETCORE_HTTPS_PORT=6001
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80;
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - ConnectionStrings__Database=${CONNECTION_STRING_DATABASE}
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/https/https-cert.pfx
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=TimeHub123
-      - DOTNET_MODIFIABLE_ASSEMBLIES=Debug
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-      - DOTNET_RUNNING_IN_CONTAINER=true
+    env_file:
+      - .env.production
     ports:
       - "6000:80"
       - "6001:443"
-      - "9229:9229" 
     volumes:
       - ./backend/https-cert.pfx:/app/https/https-cert.pfx:ro
     restart: always
-    depends_on:
-      - db
+
 
   timorya-frontend:
     container_name: timorya-frontend
@@ -35,28 +24,15 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: timorya-frontend
-    environment:
-      - NEXT_PUBLIC_API_URL=${API_URL}
+    env_file:
+      - .env.development
     ports:
       - "4000:4000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
     depends_on:
-      - timehub-api
-    restart: always
-
-  db:
-    image: postgres:16
-    container_name: timehub-postgres
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - timorya-api
     restart: always
 
 volumes:
