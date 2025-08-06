@@ -14,15 +14,21 @@ builder.Services.AddInfrastructure(builder.Configuration, builder.Host);
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+app.UseRouting();
+
 // if (app.Environment.IsDevelopment())
 // {
+app.UseCors("AllowAll");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapOpenApi();
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/openapi/v1.json", "Timorya API");
 });
-
-app.UseCors("AllowAll");
 
 app.MapScalarApiReference(options =>
 {
@@ -31,13 +37,8 @@ app.MapScalarApiReference(options =>
 
 // }
 
-app.MapControllers();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseHttpsRedirection();
-
 app.UseCustomExceptionHandler();
+
+app.MapControllers();
 
 app.Run();
