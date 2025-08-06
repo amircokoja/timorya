@@ -12,11 +12,9 @@ services:
       - .env.production
     ports:
       - "6000:80"
-      - "6001:443"
     volumes:
       - ./backend/https-cert.pfx:/app/https/https-cert.pfx:ro
     restart: always
-
 
   timorya-frontend:
     container_name: timorya-frontend
