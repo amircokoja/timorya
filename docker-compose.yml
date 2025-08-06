@@ -22,6 +22,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: timorya-app
+    environment:
+      - PORT=4000
     env_file:
       - .env.production
     ports:
