@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
     image: timorya-frontend
     env_file:
-      - .env.development
+      - .env.production
     ports:
       - "4000:4000"
     volumes:
