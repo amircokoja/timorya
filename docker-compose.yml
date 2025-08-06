@@ -16,12 +16,12 @@ services:
       - ./backend/https-cert.pfx:/app/https/https-cert.pfx:ro
     restart: always
 
-  timorya-frontend:
-    container_name: timorya-frontend
+  timorya-app:
+    container_name: timorya-app
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: timorya-frontend
+    image: timorya-app
     env_file:
       - .env.production
     ports:

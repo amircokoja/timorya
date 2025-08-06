@@ -14,7 +14,7 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Expose port
-EXPOSE 3000
+EXPOSE 4000
 
 # Start Next.js
 CMD ["npm", "run", "dev"]
