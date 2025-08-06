@@ -15,6 +15,10 @@ services:
     volumes:
       - ./backend/https-cert.pfx:/app/https/https-cert.pfx:ro
     restart: always
+    networks:
+      - rahat-kuca_default
+      - default
+
 
   timorya-app:
     container_name: timorya-app
@@ -38,3 +42,7 @@ services:
 volumes:
   postgres_data:
     driver: local
+
+networks:
+  rahat-kuca_default:
+    external: true
