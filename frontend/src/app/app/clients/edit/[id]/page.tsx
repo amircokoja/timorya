@@ -8,13 +8,12 @@ import { ClientDto } from "@/src/models/clients/client-dto";
 import { useToastStore } from "@/src/store/toast-store";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useParams } from "next/navigation";
 
-interface Params {
-  params: { id: string };
-}
+export default function EditClient() {
+  const params = useParams();
+  const id = params.id;
 
-export default function EditClient({ params }: Params) {
-  const { id } = params;
   const { showToast } = useToastStore();
   const router = useRouter();
   const { data, isLoading, isFetching, error } = useGet<ClientDto>({

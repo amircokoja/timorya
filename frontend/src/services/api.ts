@@ -47,7 +47,7 @@ api.interceptors.response.use(
               }
             }
           }
-        } catch (error) {
+        } catch {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           window.location.href = "/login";

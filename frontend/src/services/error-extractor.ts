@@ -6,7 +6,7 @@ import {
 } from "../models/abstractions/api-error";
 
 export const errorExtractor = (error: AxiosError<ApiError>) => {
-  let errorMessage = "An error occurred";
+  const errorMessage = "An error occurred";
   const apiError = error.response?.data;
   if (isCustomApiError(apiError)) {
     return apiError?.name ?? errorMessage;
@@ -19,16 +19,19 @@ export const errorExtractor = (error: AxiosError<ApiError>) => {
   return errorMessage;
 };
 
-const isCustomApiError = (error: any): error is CustomApiError => {
-  return typeof error?.code === "string" && typeof error?.name === "string";
+const isCustomApiError = (error: unknown): error is CustomApiError => {
+  return (
+    typeof (error as CustomApiError)?.code === "string" &&
+    typeof (error as CustomApiError)?.name === "string"
+  );
 };
 
-const isProblemDetailsError = (error: any): error is ProblemDetails => {
+const isProblemDetailsError = (error: unknown): error is ProblemDetails => {
   return (
-    typeof error?.title === "string" &&
-    typeof error?.type === "string" &&
-    typeof error?.detail === "string" &&
-    typeof error?.status === "number" &&
-    Array.isArray(error?.errors)
+    typeof (error as ProblemDetails)?.title === "string" &&
+    typeof (error as ProblemDetails)?.type === "string" &&
+    typeof (error as ProblemDetails)?.detail === "string" &&
+    typeof (error as ProblemDetails)?.status === "number" &&
+    Array.isArray((error as ProblemDetails)?.errors)
   );
 };

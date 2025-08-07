@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import AuthLayout from "../../components/layouts/auth-layout";
 import Button from "../../components/ui/button";
@@ -15,7 +16,7 @@ import {
   passwordValidation,
 } from "../data/validation-values/reset-password-validation";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 export type ResetPasswordForm = {
   password: string;
@@ -27,7 +28,7 @@ type ResetPasswordRequest = {
   newPassword: string;
 };
 
-export default function ResetPasswordWithToken() {
+function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const router = useRouter();
@@ -36,7 +37,7 @@ export default function ResetPasswordWithToken() {
     if (!token) {
       router.replace("/app/dashboard");
     }
-  }, [router, token]);
+  }, [token, router]);
 
   const { showToast } = useToastStore();
 
@@ -81,55 +82,63 @@ export default function ResetPasswordWithToken() {
   };
 
   return (
-    <AuthLayout>
-      <div className="col-span-6 mx-auto w-full rounded-lg bg-white shadow sm:max-w-lg md:mt-0 xl:p-0">
-        <div className="space-y-4 p-6 sm:p-8 lg:space-y-6">
-          <h1 className="text-xl leading-tight font-bold tracking-tight text-gray-900 sm:text-2xl">
-            Reset Password
-          </h1>
-          <FormProvider {...methods}>
-            <form
-              className="space-y-4 lg:space-y-6"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <Input
-                label="Password"
-                type="password"
-                error={errors.password?.message}
-                placeholder="••••••••"
-                {...methods.register("password", {
-                  ...passwordValidation,
-                })}
-              />
+    <div className="col-span-6 mx-auto w-full rounded-lg bg-white shadow sm:max-w-lg md:mt-0 xl:p-0">
+      <div className="space-y-4 p-6 sm:p-8 lg:space-y-6">
+        <h1 className="text-xl leading-tight font-bold tracking-tight text-gray-900 sm:text-2xl">
+          Reset Password
+        </h1>
+        <FormProvider {...methods}>
+          <form
+            className="space-y-4 lg:space-y-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <Input
+              label="Password"
+              type="password"
+              error={errors.password?.message}
+              placeholder="••••••••"
+              {...methods.register("password", {
+                ...passwordValidation,
+              })}
+            />
 
-              <Input
-                label="Confirm password"
-                type="password"
-                error={errors.confirmPassword?.message}
-                placeholder="••••••••"
-                {...methods.register("confirmPassword", {
-                  ...confirmPasswordValidation,
-                  validate: (value) => {
-                    if (watch("password") != value) {
-                      return "Your passwords do no match";
-                    }
-                  },
-                })}
-              />
+            <Input
+              label="Confirm password"
+              type="password"
+              error={errors.confirmPassword?.message}
+              placeholder="••••••••"
+              {...methods.register("confirmPassword", {
+                ...confirmPasswordValidation,
+                validate: (value) => {
+                  if (watch("password") !== value) {
+                    return "Your passwords do not match";
+                  }
+                },
+              })}
+            />
 
-              <Button
-                text={isPending ? "Processing..." : "Reset Password"}
-                type="submit"
-                disabled={isPending}
-              />
-              <p className="text-sm font-light text-gray-500">
-                Already have an account?{" "}
-                <CustomLink href="/login" text="Sign in here" />
-              </p>
-            </form>
-          </FormProvider>
-        </div>
+            <Button
+              text={isPending ? "Processing..." : "Reset Password"}
+              type="submit"
+              disabled={isPending}
+            />
+            <p className="text-sm font-light text-gray-500">
+              Already have an account?{" "}
+              <CustomLink href="/login" text="Sign in here" />
+            </p>
+          </form>
+        </FormProvider>
       </div>
+    </div>
+  );
+}
+
+export default function ResetPasswordWithTokenPage() {
+  return (
+    <AuthLayout>
+      <Suspense fallback={null}>
+        <ResetPasswordForm />
+      </Suspense>
     </AuthLayout>
   );
 }

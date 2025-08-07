@@ -6,15 +6,13 @@ import Breadcrumbs from "@/src/components/ui/breadcrumbs";
 import { useGet } from "@/src/hooks/use-get";
 import { ProjectDto } from "@/src/models/projects/project-dto";
 import { useToastStore } from "@/src/store/toast-store";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-interface Params {
-  params: { id: string };
-}
+export default function EditProject() {
+  const params = useParams();
+  const id = params.id;
 
-export default function EditProject({ params }: Params) {
-  const { id } = params;
   const { showToast } = useToastStore();
   const router = useRouter();
   const { data, isLoading, isFetching, error } = useGet<ProjectDto>({
