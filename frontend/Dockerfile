@@ -1,22 +1,24 @@
+# syntax=docker/dockerfile:1
+
 FROM node:18-alpine
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-# ❗️ Always install full deps so that typescript and next are available
+# Always install all dependencies (build needs devDependencies)
 RUN npm ci --legacy-peer-deps
 
 COPY . .
 
-# Optional: Set prod env AFTER install
-ARG NODE_ENV=production
-ENV NODE_ENV=$NODE_ENV
+# Build the app (this creates the .next/ directory)
+RUN npm run build
 
-# ✅ Build the Next.js app
-RUN if [ "$NODE_ENV" = "production" ]; then npm run build; fi
-
+# Expose your chosen port
 EXPOSE 4000
 
-# ✅ Dev vs Prod entry point
-CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then npm run dev; else npm start; fi"]
+# Set environment variable to tell Next.js it's running in prod
+ENV NODE_ENV=production
+
+# Run the production server
+CMD ["npm", "start"]
