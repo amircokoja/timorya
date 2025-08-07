@@ -1,29 +1,22 @@
-# syntax=docker/dockerfile:1
-
-FROM node:18-alpine AS base
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
 COPY package.json package-lock.json ./
 
-# Set build-time variable with default
+# ❗️ Always install full deps so that typescript and next are available
+RUN npm ci --legacy-peer-deps
+
+COPY . .
+
+# Optional: Set prod env AFTER install
 ARG NODE_ENV=production
 ENV NODE_ENV=$NODE_ENV
 
-# Force full dependency install (even in production build) to avoid build errors
-# Don't use NODE_ENV=production here to ensure devDependencies like next are available
-RUN --mount=type=secret,id=npmrc,target=/root/.npmrc \
-  npm ci --legacy-peer-deps
+# ✅ Build the Next.js app
+RUN if [ "$NODE_ENV" = "production" ]; then npm run build; fi
 
-# Copy app source
-COPY . .
-
-# Only run build step in production
-RUN npm run build
-
-# Expose app port
 EXPOSE 4000
 
-# Run correct command depending on mode
+# ✅ Dev vs Prod entry point
 CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then npm run dev; else npm start; fi"]
