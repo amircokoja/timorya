@@ -6,11 +6,14 @@ COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
 
 COPY . .
-COPY .env.production .env.production
 
-# Debug the build step
-RUN npm run build || (echo "❌ Build failed" && exit 1)
-RUN echo "✅ Build completed. Listing .next directory..." && ls -la .next || echo "❌ .next folder is missing"
+# Build app (creates .next/)
+RUN npm run build
+
+# ⬇️ Make sure it's not being ignored by .dockerignore!
+
+# Confirm the build exists
+RUN ls -la .next
 
 EXPOSE 4000
 
