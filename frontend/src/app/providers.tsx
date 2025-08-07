@@ -11,6 +11,7 @@ export default function Providers({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const { message, type, clearToast } = useToastStore();
+  const isDevelopment = process.env.NEXT_PUBLIC_ENVIRONMENT === "development";
 
   useEffect(() => {
     if (message) {
@@ -36,7 +37,7 @@ export default function Providers({
     <QueryClientProvider client={queryClient}>
       <Toaster position="top-center" reverseOrder={false} />
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

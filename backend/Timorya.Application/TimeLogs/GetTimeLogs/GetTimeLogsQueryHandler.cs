@@ -26,14 +26,14 @@ internal sealed class GetTimeLogsQueryHandler(
 
         var totalCount = await _context
             .Set<TimeLog>()
-            .Where(c => c.UserId == user.UserId)
+            .Where(c => c.UserId == user.UserId && c.End != null)
             .CountAsync(cancellationToken);
 
         var skip = (request.Page - 1) * request.PageSize;
         var timeLogs = await _context
             .Set<TimeLog>()
             .Include(c => c.Project)
-            .Where(c => c.UserId == user.UserId)
+            .Where(c => c.UserId == user.UserId && c.End != null)
             .OrderByDescending(c => c.End)
             .Skip(skip)
             .Take(request.PageSize)
@@ -46,12 +46,13 @@ internal sealed class GetTimeLogsQueryHandler(
             var current = log.Start;
             var end = log.End;
 
-            while (current < end)
+            while (current < end && end.HasValue)
             {
                 var date = DateOnly.FromDateTime(current.Date);
                 var startOfNextDay = current.Date.AddDays(1);
 
-                var rangeEnd = end < startOfNextDay ? end : startOfNextDay;
+                var rangeEnd =
+                    end.HasValue && end.Value < startOfNextDay ? end.Value : startOfNextDay;
 
                 var seconds = (int)(rangeEnd - current).TotalSeconds;
 

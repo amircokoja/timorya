@@ -16,6 +16,8 @@ import { errorExtractor } from "@/src/services/error-extractor";
 import { TimeLogCreateDto } from "@/src/models/time-logs/time-log-create-dto";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import TimeCounter from "./time-counter";
+import { usePut } from "@/src/hooks/use-put";
+import { TimeLogUpdateDto } from "@/src/models/time-logs/time-log-update-dto";
 
 interface LogForm {
   description: string;
@@ -23,10 +25,15 @@ interface LogForm {
 }
 
 export default function TimeLogger() {
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  // const [startDate, setStartDate] = useState<Date | null>(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
+  // const [isRunning, setIsRunning] = useState(false);
   const animationFrameRef = useRef<number | null>(null);
+
+  const { data: activeLog, isFetched: isFetchingActiveLog } =
+    useGet<TimeLogDto | null>({
+      url: "time-logs/active",
+    });
 
   const queryClient = useQueryClient();
   const { showToast } = useToastStore();
@@ -37,6 +44,11 @@ export default function TimeLogger() {
   >({
     url: "/time-logs",
   });
+
+  const { mutateAsync: updateTimeLogAsync } = usePut<
+    TimeLogUpdateDto,
+    TimeLogDto
+  >();
 
   const { data: projects, isFetching } = useGet<ProjectDto[]>({
     url: "projects",
@@ -71,15 +83,17 @@ export default function TimeLogger() {
 
   useEffect(() => {
     const update = () => {
-      if (startDate) {
+      if (activeLog?.start) {
         const now = new Date();
-        const diff = Math.floor((now.getTime() - startDate.getTime()) / 1000);
+        const diff = Math.floor(
+          (now.getTime() - new Date(activeLog.start).getTime()) / 1000,
+        );
         setElapsedSeconds(diff);
         animationFrameRef.current = requestAnimationFrame(update);
       }
     };
 
-    if (isRunning) {
+    if (activeLog) {
       animationFrameRef.current = requestAnimationFrame(update);
     }
 
@@ -88,20 +102,58 @@ export default function TimeLogger() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isRunning, startDate]);
+  }, [activeLog]);
 
   const toggleTimer = () => {
-    if (isRunning) {
-      setIsRunning(false);
+    if (activeLog) {
+      // Stop the timer
+      // setIsRunning(false);
+      // setStartDate(null);
+      handleUpdateLog();
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      handleAddLog();
     } else {
-      setStartDate(new Date());
+      // Start the timer
+      handleAddLog();
+      // setStartDate(new Date());
       setElapsedSeconds(0);
-      setIsRunning(true);
+      // setIsRunning(true);
     }
+  };
+
+  const handleUpdateLog = async () => {
+    if (!activeLog) return;
+    const url = `/time-logs/${activeLog.id}`;
+
+    const updatedTimeLog: TimeLogUpdateDto = {
+      start: new Date(activeLog.start),
+      end: new Date(),
+      description: activeLog.description,
+      projectId: activeLog.projectId,
+      seconds: elapsedSeconds,
+    };
+
+    await updateTimeLogAsync(
+      { url, data: updatedTimeLog },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              typeof query.queryKey?.[0] === "string" &&
+              query.queryKey[0].startsWith("/time-logs"),
+          });
+
+          queryClient.invalidateQueries({
+            queryKey: ["time-logs/active"],
+          });
+
+          setElapsedSeconds(0);
+        },
+      },
+    );
+
+    reset();
   };
 
   const handleAddLog = async () => {
@@ -112,29 +164,26 @@ export default function TimeLogger() {
 
     const request: TimeLogCreateDto = {
       description,
-      start: startDate!,
-      end: new Date(),
       projectId: project?.id,
-      seconds: elapsedSeconds,
     };
 
     await createTimeLogAsync(request, {
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          predicate: (query) =>
-            typeof query.queryKey?.[0] === "string" &&
-            query.queryKey[0].startsWith("/time-logs"),
-        });
-        showToast("Time log created successfully", "success");
-        reset();
+        {
+          queryClient.invalidateQueries({
+            queryKey: ["time-logs/active"],
+          });
+        }
       },
       onError: (error: AxiosError<ApiError>) => {
         const errorMessage = errorExtractor(error);
         showToast(errorMessage, "error");
       },
     });
+  };
 
-    reset();
+  const setStartDate = (date: Date | null) => {
+    console.log("Setting start date:", date);
   };
 
   return (
@@ -159,17 +208,18 @@ export default function TimeLogger() {
           <div className="py-1 md:px-4 md:py-0">
             <TimeCounter
               seconds={elapsedSeconds}
-              startDate={startDate ?? new Date()}
+              startDate={activeLog?.start ?? new Date()}
               setStartDate={setStartDate}
               setSeconds={setElapsedSeconds}
-              isRunning={isRunning}
+              isRunning={!!activeLog}
             />
           </div>
           <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 md:w-auto md:flex-row md:items-center md:space-y-0 md:space-x-3 md:pl-4">
             <Button
-              text={isRunning ? "Stop" : "Start"}
-              color={isRunning ? "red" : "blue"}
-              icon={isRunning ? <StopIcon /> : <PlayIcon />}
+              disabled={!isFetchingActiveLog}
+              text={activeLog ? "Stop" : "Start"}
+              color={activeLog ? "red" : "blue"}
+              icon={activeLog ? <StopIcon /> : <PlayIcon />}
               onClick={toggleTimer}
             />
           </div>

@@ -66,9 +66,6 @@ internal sealed class CreateTimeLogCommandHandler(
 
         var timeLog = TimeLog.Create(
             new TimeLogDescription(request.Description),
-            request.Start,
-            request.End,
-            request.Seconds,
             dbUser,
             dbUser.CurrentOrganization,
             project

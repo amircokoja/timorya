@@ -45,7 +45,7 @@ export default function Calendar({
 }: Props) {
   const [viewValue, setViewValue] = useState<View>(Views.WEEK);
   const { data } = useGet<PaginatedResut<TimeLogWeekGroup>>({
-    url: "/time-logs?page=" + 1 + "&pageSize=35",
+    url: "/time-logs?page=" + 1 + "&pageSize=1335",
   });
 
   const events: TimeLogDto[] =

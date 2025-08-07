@@ -10,7 +10,7 @@ export default function DashboardContent() {
   const [page, setPage] = useState(1);
 
   const { data } = useGet<PaginatedResut<TimeLogWeekGroup>>({
-    url: "/time-logs?page=" + page + "&pageSize=5",
+    url: "/time-logs?page=" + page + "&pageSize=30",
   });
 
   // Store the last valid data to prevent flickering

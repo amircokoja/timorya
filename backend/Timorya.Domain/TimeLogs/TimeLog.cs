@@ -10,7 +10,7 @@ public class TimeLog : Entity
 
     public TimeLogDescription Description { get; set; }
     public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public DateTime? End { get; set; }
     public int Seconds { get; set; }
 
     // foreign key
@@ -23,9 +23,6 @@ public class TimeLog : Entity
 
     public static TimeLog Create(
         TimeLogDescription description,
-        DateTime start,
-        DateTime end,
-        int seconds,
         User user,
         Organization organization,
         Project? project = null
@@ -34,9 +31,9 @@ public class TimeLog : Entity
         return new TimeLog
         {
             Description = description,
-            Start = start,
-            End = end,
-            Seconds = seconds,
+            Start = DateTime.UtcNow,
+            End = null,
+            Seconds = 0,
             User = user,
             Organization = organization,
             Project = project,

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Timorya.Api.Controllers.TimeLogs.Models;
 using Timorya.Application.TimeLogs.CreateTimeLog;
 using Timorya.Application.TimeLogs.DeleteTimeLog;
+using Timorya.Application.TimeLogs.GetActiveTimeLog;
 using Timorya.Application.TimeLogs.GetTimeLogs;
 using Timorya.Application.TimeLogs.Shared;
 using Timorya.Application.TimeLogs.UpdateTimeLog;
@@ -16,6 +17,21 @@ namespace Timorya.Api.Controllers.TimeLogs;
 public class TimeLogController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
+
+    [Authorize]
+    [HttpGet("active")]
+    public async Task<IActionResult> Get(CancellationToken cancellationToken = default)
+    {
+        var query = new GetActiveTimeLogQuery();
+
+        var result = await _sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
 
     [Authorize]
     [HttpGet]
@@ -43,13 +59,7 @@ public class TimeLogController(ISender sender) : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var command = new CreateTimeLogCommand(
-            request.Description,
-            request.Start,
-            request.End,
-            request.Seconds,
-            request.ProjectId
-        );
+        var command = new CreateTimeLogCommand(request.Description, request.ProjectId);
 
         Result<TimeLogDto> result = await _sender.Send(command, cancellationToken);
 
@@ -65,7 +75,7 @@ public class TimeLogController(ISender sender) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(
         [FromRoute] int id,
-        [FromBody] CreateTimeLogRequest request,
+        [FromBody] UpdateTimeLogRequest request,
         CancellationToken cancellationToken
     )
     {

@@ -18,6 +18,7 @@ import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
 import { useQueryClient } from "@tanstack/react-query";
 import { isValidTimeFormat } from "../app/dashboard/time-logger/utils";
+import { TimeLogUpdateDto } from "@/src/models/time-logs/time-log-update-dto";
 
 interface ModalProps {
   logItem: TimeLogDto;
@@ -40,7 +41,7 @@ const EditLogItemModal: React.FC<ModalProps> = ({
   const queryClient = useQueryClient();
   const { showToast } = useToastStore();
   const { mutateAsync: updateTimeLogAsync } = usePut<
-    TimeLogCreateDto,
+    TimeLogUpdateDto,
     TimeLogDto
   >();
 
@@ -129,9 +130,7 @@ const EditLogItemModal: React.FC<ModalProps> = ({
               label="Description"
               error={errors.description?.message}
               placeholder="Enter description"
-              {...methods.register("description", {
-                required: "Description is required",
-              })}
+              {...methods.register("description")}
             />
 
             <Select

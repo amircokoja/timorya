@@ -8,7 +8,7 @@ import { isFutureTime, isSameTimeAsStart, isValidTimeFormat } from "./utils";
 interface Props {
   seconds: number;
   startDate: Date;
-  setStartDate: Dispatch<SetStateAction<Date | null>>;
+  setStartDate: (date: Date) => void;
   setSeconds: Dispatch<SetStateAction<number>>;
   isRunning: boolean;
 }

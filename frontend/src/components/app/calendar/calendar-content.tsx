@@ -10,6 +10,7 @@ import { useState } from "react";
 import PreviewLogItemModal from "../../modals/preview-log-item-modal";
 import EditLogItemModal from "../../modals/edit-log-item-modal";
 import DeleteLogItemModal from "../../modals/delete-log-item-modal";
+import { TimeLogUpdateDto } from "@/src/models/time-logs/time-log-update-dto";
 
 export default function CalendarContent() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -34,7 +35,7 @@ export default function CalendarContent() {
 
   const onEventDrop = async (event: EventInteractionArgs<TimeLogDto>) => {
     const url = `/time-logs/${event.event.id}`;
-    const updatedTimeLog: TimeLogCreateDto = {
+    const updatedTimeLog: TimeLogUpdateDto = {
       start: new Date(event.start),
       end: new Date(event.end),
       description: event.event.description,
