@@ -8,7 +8,7 @@ import { isFutureTime, isSameTimeAsStart, isValidTimeFormat } from "./utils";
 interface Props {
   seconds: number;
   startDate: Date;
-  setStartDate: Dispatch<SetStateAction<Date>>;
+  setStartDate: Dispatch<SetStateAction<Date | null>>;
   setSeconds: Dispatch<SetStateAction<number>>;
   isRunning: boolean;
 }
@@ -96,7 +96,7 @@ export default function TimeCounter({
         </div>
 
         {isMenuOpen && isRunning && (
-          <div className="absolute left-1/2 top-7 z-10 mt-2 w-64 -translate-x-1/2 rounded-md border border-gray-300 bg-white p-4 shadow-lg">
+          <div className="absolute top-7 left-1/2 z-10 mt-2 w-64 -translate-x-1/2 rounded-md border border-gray-300 bg-white p-4 shadow-lg">
             <label className="mb-1 block text-sm font-medium text-gray-700">
               Start Time
             </label>
@@ -107,7 +107,7 @@ export default function TimeCounter({
               onChange={(e) => {
                 setUpdatedTime(e.target.value);
               }}
-              onBlur={(e) => {
+              onBlur={() => {
                 handleTimeUpdate();
               }}
             />

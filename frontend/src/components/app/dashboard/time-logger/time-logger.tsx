@@ -23,10 +23,11 @@ interface LogForm {
 }
 
 export default function TimeLogger() {
-  const [seconds, setSeconds] = useState(0);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const [startDate, setStartDate] = useState<Date>(new Date());
+  const animationFrameRef = useRef<number | null>(null);
+
   const queryClient = useQueryClient();
   const { showToast } = useToastStore();
 
@@ -69,30 +70,36 @@ export default function TimeLogger() {
   } = methods;
 
   useEffect(() => {
+    const update = () => {
+      if (startDate) {
+        const now = new Date();
+        const diff = Math.floor((now.getTime() - startDate.getTime()) / 1000);
+        setElapsedSeconds(diff);
+        animationFrameRef.current = requestAnimationFrame(update);
+      }
+    };
+
     if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        setSeconds((prev) => prev + 1);
-      }, 1000);
+      animationFrameRef.current = requestAnimationFrame(update);
     }
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
     };
-  }, [isRunning]);
+  }, [isRunning, startDate]);
 
   const toggleTimer = () => {
     if (isRunning) {
       setIsRunning(false);
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
       }
-
       handleAddLog();
-
-      setSeconds(0);
     } else {
       setStartDate(new Date());
+      setElapsedSeconds(0);
       setIsRunning(true);
     }
   };
@@ -104,11 +111,11 @@ export default function TimeLogger() {
     const project = projects?.find((p) => p.id.toString() === projectId);
 
     const request: TimeLogCreateDto = {
-      description: description,
-      start: startDate,
+      description,
+      start: startDate!,
       end: new Date(),
       projectId: project?.id,
-      seconds: seconds,
+      seconds: elapsedSeconds,
     };
 
     await createTimeLogAsync(request, {
@@ -151,10 +158,10 @@ export default function TimeLogger() {
           </div>
           <div className="py-1 md:px-4 md:py-0">
             <TimeCounter
-              seconds={seconds}
+              seconds={elapsedSeconds}
               startDate={startDate ?? new Date()}
               setStartDate={setStartDate}
-              setSeconds={setSeconds}
+              setSeconds={setElapsedSeconds}
               isRunning={isRunning}
             />
           </div>
