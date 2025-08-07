@@ -1,20 +1,25 @@
-# Use Node.js image
-FROM node:18-alpine
+# syntax=docker/dockerfile:1
 
-# Set working directory
+FROM node:18-alpine AS base
+
 WORKDIR /app
 
-# Copy package.json and package-lock.json first
+# Install dependencies
 COPY package.json package-lock.json ./
+RUN npm ci --legacy-peer-deps
 
-# Force dependency resolution during install
-RUN npm install --legacy-peer-deps
-
-# Copy the rest of the project files
+# Copy source code
 COPY . .
+
+# Allow switching modes: development or production
+ARG NODE_ENV=production
+ENV NODE_ENV=$NODE_ENV
+
+# Only build in production mode
+RUN if [ "$NODE_ENV" = "production" ]; then npm run build; fi
 
 # Expose port
 EXPOSE 4000
 
-# Start Next.js
-CMD ["npm", "run", "dev"]
+# Start based on mode
+CMD [ "sh", "-c", "if [ \"$NODE_ENV\" = \"development\" ]; then npm run dev; else npm start; fi" ]
