@@ -20,7 +20,7 @@ RUN --mount=type=secret,id=npmrc,target=/root/.npmrc \
 COPY . .
 
 # Only run build step in production
-RUN if [ "$NODE_ENV" = "production" ]; then npm run build; fi
+RUN npm run build
 
 # Expose app port
 EXPOSE 4000
