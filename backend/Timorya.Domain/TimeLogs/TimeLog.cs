@@ -25,15 +25,18 @@ public class TimeLog : Entity
         TimeLogDescription description,
         User user,
         Organization organization,
-        Project? project = null
+        DateTime start,
+        DateTime? end = null,
+        Project? project = null,
+        int seconds = 0
     )
     {
         return new TimeLog
         {
             Description = description,
-            Start = DateTime.UtcNow,
-            End = null,
-            Seconds = 0,
+            Start = start,
+            End = end,
+            Seconds = seconds,
             User = user,
             Organization = organization,
             Project = project,
@@ -43,7 +46,7 @@ public class TimeLog : Entity
     public void Update(
         TimeLogDescription description,
         DateTime start,
-        DateTime end,
+        DateTime? end,
         int seconds,
         Project? project = null
     )
@@ -53,5 +56,6 @@ public class TimeLog : Entity
         End = end;
         Seconds = seconds;
         Project = project;
+        ProjectId = project?.Id;
     }
 }

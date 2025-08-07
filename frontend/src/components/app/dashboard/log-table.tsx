@@ -4,10 +4,19 @@ import LogItem from "./log-item";
 
 interface Props {
   logGroup: TimeLogGroup;
+  elapsedSeconds: number;
+  isCurrentWeek: boolean;
 }
 
-export default function LogTable({ logGroup }: Props) {
-  const total = logGroup.timeLogs.reduce((acc, log) => acc + log.seconds, 0);
+export default function LogTable({
+  logGroup,
+  elapsedSeconds,
+  isCurrentWeek,
+}: Props) {
+  let total = logGroup.timeLogs.reduce((acc, log) => acc + log.seconds, 0);
+  if (isCurrentWeek) {
+    total += elapsedSeconds;
+  }
 
   return (
     <>

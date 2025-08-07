@@ -4,14 +4,23 @@ import { formatSeconds } from "./utils";
 
 interface Props {
   weekGroup: TimeLogWeekGroup;
+  elapsedSeconds: number;
 }
 
-export default function DashboardWeek({ weekGroup }: Props) {
+const isCurrentWeek = (week: string): boolean => {
+  return week === "This week";
+};
+
+export default function DashboardWeek({ weekGroup, elapsedSeconds }: Props) {
   const weekTotal = weekGroup.dates?.reduce((acc, group) => {
     const groupTotal = group.timeLogs.reduce(
       (sum, log) => sum + log.seconds,
       0,
     );
+
+    if (isCurrentWeek(weekGroup.week)) {
+      return acc + groupTotal + elapsedSeconds;
+    }
     return acc + groupTotal;
   }, 0);
 
@@ -33,7 +42,11 @@ export default function DashboardWeek({ weekGroup }: Props) {
           key={group.date.toString()}
           className="mb-4 overflow-auto rounded-lg border border-gray-200 last:mb-0"
         >
-          <LogTable logGroup={group} />
+          <LogTable
+            logGroup={group}
+            elapsedSeconds={elapsedSeconds}
+            isCurrentWeek={isCurrentWeek(weekGroup.week)}
+          />
         </div>
       ))}
     </>

@@ -59,7 +59,13 @@ public class TimeLogController(ISender sender) : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var command = new CreateTimeLogCommand(request.Description, request.ProjectId);
+        var command = new CreateTimeLogCommand(
+            request.Description,
+            request.ProjectId,
+            request.Start,
+            request.End,
+            request.Seconds
+        );
 
         Result<TimeLogDto> result = await _sender.Send(command, cancellationToken);
 

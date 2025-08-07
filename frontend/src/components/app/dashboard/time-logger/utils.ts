@@ -14,5 +14,8 @@ export const isFutureTime = (time: string): boolean => {
 
 export const isSameTimeAsStart = (time: string, start: Date): boolean => {
   const [hours, minutes] = time.split(":").map(Number);
-  return hours === start.getHours() && minutes === start.getMinutes();
+  return (
+    hours === new Date(start).getHours() &&
+    minutes === new Date(start).getMinutes()
+  );
 };

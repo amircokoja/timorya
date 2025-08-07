@@ -68,7 +68,10 @@ internal sealed class CreateTimeLogCommandHandler(
             new TimeLogDescription(request.Description),
             dbUser,
             dbUser.CurrentOrganization,
-            project
+            request.Start,
+            request.End,
+            project,
+            request.Seconds
         );
 
         await _context.Set<TimeLog>().AddAsync(timeLog, cancellationToken);

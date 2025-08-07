@@ -84,13 +84,10 @@ export default function Calendar({
         localizer={localizer}
         events={events}
         view={viewValue}
+        timeslots={4}
+        step={15}
         onView={onViewChange}
         resizable={true}
-        eventPropGetter={() => {
-          return {
-            className: "test-event",
-          };
-        }}
         onEventDrop={(event) => {
           if (onEventDrop) {
             onEventDrop(event);
@@ -106,12 +103,21 @@ export default function Calendar({
             onSelectSlot(slotInfo);
           }
         }}
+        dayLayoutAlgorithm="no-overlap"
         onSelectEvent={onSelectEvent}
         selectable={true}
         startAccessor="start"
-        // defaultView="week"
         endAccessor="end"
         scrollToTime={new Date(1970, 1, 1, 8, 0, 0)}
+        eventPropGetter={(event) => {
+          const durationMinutes =
+            (event.end.getTime() - event.start.getTime()) / 60000;
+          return {
+            style: {
+              minHeight: durationMinutes < 10 ? "20px" : undefined,
+            },
+          };
+        }}
         formats={{
           timeGutterFormat: (date, culture, localizer) =>
             localizer ? localizer.format(date, "HH:mm", culture) : "", // 24-hour format
@@ -130,24 +136,39 @@ export default function Calendar({
           header: ({ label }) => (
             <span dangerouslySetInnerHTML={{ __html: label }} />
           ),
-          event: ({ event }) => (
-            <div
-              className={classNames(
-                "custom-calendar-event",
-                `custom-event-${event.projectColor ?? "red"}`,
-              )}
-            >
-              <div className="custom-calendar-content">
-                <div className="event-title">
-                  <strong>{event.description}</strong>
+          event: ({ event }) => {
+            const durationMinutes =
+              (event.end.getTime() - event.start.getTime()) / 60000;
+            let eventSize = "normal";
+            if (durationMinutes < 15) {
+              eventSize = "small";
+            } else if (durationMinutes < 30) {
+              eventSize = "medium";
+            }
+
+            return (
+              <div
+                className={classNames(
+                  "custom-calendar-event",
+                  `custom-event-${event.projectColor ?? "red"}`,
+                  {
+                    "small-event": eventSize === "small",
+                    "medium-event": eventSize === "medium",
+                  },
+                )}
+              >
+                <div className="custom-calendar-content">
+                  <div className="event-title">
+                    <strong>{event.description}</strong>
+                  </div>
+                  <span className="event-time">
+                    {moment(event.start).format("HH:mm")} -{" "}
+                    {moment(event.end).format("HH:mm")}
+                  </span>
                 </div>
-                <span className="event-time">
-                  {moment(event.start).format("HH:mm")} -{" "}
-                  {moment(event.end).format("HH:mm")}
-                </span>
               </div>
-            </div>
-          ),
+            );
+          },
         }}
       />
     </div>

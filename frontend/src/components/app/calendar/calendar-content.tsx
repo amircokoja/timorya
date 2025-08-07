@@ -1,7 +1,6 @@
 import { EventInteractionArgs } from "react-big-calendar/lib/addons/dragAndDrop";
 import Calendar from "./calendar";
 import { usePut } from "@/src/hooks/use-put";
-import { TimeLogCreateDto } from "@/src/models/time-logs/time-log-create-dto";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import { useQueryClient } from "@tanstack/react-query";
 import { SlotInfo } from "react-big-calendar";
@@ -23,7 +22,7 @@ export default function CalendarContent() {
 
   const queryClient = useQueryClient();
   const { mutateAsync: updateTimeLogAsync } = usePut<
-    TimeLogCreateDto,
+    TimeLogUpdateDto,
     TimeLogDto
   >();
 

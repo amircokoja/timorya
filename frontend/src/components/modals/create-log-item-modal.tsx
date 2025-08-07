@@ -130,9 +130,7 @@ const CreateLogItemModal: React.FC<ModalProps> = ({
               label="Description"
               error={errors.description?.message}
               placeholder="Enter description"
-              {...methods.register("description", {
-                required: "Description is required",
-              })}
+              {...methods.register("description")}
             />
 
             <Select

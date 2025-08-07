@@ -1,7 +1,7 @@
 import Input from "@/src/components/ui/input";
 import Button from "@/src/components/ui/button";
 import { PlayIcon } from "@/src/components/icons/play-icon";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from "react";
 import { StopIcon } from "../../../icons/stop-icon";
 import { ProjectDto } from "@/src/models/projects/project-dto";
 import { useGet } from "@/src/hooks/use-get";
@@ -24,10 +24,15 @@ interface LogForm {
   projectId: string;
 }
 
-export default function TimeLogger() {
-  // const [startDate, setStartDate] = useState<Date | null>(null);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-  // const [isRunning, setIsRunning] = useState(false);
+interface Props {
+  elapsedSeconds: number;
+  setElapsedSeconds: Dispatch<SetStateAction<number>>;
+}
+
+export default function TimeLogger({
+  elapsedSeconds,
+  setElapsedSeconds,
+}: Props) {
   const animationFrameRef = useRef<number | null>(null);
 
   const { data: activeLog, isFetched: isFetchingActiveLog } =
@@ -102,23 +107,17 @@ export default function TimeLogger() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [activeLog]);
+  }, [activeLog, setElapsedSeconds]);
 
   const toggleTimer = () => {
     if (activeLog) {
-      // Stop the timer
-      // setIsRunning(false);
-      // setStartDate(null);
       handleUpdateLog();
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     } else {
-      // Start the timer
       handleAddLog();
-      // setStartDate(new Date());
       setElapsedSeconds(0);
-      // setIsRunning(true);
     }
   };
 
@@ -126,11 +125,14 @@ export default function TimeLogger() {
     if (!activeLog) return;
     const url = `/time-logs/${activeLog.id}`;
 
+    const projectIdValue =
+      +watch("projectId") > 0 ? +watch("projectId") : undefined;
+
     const updatedTimeLog: TimeLogUpdateDto = {
       start: new Date(activeLog.start),
       end: new Date(),
-      description: activeLog.description,
-      projectId: activeLog.projectId,
+      description: watch("description"),
+      projectId: projectIdValue,
       seconds: elapsedSeconds,
     };
 
@@ -165,6 +167,9 @@ export default function TimeLogger() {
     const request: TimeLogCreateDto = {
       description,
       projectId: project?.id,
+      seconds: 0,
+      start: new Date(),
+      end: undefined,
     };
 
     await createTimeLogAsync(request, {
@@ -182,8 +187,33 @@ export default function TimeLogger() {
     });
   };
 
-  const setStartDate = (date: Date | null) => {
-    console.log("Setting start date:", date);
+  const setStartDate = async (date: Date) => {
+    if (!activeLog) return;
+    const url = `/time-logs/${activeLog.id}`;
+    const updatedTimeLog: TimeLogUpdateDto = {
+      ...activeLog,
+      start: new Date(date),
+      end: undefined,
+      description: activeLog.description,
+      projectId: activeLog.projectId,
+      seconds: activeLog.seconds,
+    };
+
+    await updateTimeLogAsync(
+      { url, data: updatedTimeLog },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              typeof query.queryKey?.[0] === "string" &&
+              query.queryKey[0].startsWith("/time-logs"),
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["time-logs/active"],
+          });
+        },
+      },
+    );
   };
 
   return (

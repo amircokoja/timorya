@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Pagination from "../../ui/pagination";
 
 export default function DashboardContent() {
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [page, setPage] = useState(1);
 
   const { data } = useGet<PaginatedResut<TimeLogWeekGroup>>({
@@ -27,19 +28,24 @@ export default function DashboardContent() {
 
   return (
     <>
-      <TimeLogger />
+      <TimeLogger
+        elapsedSeconds={elapsedSeconds}
+        setElapsedSeconds={setElapsedSeconds}
+      />
       <div className="flex flex-1 flex-col justify-between">
         {dataAvailable ? (
           <div className="mt-4 mb-10">
             {renderData?.items?.map((group) => (
               <div key={group.week} className="mb-8 last:mb-0">
-                <DashboardWeek weekGroup={group} />
+                <DashboardWeek
+                  weekGroup={group}
+                  elapsedSeconds={elapsedSeconds}
+                />
               </div>
             ))}
           </div>
         ) : (
           <div className="align-center flex h-full justify-center">
-            {/* <div className="mt-4 mb-10"> */}
             <div className="flex h-full flex-col items-center justify-center p-6 text-center">
               <div className="mb-4 rounded-lg bg-gray-100 p-6">
                 <svg
