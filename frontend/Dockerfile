@@ -1,24 +1,19 @@
-# syntax=docker/dockerfile:1
-
 FROM node:18-alpine
 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-
-# Always install all dependencies (build needs devDependencies)
 RUN npm ci --legacy-peer-deps
 
 COPY . .
+COPY .env.production .env.production
 
-# Build the app (this creates the .next/ directory)
-RUN npm run build
+# Debug the build step
+RUN npm run build || (echo "❌ Build failed" && exit 1)
+RUN echo "✅ Build completed. Listing .next directory..." && ls -la .next || echo "❌ .next folder is missing"
 
-# Expose your chosen port
 EXPOSE 4000
 
-# Set environment variable to tell Next.js it's running in prod
 ENV NODE_ENV=production
 
-# Run the production server
 CMD ["npm", "start"]
