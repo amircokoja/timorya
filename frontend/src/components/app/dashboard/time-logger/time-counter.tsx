@@ -2,8 +2,9 @@ import { ClockIcon } from "@/src/components/icons/clock-icon";
 import { formatSeconds } from "../utils";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useClickAway } from "react-use";
-import Input from "@/src/components/ui/input";
 import { isFutureTime, isSameTimeAsStart, isValidTimeFormat } from "./utils";
+import StartTimeEditor from "./start-time-editor";
+import { useToastStore } from "@/src/store/toast-store";
 
 interface Props {
   seconds: number;
@@ -20,6 +21,7 @@ export default function TimeCounter({
   setSeconds,
   isRunning,
 }: Props) {
+  const { showToast } = useToastStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const clockRef = useRef(null);
   const [updatedTime, setUpdatedTime] = useState<string>("");
@@ -54,17 +56,17 @@ export default function TimeCounter({
 
   const handleTimeUpdate = () => {
     if (!isValidTimeFormat(updatedTime)) {
-      console.log("Invalid time format");
+      showToast("Invalid time format", "error");
       return;
     }
 
     if (isFutureTime(updatedTime)) {
-      console.log("Time cannot be in the future");
+      showToast("Time cannot be in the future", "error");
       return;
     }
 
     if (isSameTimeAsStart(updatedTime, startDate)) {
-      console.log("No change in time");
+      showToast("No change in time", "info");
       return;
     }
 
@@ -79,6 +81,10 @@ export default function TimeCounter({
       (now.getTime() - newStartDate.getTime()) / 1000,
     );
     setSeconds(diffInSeconds);
+
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
   };
 
   return (
@@ -96,22 +102,11 @@ export default function TimeCounter({
         </div>
 
         {isMenuOpen && isRunning && (
-          <div className="absolute top-7 left-1/2 z-10 mt-2 w-64 -translate-x-1/2 rounded-md border border-gray-300 bg-white p-4 shadow-lg">
-            <label className="mb-1 block text-sm font-medium text-gray-700">
-              Start Time
-            </label>
-            <Input
-              placeholder="Enter start time"
-              name="startTime"
-              value={updatedTime}
-              onChange={(e) => {
-                setUpdatedTime(e.target.value);
-              }}
-              onBlur={() => {
-                handleTimeUpdate();
-              }}
-            />
-          </div>
+          <StartTimeEditor
+            updatedTime={updatedTime}
+            setUpdatedTime={setUpdatedTime}
+            handleTimeUpdate={handleTimeUpdate}
+          />
         )}
       </div>
     </>

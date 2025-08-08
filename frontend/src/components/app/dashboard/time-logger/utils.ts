@@ -1,5 +1,5 @@
 export const isValidTimeFormat = (time: string): boolean => {
-  const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  const timePattern = /^([0]?\d|1\d|2[0-3]):([0-5]\d)$/;
   return timePattern.test(time);
 };
 
