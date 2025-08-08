@@ -87,7 +87,7 @@ export default function DashboardContent() {
       <div className="flex flex-1 flex-col justify-between">
         {isFetching ? (
           <Loading />
-        ) : !dataAvailable ? (
+        ) : dataAvailable ? (
           renderDataItems()
         ) : (
           renderEmptyState()

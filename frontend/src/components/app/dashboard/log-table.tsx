@@ -5,16 +5,21 @@ import LogItem from "./log-item";
 interface Props {
   logGroup: TimeLogGroup;
   elapsedSeconds: number;
-  isCurrentWeek: boolean;
 }
 
-export default function LogTable({
-  logGroup,
-  elapsedSeconds,
-  isCurrentWeek,
-}: Props) {
+const isToday = (date: Date) => {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+};
+
+export default function LogTable({ logGroup, elapsedSeconds }: Props) {
   let total = logGroup.timeLogs.reduce((acc, log) => acc + log.seconds, 0);
-  if (isCurrentWeek) {
+
+  if (isToday(new Date(logGroup.date))) {
     total += elapsedSeconds;
   }
 
