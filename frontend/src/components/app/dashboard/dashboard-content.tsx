@@ -1,3 +1,5 @@
+"use client";
+
 import TimeLogger from "./time-logger/time-logger";
 import { useGet } from "@/src/hooks/use-get";
 import { TimeLogWeekGroup } from "@/src/models/time-logs/time-log-week-group";
@@ -5,6 +7,8 @@ import DashboardWeek from "./dashboard-week";
 import { PaginatedResut } from "@/src/models/abstractions/paginated-result";
 import { useState, useEffect } from "react";
 import Pagination from "../../ui/pagination";
+import { formatSeconds } from "./utils";
+import { metadata } from "@/src/models/data/metadata";
 
 export default function DashboardContent() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -25,6 +29,14 @@ export default function DashboardContent() {
 
   const dataAvailable = data && data.items && data.items.length > 0;
   const renderData = data ?? lastData;
+
+  useEffect(() => {
+    if (elapsedSeconds > 0) {
+      document.title = `Timorya | ${formatSeconds(elapsedSeconds)}`;
+    } else {
+      document.title = metadata.title as string;
+    }
+  }, [elapsedSeconds]);
 
   return (
     <>

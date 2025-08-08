@@ -1,15 +1,9 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeModeScript } from "flowbite-react";
 import "./globals.css";
 import Providers from "./providers";
-
+import { metadata } from "../models/data/metadata";
 const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "Timorya | Time Tracking App",
-  description: "A simple time tracking app for developers",
-};
 
 export default function RootLayout({
   children,
@@ -21,6 +15,13 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <ThemeModeScript />
+        <title>{String(metadata.title ?? "Timorya | Time Tracking App")}</title>
+        <meta
+          name="description"
+          content={String(
+            metadata.description ?? "A simple time tracking app for developers",
+          )}
+        />
       </head>
       <body className={inter.className}>
         <Providers>{children}</Providers>
