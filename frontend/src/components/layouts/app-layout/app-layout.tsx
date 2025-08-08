@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BackIcon } from "../../icons/back-icon";
 import Button from "../../ui/button";
 import AppNavbar from "./app-navbar";
@@ -6,13 +6,19 @@ import classNames from "classnames";
 import Sidebar from "./sidebar/sidebar";
 import Link from "next/link";
 import { TimoryaLogo } from "../../icons/timorya-logo";
+import useIsMobile from "@/src/hooks/useIsMobile";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export default function AppLayout({ children }: Props) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const isMobile = useIsMobile();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setIsSidebarOpen(!isMobile);
+  }, [isMobile]);
 
   const handleToggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

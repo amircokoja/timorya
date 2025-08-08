@@ -18,7 +18,8 @@ import { TimeLogWeekGroup } from "@/src/models/time-logs/time-log-week-group";
 import { useGet } from "@/src/hooks/use-get";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useIsMobile from "@/src/hooks/useIsMobile";
 
 export interface CalendarEvent {
   id: number;
@@ -28,6 +29,12 @@ export interface CalendarEvent {
   allDay?: boolean;
 }
 
+moment.locale("en", {
+  week: {
+    dow: 1,
+    doy: 1,
+  },
+});
 const localizer = momentLocalizer(moment);
 
 const DnDCalendar = withDragAndDrop(ReactBigCalendar<TimeLogDto>);
@@ -43,10 +50,16 @@ export default function Calendar({
   onSelectSlot,
   onSelectEvent,
 }: Props) {
+  const isMobile = useIsMobile();
+
   const [viewValue, setViewValue] = useState<View>(Views.WEEK);
   const { data } = useGet<PaginatedResut<TimeLogWeekGroup>>({
     url: "/time-logs?page=" + 1 + "&pageSize=1335",
   });
+
+  useEffect(() => {
+    setViewValue(isMobile ? Views.DAY : Views.WEEK);
+  }, [isMobile]);
 
   const events: TimeLogDto[] =
     data?.items.flatMap((group) =>
@@ -87,6 +100,7 @@ export default function Calendar({
         timeslots={4}
         step={15}
         onView={onViewChange}
+        views={["day", "week"]}
         resizable={true}
         onEventDrop={(event) => {
           if (onEventDrop) {
