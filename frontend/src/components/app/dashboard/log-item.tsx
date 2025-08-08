@@ -2,11 +2,12 @@ import { ClockIcon } from "../../icons/clock-icon";
 import { ThreeDotsIcon } from "../../icons/three-dots-icon";
 import Button from "../../ui/button";
 import Dropdown from "../../ui/dropdown";
-import { formatSeconds, formatTime } from "./utils";
+import { formatTime } from "./utils";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import { useEffect, useState } from "react";
 import EditLogItemModal from "../../modals/edit-log-item-modal";
 import DeleteLogItemModal from "../../modals/delete-log-item-modal";
+import TimeDisplay from "../../ui/time-display";
 
 interface Props {
   logItem: TimeLogDto;
@@ -78,7 +79,7 @@ export default function LogItem({ logItem }: Props) {
           </div>
           <div className="flex flex-1 items-center justify-start gap-1 text-start md:w-[200px] md:px-4">
             <ClockIcon />
-            {formatSeconds(logItem.seconds)}
+            <TimeDisplay seconds={logItem.seconds} />
           </div>
         </div>
 

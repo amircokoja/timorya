@@ -1,10 +1,10 @@
 import { ClockIcon } from "@/src/components/icons/clock-icon";
-import { formatSeconds } from "../utils";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useClickAway } from "react-use";
 import { isFutureTime, isSameTimeAsStart, isValidTimeFormat } from "./utils";
 import StartTimeEditor from "./start-time-editor";
 import { useToastStore } from "@/src/store/toast-store";
+import TimeDisplay from "@/src/components/ui/time-display";
 
 interface Props {
   seconds: number;
@@ -96,9 +96,7 @@ export default function TimeCounter({
           onClick={handleTimeClick}
         >
           <ClockIcon />
-          <p className="w-[60px] text-center text-sm">
-            {formatSeconds(seconds)}
-          </p>
+          <TimeDisplay seconds={seconds} />
         </div>
 
         {isMenuOpen && isRunning && (

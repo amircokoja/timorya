@@ -1,6 +1,6 @@
 import { TimeLogWeekGroup } from "@/src/models/time-logs/time-log-week-group";
 import LogTable from "./log-table";
-import { formatSeconds } from "./utils";
+import TimeDisplay from "../../ui/time-display";
 
 interface Props {
   weekGroup: TimeLogWeekGroup;
@@ -28,13 +28,12 @@ export default function DashboardWeek({ weekGroup, elapsedSeconds }: Props) {
     <>
       <div className="mb-2 flex items-center justify-between">
         <p className="text-sm">{weekGroup.week}</p>
-        <div>
-          <p className="text-xs text-gray-400">
-            Week total:{" "}
-            <span className="text-sm font-semibold text-gray-600">
-              {formatSeconds(weekTotal)}
-            </span>
-          </p>
+        <div className="flex items-center gap-2">
+          <p className="text-xs text-gray-400">Week total:</p>
+          <TimeDisplay
+            seconds={weekTotal}
+            customClasses="text-sm font-semibold text-gray-600"
+          />
         </div>
       </div>
       {weekGroup.dates?.map((group) => (
@@ -42,11 +41,7 @@ export default function DashboardWeek({ weekGroup, elapsedSeconds }: Props) {
           key={group.date.toString()}
           className="mb-4 overflow-auto rounded-lg border border-gray-200 last:mb-0"
         >
-          <LogTable
-            logGroup={group}
-            elapsedSeconds={elapsedSeconds}
-            isCurrentWeek={isCurrentWeek(weekGroup.week)}
-          />
+          <LogTable logGroup={group} elapsedSeconds={elapsedSeconds} />
         </div>
       ))}
     </>

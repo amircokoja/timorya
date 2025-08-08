@@ -1,6 +1,7 @@
 import { TimeLogGroup } from "@/src/models/time-logs/time-log-group";
-import { formatSeconds, generateDateValue } from "./utils";
+import { generateDateValue } from "./utils";
 import LogItem from "./log-item";
+import TimeDisplay from "../../ui/time-display";
 
 interface Props {
   logGroup: TimeLogGroup;
@@ -31,7 +32,7 @@ export default function LogTable({ logGroup, elapsedSeconds }: Props) {
         </p>
         <div className="flex items-center">
           <p className="mr-2 text-sm text-gray-500">Total:</p>
-          <p className="py-4 text-sm">{formatSeconds(total)}</p>
+          <TimeDisplay customClasses="py-4 text-sm" seconds={total} />
         </div>
       </div>
       <div>
