@@ -71,8 +71,6 @@ export default function Calendar({
     }
   };
 
-  console.log(calendarData);
-
   return (
     <div
       className={classNames(
@@ -114,6 +112,7 @@ export default function Calendar({
             onSelectSlot(slotInfo);
           }
         }}
+        showMultiDayTimes={true}
         dayLayoutAlgorithm="no-overlap"
         onSelectEvent={onSelectEvent}
         selectable={true}

@@ -39,10 +39,17 @@ export const generateDateValue = (date: Date) => {
   });
 };
 
-export const updateTimeForDate = (date: Date, time: string): Date => {
+export const updateTimeForDate = (
+  date: Date,
+  time: string,
+  isMultiDayEvent: boolean = false,
+): Date => {
   const [hours, minutes] = time.split(":").map(Number);
   const updatedDate = new Date(date);
   updatedDate.setHours(hours, minutes, 0, 0);
+  if (isMultiDayEvent) {
+    updatedDate.setDate(updatedDate.getDate() + 1);
+  }
   return updatedDate;
 };
 

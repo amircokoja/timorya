@@ -61,6 +61,9 @@ const CreateLogItemModal: React.FC<ModalProps> = ({
     },
   });
 
+  const startTime = methods.watch("startTime");
+  const endTime = methods.watch("endTime");
+
   useEffect(() => {
     if (isOpen) {
       methods.reset({
@@ -79,7 +82,7 @@ const CreateLogItemModal: React.FC<ModalProps> = ({
 
   const onSubmit = async (data: LogItemForm) => {
     const newStartDate = updateTimeForDate(start, data.startTime);
-    const newEndDate = updateTimeForDate(end, data.endTime);
+    const newEndDate = updateTimeForDate(end, data.endTime, isMultiDayEvent);
     const seconds = getTimeDifferenceInSeconds(newStartDate, newEndDate);
 
     await createTimeLogAsync(
@@ -121,6 +124,16 @@ const CreateLogItemModal: React.FC<ModalProps> = ({
     ];
   }, [projects]);
 
+  const isMultiDayEvent = useMemo(() => {
+    if (isValidTimeFormat(startTime) && isValidTimeFormat(endTime)) {
+      const newStartDate = updateTimeForDate(start, startTime);
+      const newEndDate = updateTimeForDate(end, endTime);
+
+      return newEndDate < newStartDate;
+    }
+    return false;
+  }, [start, startTime, end, endTime]);
+
   return (
     <ModalLayout isOpen={isOpen} onClose={onClose} title="Create time log">
       <FormProvider {...methods}>
@@ -157,7 +170,7 @@ const CreateLogItemModal: React.FC<ModalProps> = ({
             />
 
             <Input
-              label="End Time"
+              label={isMultiDayEvent ? "End Time (+1)" : "End Time"}
               error={errors.endTime?.message}
               placeholder="Enter end time"
               {...methods.register("endTime", {

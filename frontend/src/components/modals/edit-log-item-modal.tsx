@@ -48,7 +48,6 @@ const EditLogItemModal: React.FC<ModalProps> = ({
     url: "projects",
   });
   const methods = useForm<LogItemForm>({
-    mode: "onBlur",
     defaultValues: {
       startTime: "",
       endTime: "",
@@ -62,9 +61,16 @@ const EditLogItemModal: React.FC<ModalProps> = ({
     formState: { errors },
   } = methods;
 
+  const startTime = methods.watch("startTime");
+  const endTime = methods.watch("endTime");
+
   const onSubmit = async (data: LogItemForm) => {
     const newStartDate = updateTimeForDate(logItem.start, data.startTime);
-    const newEndDate = updateTimeForDate(logItem.end, data.endTime);
+    const newEndDate = updateTimeForDate(
+      logItem.end,
+      data.endTime,
+      isMultiDayEvent,
+    );
     const seconds = getTimeDifferenceInSeconds(newStartDate, newEndDate);
 
     await updateTimeLogAsync(
@@ -120,6 +126,16 @@ const EditLogItemModal: React.FC<ModalProps> = ({
     }
   }, [logItem, projects, methods]);
 
+  const isMultiDayEvent = useMemo(() => {
+    if (isValidTimeFormat(startTime) && isValidTimeFormat(endTime)) {
+      const newStartDate = updateTimeForDate(logItem.start, startTime);
+      const newEndDate = updateTimeForDate(logItem.end, endTime);
+
+      return newEndDate < newStartDate;
+    }
+    return false;
+  }, [logItem.start, logItem.end, startTime, endTime]);
+
   return (
     <ModalLayout isOpen={isOpen} onClose={onClose} title="Edit time log">
       <FormProvider {...methods}>
@@ -156,7 +172,7 @@ const EditLogItemModal: React.FC<ModalProps> = ({
             />
 
             <Input
-              label="End Time"
+              label={isMultiDayEvent ? "End Time (+1)" : "End Time"}
               error={errors.endTime?.message}
               placeholder="Enter end time"
               {...methods.register("endTime", {
