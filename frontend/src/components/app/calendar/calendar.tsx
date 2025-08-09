@@ -13,14 +13,13 @@ import classNames from "classnames";
 
 import "./calendar.scss";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { PaginatedResut } from "@/src/models/abstractions/paginated-result";
-import { TimeLogWeekGroup } from "@/src/models/time-logs/time-log-week-group";
-import { useGet } from "@/src/hooks/use-get";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import { useEffect, useState } from "react";
 import useIsMobile from "@/src/hooks/useIsMobile";
 import CalendarEvent from "./calendar-event";
+import { useGetCalendarTimeLogs } from "@/src/hooks/calendar/use-get-calendar-time-logs";
+import { getEndOfWeek, getStartOfWeek } from "./utils";
 
 export interface CalendarEvent {
   id: number;
@@ -52,31 +51,17 @@ export default function Calendar({
   onSelectEvent,
 }: Props) {
   const isMobile = useIsMobile();
-
   const [viewValue, setViewValue] = useState<View>(Views.WEEK);
-  const { data } = useGet<PaginatedResut<TimeLogWeekGroup>>({
-    url: "/time-logs?page=" + 1 + "&pageSize=1335",
-  });
+
+  const today = new Date();
+  const [startDate, setStartDate] = useState<Date>(getStartOfWeek(today));
+  const [endDate, setEndDate] = useState<Date>(getEndOfWeek(today));
+
+  const { data: calendarData } = useGetCalendarTimeLogs(startDate, endDate);
 
   useEffect(() => {
     setViewValue(isMobile ? Views.DAY : Views.WEEK);
   }, [isMobile]);
-
-  const events: TimeLogDto[] =
-    data?.items.flatMap((group) =>
-      group.dates.flatMap((log) =>
-        log.timeLogs.map((timeLog) => ({
-          id: timeLog.id,
-          description: timeLog.description || "No description",
-          start: new Date(timeLog.start),
-          end: new Date(timeLog.end),
-          projectId: timeLog.projectId,
-          seconds: timeLog.seconds,
-          projectColor: timeLog.projectColor || "blue",
-          projectName: timeLog.projectName || "No project",
-        })),
-      ),
-    ) || [];
 
   const onViewChange = (event: string) => {
     if (event === "day") {
@@ -85,6 +70,8 @@ export default function Calendar({
       setViewValue(Views.WEEK);
     }
   };
+
+  console.log(calendarData);
 
   return (
     <div
@@ -96,11 +83,20 @@ export default function Calendar({
     >
       <DnDCalendar
         localizer={localizer}
-        events={events}
+        events={calendarData}
         view={viewValue}
         timeslots={4}
         step={15}
         onView={onViewChange}
+        onRangeChange={(range) => {
+          if (Array.isArray(range)) {
+            setStartDate(range[0] as Date);
+            setEndDate(range[range.length - 1] as Date);
+          } else if (range && typeof range === "object" && "start" in range) {
+            setStartDate(range.start as Date);
+          }
+        }}
+        date={startDate}
         views={["day", "week"]}
         resizable={true}
         onEventDrop={(event) => {

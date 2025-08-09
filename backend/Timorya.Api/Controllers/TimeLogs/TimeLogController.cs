@@ -6,6 +6,7 @@ using Timorya.Application.TimeLogs.CreateTimeLog;
 using Timorya.Application.TimeLogs.DeleteTimeLog;
 using Timorya.Application.TimeLogs.GetActiveTimeLog;
 using Timorya.Application.TimeLogs.GetTimeLogs;
+using Timorya.Application.TimeLogs.GetTimeLogsForCalendar;
 using Timorya.Application.TimeLogs.Shared;
 using Timorya.Application.TimeLogs.UpdateTimeLog;
 using Timorya.Domain.Abstractions;
@@ -42,6 +43,25 @@ public class TimeLogController(ISender sender) : ControllerBase
     )
     {
         var query = new GetTimeLogsQuery(page, pageSize);
+
+        var result = await _sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpGet("calendar")]
+    public async Task<IActionResult> Get(
+        [FromQuery] DateTime startDate,
+        [FromQuery] DateTime endDate,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var query = new GetTimeLogsForCalendarQuery(startDate, endDate);
 
         var result = await _sender.Send(query, cancellationToken);
         if (result.IsFailure)
