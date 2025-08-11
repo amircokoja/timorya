@@ -1,0 +1,13 @@
+services:
+  timorya-api:
+    ports:
+      - "6000:80"
+      - "6001:443"
+    volumes:
+      - ./backend/https-cert.pfx:/app/https/https-cert.pfx:ro
+
+  timorya-app:
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
