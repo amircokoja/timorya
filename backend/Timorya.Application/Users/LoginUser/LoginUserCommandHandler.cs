@@ -26,7 +26,7 @@ internal sealed class LoginUserCommandHandler(IApplicationDbContext context, IJw
             .ThenInclude(uo => uo.Role)
             .FirstOrDefaultAsync(u => u.Email == new Email(request.Email), cancellationToken);
 
-        if (user == null || !user.VerifyPassword(request.Password))
+        if (user == null || (!request.IsOAuth && !user.VerifyPassword(request.Password)))
         {
             return Result.Failure<LoginUserResponse>(UserApplicationErrors.InvalidCredentials);
         }

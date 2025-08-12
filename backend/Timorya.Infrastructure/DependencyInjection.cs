@@ -43,6 +43,10 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+        services.Configure<ApplicationSettings>(configuration.GetSection("ApplicationSettings"));
+        services.Configure<GoogleSettings>(configuration.GetSection("GoogleSettings"));
+
+        services.AddHttpClient();
 
         return services;
     }

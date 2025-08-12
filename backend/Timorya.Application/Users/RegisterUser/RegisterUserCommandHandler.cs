@@ -34,16 +34,22 @@ internal sealed class RegisterUserCommandHandler(
             return Result.Failure<RegisterUserResponse>(UserApplicationErrors.EmailAlreadyExists);
         }
 
-        if (request.Password != request.ConfirmPassword)
+        Password password = Password.Empty;
+        if (!request.IsOAuth)
         {
-            return Result.Failure<RegisterUserResponse>(UserApplicationErrors.PasswordMismatch);
-        }
+            if (request.Password != request.ConfirmPassword)
+            {
+                return Result.Failure<RegisterUserResponse>(UserApplicationErrors.PasswordMismatch);
+            }
 
-        var passwordHashResult = Password.Create(request.Password);
+            var passwordHashResult = Password.Create(request.Password);
 
-        if (passwordHashResult.IsFailure)
-        {
-            return Result.Failure<RegisterUserResponse>(passwordHashResult.Error);
+            if (passwordHashResult.IsFailure)
+            {
+                return Result.Failure<RegisterUserResponse>(passwordHashResult.Error);
+            }
+
+            password = passwordHashResult.Value;
         }
 
         var firstName = new FirstName(request.FirstName);
@@ -54,7 +60,7 @@ internal sealed class RegisterUserCommandHandler(
             firstName,
             new LastName(request.LastName),
             new Email(request.Email),
-            passwordHashResult.Value,
+            password,
             organization
         );
 
@@ -66,19 +72,13 @@ internal sealed class RegisterUserCommandHandler(
         await _context.SaveChangesAsync(cancellationToken);
 
         // Move to event handler
-        try
-        {
-            var emailValue = _emailTemplateService.NewUserEmailContent(
-                request.Email,
-                request.FirstName + " " + request.LastName
-            );
 
-            await _emailService.SendEmailAsync(emailValue, cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Failed to send email: {ex.Message}");
-        }
+        var emailValue = _emailTemplateService.NewUserEmailContent(
+            request.Email,
+            request.FirstName + " " + request.LastName
+        );
+
+        await _emailService.SendEmailAsync(emailValue, cancellationToken);
 
         return new RegisterUserResponse(user);
     }

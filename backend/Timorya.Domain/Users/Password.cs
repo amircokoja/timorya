@@ -19,6 +19,8 @@ public record Password(string Value)
         return Result.Success(new Password(HashPassword(password)));
     }
 
+    public static Password Empty => new(string.Empty);
+
     private static string HashPassword(string password)
     {
         return BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));

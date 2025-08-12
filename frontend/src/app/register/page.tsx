@@ -20,6 +20,8 @@ import {
 } from "../data/validation-values/register-user-validations";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
+import LinkButton from "@/src/components/ui/link-button";
+import { GoogleIcon } from "@/src/components/icons/google-icon";
 
 export type RegistrationForm = {
   email: string;
@@ -33,6 +35,8 @@ export type RegistrationForm = {
 export default function Register() {
   const router = useRouter();
   const { showToast } = useToastStore();
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL + "/users/google";
 
   const { mutateAsync: registerUserAsync, isPending } = usePost<
     RegistrationForm,
@@ -87,6 +91,20 @@ export default function Register() {
           <h1 className="text-xl leading-tight font-bold tracking-tight text-gray-900 sm:text-2xl">
             Create your account
           </h1>
+          <div className="items-center space-y-3 sm:flex sm:space-y-0 sm:space-x-4">
+            <LinkButton
+              additionalClasses="w-full"
+              icon={<GoogleIcon />}
+              color="white"
+              href={apiUrl}
+              text="Sign up with Google"
+            />
+          </div>
+          <div className="flex items-center">
+            <div className="h-0.5 w-full bg-gray-200"></div>
+            <div className="px-5 text-center text-gray-500">or</div>
+            <div className="h-0.5 w-full bg-gray-200"></div>
+          </div>
           <FormProvider {...methods}>
             <form
               className="space-y-4 lg:space-y-6"

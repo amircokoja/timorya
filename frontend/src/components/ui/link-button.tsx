@@ -16,6 +16,7 @@ interface LinkButtonProps
   icon?: React.ReactNode;
   size?: "sm" | "md" | "lg";
   href: string;
+  additionalClasses?: string;
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({
@@ -25,10 +26,11 @@ const LinkButton: React.FC<LinkButtonProps> = ({
   icon,
   size = "md",
   href,
+  additionalClasses,
   ...props
 }) => {
   const hasText = !!text;
-  const linkClass = `${baseStyles} ${getButtonStyles(color, variant)} ${getSizeStyles(size, hasText)}`;
+  const linkClass = `${baseStyles} ${getButtonStyles(color, variant)} ${getSizeStyles(size, hasText)} ${additionalClasses}`;
 
   return (
     <Link href={href} className={linkClass} {...props}>

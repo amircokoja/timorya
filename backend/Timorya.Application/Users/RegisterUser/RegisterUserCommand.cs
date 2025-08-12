@@ -7,5 +7,6 @@ public sealed record RegisterUserCommand(
     string LastName,
     string Email,
     string Password,
-    string ConfirmPassword
+    string ConfirmPassword,
+    bool IsOAuth = false
 ) : ICommand<RegisterUserResponse>;
