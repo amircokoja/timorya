@@ -40,6 +40,15 @@ internal sealed class CreateTimeLogCommandHandler(
             return Result.Failure<TimeLogDto>(UserErrors.NotFound);
         }
 
+        var timeLogCheck = await _context
+            .Set<TimeLog>()
+            .FirstOrDefaultAsync(c => c.UserId == dbUser.Id && c.End == null, cancellationToken);
+
+        if (timeLogCheck != null)
+        {
+            return Result.Failure<TimeLogDto>(TimeLogErrors.AlreadyExists);
+        }
+
         Project? project = null;
 
         if (request.ProjectId.HasValue)
