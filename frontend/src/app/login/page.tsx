@@ -7,7 +7,7 @@ import Input from "../../components/ui/input";
 import CustomLink from "../../components/ui/link";
 import { usePost } from "@/src/hooks/use-post";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { AxiosError } from "axios";
 import { ApiError } from "@/src/models/abstractions/api-error";
 import { errorExtractor } from "@/src/services/error-extractor";
@@ -21,7 +21,7 @@ type FormValues = {
   password: string;
 };
 
-export default function Login() {
+function Login() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const accessToken = searchParams.get("accessToken");
@@ -139,6 +139,16 @@ export default function Login() {
           </FormProvider>
         </div>
       </div>
+    </AuthLayout>
+  );
+}
+
+export default function LoginPageWithTokens() {
+  return (
+    <AuthLayout>
+      <Suspense fallback={null}>
+        <Login />
+      </Suspense>
     </AuthLayout>
   );
 }
