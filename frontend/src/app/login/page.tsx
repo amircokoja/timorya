@@ -145,10 +145,8 @@ function Login() {
 
 export default function LoginPageWithTokens() {
   return (
-    <AuthLayout>
-      <Suspense fallback={null}>
-        <Login />
-      </Suspense>
-    </AuthLayout>
+    <Suspense fallback={null}>
+      <Login />
+    </Suspense>
   );
 }
