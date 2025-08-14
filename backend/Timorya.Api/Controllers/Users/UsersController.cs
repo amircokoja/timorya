@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Timorya.Api.Controllers.Users.Models;
 using Timorya.Application.Common.Configuration;
 using Timorya.Application.Users.ChangeUserPassword;
+using Timorya.Application.Users.DeactivateAccount;
 using Timorya.Application.Users.ForgotPassword;
 using Timorya.Application.Users.GetUserData;
 using Timorya.Application.Users.GoogleOAuth;
@@ -181,6 +182,20 @@ public class UsersController(
             request.NewPassword,
             request.ConfirmPassword
         );
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpDelete("deactivate-account")]
+    public async Task<IActionResult> DeactivateAccount(CancellationToken cancellationToken)
+    {
+        var command = new DeactivateAccountCommand();
 
         Result<Unit> result = await _sender.Send(command, cancellationToken);
         if (result.IsFailure)

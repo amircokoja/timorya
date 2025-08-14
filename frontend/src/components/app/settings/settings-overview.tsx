@@ -1,10 +1,15 @@
 import { UserDataDto } from "@/src/models/users/user-data-dto";
+import Button from "../../ui/button";
+import { useState } from "react";
+import DeactivateAccountModal from "../../modals/deactivate-account-modal";
 
 interface Props {
   userData: UserDataDto;
 }
 
 export default function SettingsOverview({ userData }: Props) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="space-y-4 py-4 md:py-8">
       <div className="flex space-x-4">
@@ -37,6 +42,20 @@ export default function SettingsOverview({ userData }: Props) {
         <dt className="font-semibold text-gray-900">Email Address</dt>
         <dd className="text-gray-500">{userData.email}</dd>
       </dl>
+
+      <div>
+        <h3 className="mb-2 font-semibold text-gray-900">Account Actions</h3>
+        <Button
+          text="Deactivate account"
+          color="red"
+          onClick={() => setIsModalOpen(true)}
+        />
+      </div>
+
+      <DeactivateAccountModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
