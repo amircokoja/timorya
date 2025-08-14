@@ -12,17 +12,12 @@ const isCurrentWeek = (week: string): boolean => {
 };
 
 export default function DashboardWeek({ weekGroup, elapsedSeconds }: Props) {
-  const weekTotal = weekGroup.dates?.reduce((acc, group) => {
-    const groupTotal = group.timeLogs.reduce(
-      (sum, log) => sum + log.seconds,
+  const weekTotal =
+    (weekGroup.dates?.reduce(
+      (acc, { timeLogs }) =>
+        acc + timeLogs.reduce((sum, { seconds }) => sum + seconds, 0),
       0,
-    );
-
-    if (isCurrentWeek(weekGroup.week)) {
-      return acc + groupTotal + elapsedSeconds;
-    }
-    return acc + groupTotal;
-  }, 0);
+    ) ?? 0) + (isCurrentWeek(weekGroup.week) ? elapsedSeconds : 0);
 
   return (
     <>

@@ -219,14 +219,14 @@ export default function TimeLogger({
   return (
     <div className="relative rounded-xl border border-gray-200 bg-white">
       <FormProvider {...methods}>
-        <div className="flex flex-col items-center justify-between space-y-2 p-3 md:flex-row md:space-y-0">
-          <div className="w-full flex-1 border-gray-200 md:border-r md:pr-4">
+        <div className="flex flex-col items-center justify-between space-y-2 p-3 lg:flex-row lg:space-y-0">
+          <div className="w-full flex-1 border-gray-200 lg:border-r lg:pr-4">
             <Input
               placeholder="What are you working on?"
               {...methods.register("description")}
             />
           </div>
-          <div className="w-full border-gray-200 md:w-[170px] md:border-r md:px-4">
+          <div className="w-full border-gray-200 lg:w-[170px] lg:border-r lg:px-4">
             <Select
               disabled={isFetching}
               removeFirstOption={true}
@@ -235,7 +235,7 @@ export default function TimeLogger({
               {...methods.register("projectId")}
             />
           </div>
-          <div className="py-1 md:px-4 md:py-0">
+          <div className="py-1 lg:px-4 lg:py-0">
             <TimeCounter
               seconds={elapsedSeconds}
               startDate={activeLog?.start ?? new Date()}
@@ -244,7 +244,7 @@ export default function TimeLogger({
               isRunning={!!activeLog}
             />
           </div>
-          <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 md:w-auto md:flex-row md:items-center md:space-y-0 md:space-x-3 md:pl-4">
+          <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 lg:w-auto lg:flex-row lg:items-center lg:space-y-0 lg:space-x-3 lg:pl-4">
             <Button
               disabled={!isFetchingActiveLog}
               text={activeLog ? "Stop" : "Start"}
