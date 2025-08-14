@@ -66,4 +66,6 @@ public sealed class User : Entity
     {
         Password = newPassword;
     }
+
+    public bool IsOAuthUser => string.IsNullOrEmpty(Password?.Value);
 }

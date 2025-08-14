@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import Button from "../../ui/button";
 import Dropdown from "../../ui/dropdown";
+import { useRouter } from "next/navigation";
 
 interface Props {
   isSidebarOpen: boolean;
@@ -11,6 +12,7 @@ export default function AppNavbar({
   isSidebarOpen,
   handleSidebarToggle,
 }: Props) {
+  const router = useRouter();
   const sidebarButtonOpenClasses = classNames(
     "inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200",
     isSidebarOpen ? "block sm:hidden" : "",
@@ -20,6 +22,10 @@ export default function AppNavbar({
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     window.location.href = "/login";
+  };
+
+  const handleSettingsSelect = () => {
+    router.push("/app/settings");
   };
 
   return (
@@ -54,6 +60,7 @@ export default function AppNavbar({
 
           <div className="flex items-center justify-between lg:order-2">
             <Dropdown
+              className="!min-w-32"
               trigger={
                 <Button
                   size="sm"
@@ -77,6 +84,10 @@ export default function AppNavbar({
                 />
               }
               items={[
+                {
+                  label: "Settings",
+                  onClick: () => handleSettingsSelect(),
+                },
                 {
                   label: "Log out",
                   onClick: () => handleLogout(),

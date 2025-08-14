@@ -2,7 +2,7 @@ import {
   Dropdown as FlowbiteDropdown,
   DropdownItem as FlowbiteDropdownItem,
 } from "flowbite-react";
-import { FloatingProps } from "flowbite-react/components/Floating";
+import { DropdownProps } from "flowbite-react/components/Dropdown";
 import React from "react";
 
 interface DropdownItem {
@@ -11,18 +11,24 @@ interface DropdownItem {
   onClick?: () => void;
 }
 
-interface Props extends Omit<Partial<FloatingProps>, "trigger"> {
+interface Props extends Omit<Partial<DropdownProps>, "trigger"> {
   items: DropdownItem[];
   trigger: React.ReactElement;
 }
 
-const Dropdown: React.FC<Props> = ({ items, trigger }: Props, ...rest) => {
+const Dropdown: React.FC<Props> = ({
+  items,
+  trigger,
+  className,
+  ...rest
+}: Props) => {
   return (
     <FlowbiteDropdown
       label={""}
       dismissOnClick={true}
       renderTrigger={() => trigger}
       placement="bottom-start"
+      className={className}
       {...rest}
     >
       {items.map((item) => (

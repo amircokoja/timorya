@@ -1,9 +1,12 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Timorya.Api.Controllers.Users.Models;
 using Timorya.Application.Common.Configuration;
+using Timorya.Application.Users.ChangeUserPassword;
 using Timorya.Application.Users.ForgotPassword;
+using Timorya.Application.Users.GetUserData;
 using Timorya.Application.Users.GoogleOAuth;
 using Timorya.Application.Users.LoginUser;
 using Timorya.Application.Users.LoginUserWithRefreshToken;
@@ -149,5 +152,41 @@ public class UsersController(
         }
 
         return Redirect(result.Value);
+    }
+
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<IActionResult> Get(CancellationToken cancellationToken = default)
+    {
+        var query = new GetUserDataQuery();
+
+        var result = await _sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(
+        [FromBody] ChangePasswordRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new ChangeUserPasswordCommand(
+            request.OldPassword,
+            request.NewPassword,
+            request.ConfirmPassword
+        );
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok();
     }
 }

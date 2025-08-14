@@ -16,4 +16,9 @@ public static class UserApplicationErrors
         "User.EmailAlreadyExists",
         "A user with the provided email already exists."
     );
+
+    public static readonly Error PasswordsDoNotMatch = new(
+        "User.PasswordsDoNotMatch",
+        "The provided passwords do not match."
+    );
 }
