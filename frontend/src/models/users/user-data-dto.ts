@@ -3,4 +3,5 @@ export interface UserDataDto {
   lastName: string;
   email: string;
   isPasswordSet: boolean;
+  currentOrganizationId?: number;
 }

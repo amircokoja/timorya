@@ -18,4 +18,9 @@ public sealed class UserOrganization
     public User User { get; private init; }
     public Organization Organization { get; private init; }
     public Role Role { get; private init; }
+
+    public static UserOrganization Create(User user, Organization organization, Role role)
+    {
+        return new UserOrganization(user, organization, role);
+    }
 }

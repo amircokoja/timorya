@@ -7,6 +7,9 @@ import Sidebar from "./sidebar/sidebar";
 import Link from "next/link";
 import { TimoryaLogo } from "../../icons/timorya-logo";
 import useIsMobile from "@/src/hooks/useIsMobile";
+import { UserDataDto } from "@/src/models/users/user-data-dto";
+import { useGet } from "@/src/hooks/use-get";
+import CreateOrganizationModal from "../../modals/create-organization-modal";
 
 interface Props {
   children: React.ReactNode;
@@ -15,6 +18,17 @@ interface Props {
 export default function AppLayout({ children }: Props) {
   const isMobile = useIsMobile();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { data: userData } = useGet<UserDataDto>({
+    url: "users/me",
+  });
+  const [isCreateOrganizationModalOpen, setIsCreateOrganizationModalOpen] =
+    useState(false);
+
+  useEffect(() => {
+    if (userData && !userData.currentOrganizationId) {
+      setIsCreateOrganizationModalOpen(true);
+    }
+  }, [userData]);
 
   useEffect(() => {
     setIsSidebarOpen(!isMobile);
@@ -70,6 +84,11 @@ export default function AppLayout({ children }: Props) {
           </div>
         </div>
       </div>
+
+      <CreateOrganizationModal
+        isOpen={isCreateOrganizationModalOpen}
+        onClose={() => setIsCreateOrganizationModalOpen(false)}
+      />
     </>
   );
 }

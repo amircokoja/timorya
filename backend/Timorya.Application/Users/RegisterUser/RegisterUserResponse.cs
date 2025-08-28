@@ -7,7 +7,7 @@ public sealed record RegisterUserResponse(
     string FirstName,
     string LastName,
     string Email,
-    int OrganizationId
+    int? OrganizationId
 )
 {
     public RegisterUserResponse(User user)

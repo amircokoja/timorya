@@ -54,25 +54,18 @@ internal sealed class RegisterUserCommandHandler(
 
         var firstName = new FirstName(request.FirstName);
 
-        var organization = Organization.Create(firstName);
-
         var user = User.Create(
             firstName,
             new LastName(request.LastName),
             new Email(request.Email),
-            password,
-            organization
+            password
         );
 
-        _context.Set<Organization>().Add(organization);
-        _context.Set<Role>().Attach(Role.Owner);
-        user.AddToOrganization(organization, Role.Owner);
         _context.Set<User>().Add(user);
 
         await _context.SaveChangesAsync(cancellationToken);
 
         // Move to event handler
-
         var emailValue = _emailTemplateService.NewUserEmailContent(
             request.Email,
             request.FirstName + " " + request.LastName

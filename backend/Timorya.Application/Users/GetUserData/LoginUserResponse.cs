@@ -6,13 +6,15 @@ public sealed class UserDataResponse(
     string email,
     string firstName,
     string lastName,
-    bool isPasswordSet
+    bool isPasswordSet,
+    int? currentOrganizationId
 )
 {
     public string Email { get; init; } = email;
     public string FirstName { get; init; } = firstName;
     public string LastName { get; init; } = lastName;
     public bool IsPasswordSet { get; init; } = isPasswordSet;
+    public int? CurrentOrganizationId { get; init; } = currentOrganizationId;
 
     public static UserDataResponse FromUser(User user)
     {
@@ -20,7 +22,8 @@ public sealed class UserDataResponse(
             user.Email.Value,
             user.FirstName.Value,
             user.LastName.Value,
-            string.IsNullOrWhiteSpace(user.Password.Value) == false
+            string.IsNullOrWhiteSpace(user.Password.Value) == false,
+            user.CurrentOrganizationId
         );
     }
 }

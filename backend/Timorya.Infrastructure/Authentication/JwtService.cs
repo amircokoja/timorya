@@ -14,7 +14,7 @@ public class JwtService(IOptions<JwtSettings> options) : IJwtService
 {
     private readonly JwtSettings _jwtSettings = options.Value;
 
-    public string GenerateJwtToken(int userId, string email, int organizationId, Role? role)
+    public string GenerateJwtToken(int userId, string email, int? organizationId, Role? role)
     {
         var expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes);
 
@@ -22,10 +22,14 @@ public class JwtService(IOptions<JwtSettings> options) : IJwtService
         {
             new(JwtRegisteredClaimNames.Sub, userId.ToString()),
             new(JwtRegisteredClaimNames.Email, email),
-            new(JwtCustomClaimNames.Organization, organizationId.ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Exp, expires.ToString()),
         };
+
+        if (organizationId.HasValue)
+        {
+            claims.Add(new(JwtCustomClaimNames.Organization, organizationId.Value.ToString()));
+        }
 
         if (role != null)
         {

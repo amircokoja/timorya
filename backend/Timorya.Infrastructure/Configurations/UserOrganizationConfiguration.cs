@@ -21,7 +21,7 @@ internal sealed class UserOrganizationConfiguration : IEntityTypeConfiguration<U
             .HasOne(ur => ur.Organization)
             .WithMany(o => o.UserOrganizations)
             .HasForeignKey(ur => ur.OrganizationId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder
             .HasOne(ur => ur.Role)

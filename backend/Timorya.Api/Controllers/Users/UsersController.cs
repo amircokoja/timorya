@@ -5,8 +5,11 @@ using Microsoft.Extensions.Options;
 using Timorya.Api.Controllers.Users.Models;
 using Timorya.Application.Common.Configuration;
 using Timorya.Application.Users.ChangeUserPassword;
+using Timorya.Application.Users.CreateOrganization;
 using Timorya.Application.Users.DeactivateAccount;
+using Timorya.Application.Users.DeleteOrganization;
 using Timorya.Application.Users.ForgotPassword;
+using Timorya.Application.Users.GetOrganizations;
 using Timorya.Application.Users.GetUserData;
 using Timorya.Application.Users.GoogleOAuth;
 using Timorya.Application.Users.LoginUser;
@@ -202,6 +205,54 @@ public class UsersController(
         {
             return BadRequest(result.Error);
         }
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpPost("organizations")]
+    public async Task<IActionResult> CreateOrganization(
+        [FromBody] CreateOrganizationRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new CreateOrganizationCommand(request.Name, request.IsPersonalWorkspace);
+
+        Result<OrganizationDto> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpGet("organizations")]
+    public async Task<IActionResult> GetOrganizations(CancellationToken cancellationToken)
+    {
+        var query = new GetOrganizationsQuery();
+
+        var result = await _sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpDelete("organizations/{id}")]
+    public async Task<IActionResult> DeleteOrganization(int id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteOrganizationCommand(id);
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
         return Ok();
     }
 }
