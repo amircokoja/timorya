@@ -11,6 +11,7 @@ import { OrganizationDto } from "@/src/models/users/organization-dto";
 import { getWorkspaceType } from "@/src/models/users/utils";
 import { UserDataDto } from "@/src/models/users/user-data-dto";
 import { useGet } from "@/src/hooks/use-get";
+import { usePut } from "@/src/hooks/use-put";
 
 interface Props {
   organizations: OrganizationDto[];
@@ -26,6 +27,8 @@ export default function OrganizationsTable({ organizations }: Props) {
   const { mutateAsync: deleteOrganizationAsync } = useDelete<boolean>({
     options: {},
   });
+
+  const { mutateAsync: setActiveOrganizationAsync, isPending } = usePut();
 
   const queryClient = useQueryClient();
 
@@ -59,7 +62,31 @@ export default function OrganizationsTable({ organizations }: Props) {
   };
 
   const handleSwitchOrganization = (organization: OrganizationDto) => {
-    console.log(organization);
+    const url = "users/organizations/set-active/" + organization.id;
+
+    setActiveOrganizationAsync(
+      {
+        url,
+        data: {},
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["users/me"],
+          });
+          queryClient.invalidateQueries({
+            queryKey: ["time-logs/active"],
+          });
+          queryClient.invalidateQueries({
+            predicate: (query) =>
+              typeof query.queryKey?.[0] === "string" &&
+              query.queryKey[0].startsWith("/time-logs"),
+          });
+
+          showToast("Successfully switched to " + organization.name, "success");
+        },
+      },
+    );
   };
 
   return (
@@ -97,10 +124,10 @@ export default function OrganizationsTable({ organizations }: Props) {
               <td className="px-4 py-3">{organization.role}</td>
               <td className="px-4 py-3">{getWorkspaceType(organization)}</td>
               <td className="px-4 py-3">
-                {userData?.currentOrganizationId === organization.id && (
+                {userData?.currentOrganizationId !== organization.id && (
                   <Button
                     onClick={() => handleSwitchOrganization(organization)}
-                    disabled={isFetching}
+                    disabled={isFetching || isPending}
                     text="Switch"
                     size="sm"
                   />

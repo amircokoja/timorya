@@ -16,6 +16,7 @@ using Timorya.Application.Users.LoginUser;
 using Timorya.Application.Users.LoginUserWithRefreshToken;
 using Timorya.Application.Users.RegisterUser;
 using Timorya.Application.Users.ResetPasswordWithToken;
+using Timorya.Application.Users.SetActiveOrganization;
 using Timorya.Domain.Abstractions;
 
 namespace Timorya.Api.Controllers.Users;
@@ -218,6 +219,24 @@ public class UsersController(
         var command = new CreateOrganizationCommand(request.Name, request.IsPersonalWorkspace);
 
         Result<OrganizationDto> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPut("organizations/set-active/{id}")]
+    public async Task<IActionResult> SetActiveOrganization(
+        [FromRoute] int id,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new SetActiveOrganizationCommand(id);
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
