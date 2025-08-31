@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Timorya.Api.Controllers.Users.Models;
 using Timorya.Application.Common.Configuration;
+using Timorya.Application.Users.AcceptInvitation;
 using Timorya.Application.Users.ChangeUserPassword;
 using Timorya.Application.Users.CreateOrganization;
 using Timorya.Application.Users.DeactivateAccount;
 using Timorya.Application.Users.DeleteOrganization;
 using Timorya.Application.Users.ForgotPassword;
+using Timorya.Application.Users.GetInvitation;
 using Timorya.Application.Users.GetOrganizations;
 using Timorya.Application.Users.GetRoles;
 using Timorya.Application.Users.GetUserData;
@@ -300,6 +302,42 @@ public class UsersController(
     )
     {
         var command = new InviteMemberCommand(request.Email, request.RoleId);
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpGet("invitations/{token}")]
+    public async Task<IActionResult> GetInvitation(
+        [FromRoute] string token,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new GetInvitationQuery(token);
+
+        Result<InvitationMemberDto> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPost("accept-invitation")]
+    public async Task<IActionResult> AcceptInvitation(
+        [FromBody] AcceptInvitationRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new AcceptInvitationCommand(request.Token);
 
         Result<Unit> result = await _sender.Send(command, cancellationToken);
         if (result.IsFailure)

@@ -19,7 +19,7 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
 
         var role = _httpContextAccessor?.HttpContext?.User?.GetRole();
 
-        if (email == null || userId == null || organizationId == null || role == null)
+        if (email == null || userId == null)
         {
             throw new UnauthorizedAccessException();
         }
@@ -28,8 +28,8 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
         {
             Email = email,
             UserId = userId.Value,
-            CurrentOrganizationId = organizationId.Value,
-            Role = role,
+            CurrentOrganizationId = organizationId.HasValue ? organizationId.Value : null,
+            Role = role ?? string.Empty,
         };
     }
 }

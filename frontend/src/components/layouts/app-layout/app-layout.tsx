@@ -5,7 +5,7 @@ import AppNavbar from "./app-navbar";
 import classNames from "classnames";
 import Sidebar from "./sidebar/sidebar";
 import Link from "next/link";
-import { TimoryaLogo } from "../../icons/timorya-logo";
+import { TimoryaTextLogo } from "../../icons/timorya-text-logo";
 import useIsMobile from "@/src/hooks/useIsMobile";
 import { UserDataDto } from "@/src/models/users/user-data-dto";
 import { useGet } from "@/src/hooks/use-get";
@@ -54,7 +54,7 @@ export default function AppLayout({ children }: Props) {
           <div className="border-b border-gray-200 bg-white px-4 py-2.5 lg:px-6">
             <div className="flex h-[50px] items-center justify-between">
               <Link href="/" className="relative top-0.5">
-                <TimoryaLogo />
+                <TimoryaTextLogo />
               </Link>
               <Button
                 color="white"

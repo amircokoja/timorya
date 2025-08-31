@@ -26,6 +26,6 @@ public static class UserErrors
 
     public static readonly Error InvalidToken = new(
         "User.InvalidToken",
-        "The provided reset token is invalid"
+        "The provided token is invalid"
     );
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TimoryaLogo } from "../icons/timorya-logo";
+import { TimoryaTextLogo } from "../icons/timorya-text-logo";
 
 export default function AuthLayout({
   children,
@@ -7,12 +7,12 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex min-h-screen items-center bg-gray-50">
+    <section className="flex min-h-screen items-center bg-[url('/blue-abstract.png')] bg-cover bg-center bg-no-repeat bg-blend-multiply">
       <div className="mx-auto max-w-screen-xl px-4 py-8 lg:grid lg:grid-cols-12 lg:gap-20 lg:py-16">
         <div className="col-span-6 mr-auto hidden flex-col justify-center lg:flex xl:mb-0">
           <div>
             <Link href="/" className="relative top-0.5">
-              <TimoryaLogo />
+              <TimoryaTextLogo />
             </Link>
             <div className="mt-10 flex">
               <svg
@@ -28,10 +28,10 @@ export default function AuthLayout({
                 ></path>
               </svg>
               <div>
-                <h3 className="mb-2 text-xl leading-none font-bold text-gray-900">
+                <h3 className="mb-2 text-xl leading-none font-bold text-gray-200">
                   Track time effortlessly
                 </h3>
-                <p className="mb-2 font-light text-gray-500">
+                <p className="mb-2 font-light text-gray-200">
                   Easily log your work hours with an intuitive and user-friendly
                   interface.
                 </p>
@@ -51,10 +51,10 @@ export default function AuthLayout({
                 ></path>
               </svg>
               <div>
-                <h3 className="mb-2 text-xl leading-none font-bold text-gray-900">
+                <h3 className="mb-2 text-xl leading-none font-bold text-gray-200">
                   Boost productivity
                 </h3>
-                <p className="mb-2 font-light text-gray-500">
+                <p className="mb-2 font-light text-gray-200">
                   Gain insights into your work patterns and optimize your
                   efficiency with detailed reports.
                 </p>
@@ -74,10 +74,10 @@ export default function AuthLayout({
                 ></path>
               </svg>
               <div>
-                <h3 className="mb-2 text-xl leading-none font-bold text-gray-900">
+                <h3 className="mb-2 text-xl leading-none font-bold text-gray-200">
                   Stay in control
                 </h3>
-                <p className="mb-2 font-light text-gray-500">
+                <p className="mb-2 font-light text-gray-200">
                   Manage your time effectively with project-based tracking and
                   real-time notifications.
                 </p>
@@ -87,7 +87,7 @@ export default function AuthLayout({
         </div>
         <div className="mb-6 flex justify-center lg:hidden">
           <Link href="/" className="relative top-0.5">
-            <TimoryaLogo />
+            <TimoryaTextLogo />
           </Link>
         </div>
         {children}
