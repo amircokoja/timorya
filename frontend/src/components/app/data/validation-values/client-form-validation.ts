@@ -1,5 +1,5 @@
+import { ClientsForm } from "@/src/app/app/clients/add/page";
 import { RegisterOptions } from "react-hook-form";
-import { ClientsForm } from "../../app/clients/add/page";
 
 export const firstNameValidation:
   | RegisterOptions<ClientsForm, "firstName">

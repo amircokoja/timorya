@@ -1,4 +1,3 @@
-import { projectNameValidation } from "@/src/app/data/validation-values/project-form-validation";
 import Button from "@/src/components/ui/button";
 import ColorSelector from "@/src/components/ui/color-selector";
 import Input from "@/src/components/ui/input";
@@ -16,6 +15,7 @@ import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { projectNameValidation } from "../data/validation-values/project-form-validation";
 
 export type ProjectForm = {
   name: string;

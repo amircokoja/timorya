@@ -1,5 +1,5 @@
+import { RegistrationForm } from "@/src/app/register/page";
 import { RegisterOptions } from "react-hook-form";
-import { RegistrationForm } from "../../register/page";
 
 export const firstNameValidation:
   | RegisterOptions<RegistrationForm, "firstName">

@@ -10,7 +10,7 @@ import { usePost } from "@/src/hooks/use-post";
 import { InviteMemberRequest } from "@/src/models/users/invite-member-request";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
-import { emailValidation } from "@/src/app/data/validation-values/invite-member-validations";
+import { emailValidation } from "../app/data/validation-values/invite-member-validations";
 
 interface ModalProps {
   isOpen: boolean;

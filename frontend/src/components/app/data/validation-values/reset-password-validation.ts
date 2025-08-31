@@ -1,5 +1,5 @@
+import { ResetPasswordForm } from "@/src/app/reset-password-with-token/page";
 import { RegisterOptions } from "react-hook-form";
-import { ResetPasswordForm } from "../../reset-password-with-token/page";
 
 export const passwordValidation:
   | RegisterOptions<ResetPasswordForm, "password">

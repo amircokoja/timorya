@@ -11,17 +11,18 @@ import { usePost } from "@/src/hooks/use-post";
 import { AxiosError } from "axios";
 import { RegisterUserResponse } from "@/src/models/users/register-user-response";
 import { ApiError } from "@/src/models/abstractions/api-error";
-import {
-  confirmPasswordValidation,
-  emailValidation,
-  firstNameValidation,
-  lastNameValidation,
-  passwordValidation,
-} from "../data/validation-values/register-user-validations";
+
 import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
 import LinkButton from "@/src/components/ui/link-button";
 import { GoogleIcon } from "@/src/components/icons/google-icon";
+import {
+  firstNameValidation,
+  lastNameValidation,
+  emailValidation,
+  passwordValidation,
+  confirmPasswordValidation,
+} from "@/src/components/app/data/validation-values/register-user-validations";
 
 export type RegistrationForm = {
   email: string;

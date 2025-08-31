@@ -1,12 +1,12 @@
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../../ui/input";
 import Button from "../../ui/button";
-import { newPasswordValidation } from "@/src/app/data/validation-values/new-password-validation";
 import { usePost } from "@/src/hooks/use-post";
 import { useToastStore } from "@/src/store/toast-store";
 import { AxiosError } from "axios";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { ApiError } from "@/src/models/abstractions/api-error";
+import { newPasswordValidation } from "../data/validation-values/new-password-validation";
 
 export interface SettingsPasswordsForm {
   oldPassword: string;

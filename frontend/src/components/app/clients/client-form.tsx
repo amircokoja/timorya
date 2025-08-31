@@ -2,7 +2,7 @@ import {
   emailValidation,
   firstNameValidation,
   lastNameValidation,
-} from "@/src/app/data/validation-values/client-form-validation";
+} from "@/src/components/app/data/validation-values/client-form-validation";
 import Button from "@/src/components/ui/button";
 import ColorSelector from "@/src/components/ui/color-selector";
 import Input from "@/src/components/ui/input";

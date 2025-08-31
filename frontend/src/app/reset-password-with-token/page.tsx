@@ -11,12 +11,13 @@ import { AxiosError } from "axios";
 import { ApiError } from "@/src/models/abstractions/api-error";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import {
   confirmPasswordValidation,
   passwordValidation,
-} from "../data/validation-values/reset-password-validation";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect } from "react";
+} from "@/src/components/app/data/validation-values/reset-password-validation";
 
 export type ResetPasswordForm = {
   password: string;

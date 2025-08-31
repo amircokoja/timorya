@@ -12,7 +12,7 @@ import {
   OrganizationDto,
   WorkspaceType,
 } from "@/src/models/users/organization-dto";
-import { nameValidation } from "@/src/app/data/validation-values/create-organization-validations";
+import { nameValidation } from "../app/data/validation-values/create-organization-validations";
 
 interface ModalProps {
   isOpen: boolean;
