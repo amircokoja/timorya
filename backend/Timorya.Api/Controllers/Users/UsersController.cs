@@ -10,8 +10,10 @@ using Timorya.Application.Users.DeactivateAccount;
 using Timorya.Application.Users.DeleteOrganization;
 using Timorya.Application.Users.ForgotPassword;
 using Timorya.Application.Users.GetOrganizations;
+using Timorya.Application.Users.GetRoles;
 using Timorya.Application.Users.GetUserData;
 using Timorya.Application.Users.GoogleOAuth;
+using Timorya.Application.Users.InviteMember;
 using Timorya.Application.Users.LoginUser;
 using Timorya.Application.Users.LoginUserWithRefreshToken;
 using Timorya.Application.Users.RegisterUser;
@@ -273,5 +275,38 @@ public class UsersController(
         }
 
         return Ok();
+    }
+
+    [Authorize]
+    [HttpGet("roles")]
+    public async Task<IActionResult> GetRoles(CancellationToken cancellationToken)
+    {
+        var query = new GetRolesQuery();
+
+        var result = await _sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPost("invite")]
+    public async Task<IActionResult> InviteMember(
+        [FromBody] InviteMemberRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new InviteMemberCommand(request.Email, request.RoleId);
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 }

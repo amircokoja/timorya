@@ -3,6 +3,7 @@
 import { CalendarIcon } from "@/src/components/icons/sidebar-icons/calendar-icon";
 import { ClientsIcon } from "@/src/components/icons/sidebar-icons/clients-icon";
 import { DashboardIcon } from "@/src/components/icons/sidebar-icons/dashboard-icon";
+import { MembersIcon } from "@/src/components/icons/sidebar-icons/members-icon";
 // import { MembersIcon } from "@/src/components/icons/sidebar-icons/members-icon";
 import { ProjectsIcon } from "@/src/components/icons/sidebar-icons/projects-icon";
 import { JSX } from "react";
@@ -69,11 +70,11 @@ export const SupportSidebarGroup: SidebarGroupType = {
       icon: ProjectsIcon,
       href: "/app/projects",
     },
-    // {
-    //   label: "Members",
-    //   icon: MembersIcon,
-    //   href: "/app/members",
-    // },
+    {
+      label: "Members",
+      icon: MembersIcon,
+      href: "/app/members",
+    },
     // {
     //   label: "Settings",
     //   icon: SettingsIcon,

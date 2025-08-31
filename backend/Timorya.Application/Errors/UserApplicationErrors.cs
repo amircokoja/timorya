@@ -21,4 +21,19 @@ public static class UserApplicationErrors
         "User.PasswordsDoNotMatch",
         "The provided passwords do not match."
     );
+
+    public static readonly Error RoleNotFound = new(
+        "User.RoleNotFound",
+        "The specified role was not found."
+    );
+
+    public static readonly Error NoActiveOrganization = new(
+        "User.NoActiveOrganization",
+        "The user does not belong to any active organization."
+    );
+
+    public static readonly Error UserAlreadyInOrganization = new(
+        "User.UserAlreadyInOrganization",
+        "The user is already a member of the organization."
+    );
 }
