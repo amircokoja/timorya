@@ -28,4 +28,9 @@ public static class UserErrors
         "User.InvalidToken",
         "The provided token is invalid"
     );
+
+    public static readonly Error NoActiveOrganization = new(
+        "User.NoActiveOrganization",
+        "User does not have an active organization"
+    );
 }

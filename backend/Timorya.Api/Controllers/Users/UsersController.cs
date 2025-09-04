@@ -11,6 +11,7 @@ using Timorya.Application.Users.DeactivateAccount;
 using Timorya.Application.Users.DeleteOrganization;
 using Timorya.Application.Users.ForgotPassword;
 using Timorya.Application.Users.GetInvitation;
+using Timorya.Application.Users.GetMembers;
 using Timorya.Application.Users.GetOrganizations;
 using Timorya.Application.Users.GetRoles;
 using Timorya.Application.Users.GetUserData;
@@ -340,6 +341,20 @@ public class UsersController(
         var command = new AcceptInvitationCommand(request.Token);
 
         Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpGet("members")]
+    public async Task<IActionResult> GetMembers(CancellationToken cancellationToken)
+    {
+        var query = new GetMembersQuery();
+        var result = await _sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);

@@ -1,20 +1,20 @@
 "use client";
 
-import ProjectsTable from "@/src/components/app/projects/projects-table";
+import MembersTable from "@/src/components/app/members/members-table";
 import { LoadingIcon } from "@/src/components/icons/loading-icon";
 import { SearchIcon } from "@/src/components/icons/search-icon";
 import InviteMembersModal from "@/src/components/modals/invite-members-modal";
 import Button from "@/src/components/ui/button";
 import Input from "@/src/components/ui/input";
 import { useGet } from "@/src/hooks/use-get";
-import { ProjectDto } from "@/src/models/projects/project-dto";
+import { MemberDto } from "@/src/models/users/member-dto";
 import { useState } from "react";
 
 export default function Members() {
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
-  const { data: projects, isFetching: isFetching } = useGet<ProjectDto[]>({
-    url: "projects",
+  const { data: members, isFetching } = useGet<MemberDto[]>({
+    url: "users/members",
   });
 
   const [searchText, setSearchText] = useState("");
@@ -23,14 +23,17 @@ export default function Members() {
     setSearchText(event.target.value.toLowerCase());
   };
 
-  const filteredProjects = projects?.filter((project) =>
-    project.name.toLowerCase().includes(searchText),
+  const filteredMembers = members?.filter(
+    (member) =>
+      member.email.toLowerCase().includes(searchText) ||
+      (member.name && member.name.toLowerCase().includes(searchText)) ||
+      member.role.toLowerCase().includes(searchText),
   );
 
   const generateContent = () => {
     return (
       <>
-        {projects?.length === 0 ? (
+        {filteredMembers?.length === 0 ? (
           <section className="bg-white">
             <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
               <div className="mx-auto max-w-screen-sm text-center">
@@ -46,7 +49,7 @@ export default function Members() {
           </section>
         ) : (
           <div className="overflow-x-auto">
-            <ProjectsTable projects={filteredProjects!} />
+            <MembersTable members={filteredMembers!} />
           </div>
         )}
       </>

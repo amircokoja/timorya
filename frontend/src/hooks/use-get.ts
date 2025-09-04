@@ -6,9 +6,10 @@ import api from "../services/api";
 interface UseGetOptions<T> {
   url: string;
   options?: UndefinedInitialDataOptions<T, Error, T, readonly unknown[]>;
+  enabled?: boolean;
 }
 
-export function useGet<T>({ url, options }: UseGetOptions<T>) {
+export function useGet<T>({ url, options, enabled = true }: UseGetOptions<T>) {
   return useQuery<T>({
     queryKey: [url],
     queryFn: async () => {
@@ -17,6 +18,7 @@ export function useGet<T>({ url, options }: UseGetOptions<T>) {
     },
     staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
+    enabled,
     ...options,
   });
 }

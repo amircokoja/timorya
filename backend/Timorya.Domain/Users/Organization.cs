@@ -10,11 +10,13 @@ public sealed class Organization : Entity
 
     public OrganizationName Name { get; private set; }
     public bool IsPersonalWorkspace { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+
     public ICollection<UserOrganization> UserOrganizations { get; private set; }
     public ICollection<User> Users { get; private set; }
     public ICollection<Client> Clients { get; private set; }
     public ICollection<TimeLog> TimeLogs { get; private set; }
-    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+    public ICollection<MemberInvitation> MemberInvitations { get; private set; }
 
     public static Organization Create(string name, bool isPersonalWorkspace)
     {
