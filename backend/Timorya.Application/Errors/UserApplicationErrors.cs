@@ -36,4 +36,19 @@ public static class UserApplicationErrors
         "User.UserAlreadyInOrganization",
         "The user is already a member of the organization."
     );
+
+    public static readonly Error InvitationAndUserIdNull = new(
+        "User.InvitationAndUserIdNull",
+        "Both InvitationId and UserId cannot be null."
+    );
+
+    public static readonly Error CannotChangeOwnRole = new(
+        "User.CannotChangeOwnRole",
+        "Users cannot change their own role."
+    );
+
+    public static readonly Error AtLeastOneOwnerRequired = new(
+        "User.AtLeastOneOwnerRequired",
+        "An organization must have at least one owner."
+    );
 }

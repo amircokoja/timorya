@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Timorya.Api.Controllers.Users.Models;
 using Timorya.Application.Common.Configuration;
 using Timorya.Application.Users.AcceptInvitation;
+using Timorya.Application.Users.ChangeMemberRole;
 using Timorya.Application.Users.ChangeUserPassword;
 using Timorya.Application.Users.CreateOrganization;
 using Timorya.Application.Users.DeactivateAccount;
@@ -355,6 +356,28 @@ public class UsersController(
     {
         var query = new GetMembersQuery();
         var result = await _sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPost("change-member-role")]
+    public async Task<IActionResult> ChangeMemberRole(
+        [FromBody] ChangeMemberRoleRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new ChangeMemberRoleCommand(
+            request.UserId,
+            request.InvitationId,
+            request.NewRoleId
+        );
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);

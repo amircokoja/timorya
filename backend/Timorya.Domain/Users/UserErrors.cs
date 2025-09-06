@@ -33,4 +33,9 @@ public static class UserErrors
         "User.NoActiveOrganization",
         "User does not have an active organization"
     );
+
+    public static readonly Error InvalidInvitation = new(
+        "User.InvalidInvitation",
+        "The provided invitation is invalid"
+    );
 }

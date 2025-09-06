@@ -15,6 +15,7 @@ interface ButtonProps
   size?: "xs" | "sm" | "md" | "lg";
   icon?: React.ReactNode;
   additionalClasses?: string;
+  iconPosition?: "left" | "right";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -24,6 +25,7 @@ const Button: React.FC<ButtonProps> = ({
   size = "md",
   icon,
   additionalClasses,
+  iconPosition = "left",
   ...props
 }) => {
   const hasText = !!text;
@@ -31,8 +33,13 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button className={buttonClass} {...props}>
-      {icon && <span className={hasText ? "mr-2" : ""}>{icon}</span>}
-      {text}
+      {icon && iconPosition === "left" && (
+        <span className={hasText ? "mr-2" : ""}>{icon}</span>
+      )}
+      <span>{text}</span>
+      {icon && iconPosition === "right" && (
+        <span className={hasText ? "ml-2" : ""}>{icon}</span>
+      )}
     </button>
   );
 };

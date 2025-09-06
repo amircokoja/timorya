@@ -25,4 +25,10 @@ public class MemberInvitation : Entity
         InvitedByUser = invitedByUser;
         CreatedAt = DateTime.UtcNow;
     }
+
+    public void UpdateRole(Role newRole)
+    {
+        Role = newRole;
+        RoleId = newRole.Id;
+    }
 }
