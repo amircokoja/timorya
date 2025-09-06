@@ -6,18 +6,18 @@ using Timorya.Application.Errors;
 using Timorya.Domain.Abstractions;
 using Timorya.Domain.Users;
 
-namespace Timorya.Application.Users.ChangeMemberRole;
+namespace Timorya.Application.Users.DeleteMember;
 
-internal sealed class ChangeMemberRoleCommandHandler(
+internal sealed class DeleteMemberCommandHandler(
     IApplicationDbContext context,
     ICurrentUserService currentUserService
-) : ICommandHandler<ChangeMemberRoleCommand, Unit>
+) : ICommandHandler<DeleteMemberCommand, Unit>
 {
     private readonly IApplicationDbContext _context = context;
     private readonly ICurrentUserService _currentUserService = currentUserService;
 
     public async Task<Result<Unit>> Handle(
-        ChangeMemberRoleCommand request,
+        DeleteMemberCommand request,
         CancellationToken cancellationToken
     )
     {
@@ -32,20 +32,11 @@ internal sealed class ChangeMemberRoleCommandHandler(
             return Result.Failure<Unit>(UserErrors.NotFound);
         }
 
-        var role = await _context
-            .Set<Role>()
-            .FirstOrDefaultAsync(r => r.Id == request.NewRoleId, cancellationToken);
-
-        if (role == null)
-        {
-            return Result.Failure<Unit>(RoleErrors.NotFound);
-        }
-
         if (request.UserId != null)
         {
             if (request.UserId == user.Id)
             {
-                return Result.Failure<Unit>(UserApplicationErrors.CannotChangeOwnRole);
+                return Result.Failure<Unit>(UserApplicationErrors.CannotDeleteYourself);
             }
 
             var userOrganization = await _context
@@ -60,9 +51,9 @@ internal sealed class ChangeMemberRoleCommandHandler(
                 return Result.Failure<Unit>(UserErrors.NotMemberOfOrganization);
             }
 
-            if (userOrganization.RoleId == Role.Owner.Id && request.NewRoleId != Role.Owner.Id)
+            if (userOrganization.RoleId == Role.Owner.Id)
             {
-                var userOrg = await _context
+                var otherOwners = await _context
                     .Set<UserOrganization>()
                     .Where(uo =>
                         uo.OrganizationId == user.CurrentOrganizationId
@@ -71,14 +62,13 @@ internal sealed class ChangeMemberRoleCommandHandler(
                     )
                     .AnyAsync(cancellationToken);
 
-                if (!userOrg)
+                if (!otherOwners)
                 {
                     return Result.Failure<Unit>(UserApplicationErrors.AtLeastOneOwnerRequired);
                 }
             }
 
-            userOrganization.UpdateRole(role);
-            _context.Set<UserOrganization>().Update(userOrganization);
+            _context.Set<UserOrganization>().Remove(userOrganization);
         }
         else if (request.InvitationId != null)
         {
@@ -92,9 +82,7 @@ internal sealed class ChangeMemberRoleCommandHandler(
                 return Result.Failure<Unit>(UserErrors.InvalidInvitation);
             }
 
-            invitation.UpdateRole(role);
-
-            _context.Set<MemberInvitation>().Update(invitation);
+            _context.Set<MemberInvitation>().Remove(invitation);
         }
         else
         {

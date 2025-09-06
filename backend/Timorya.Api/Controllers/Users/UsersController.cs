@@ -9,6 +9,7 @@ using Timorya.Application.Users.ChangeMemberRole;
 using Timorya.Application.Users.ChangeUserPassword;
 using Timorya.Application.Users.CreateOrganization;
 using Timorya.Application.Users.DeactivateAccount;
+using Timorya.Application.Users.DeleteMember;
 using Timorya.Application.Users.DeleteOrganization;
 using Timorya.Application.Users.ForgotPassword;
 using Timorya.Application.Users.GetInvitation;
@@ -384,5 +385,23 @@ public class UsersController(
         }
 
         return Ok(result.Value);
+    }
+
+    [Authorize]
+    [HttpPost("members/delete")]
+    public async Task<IActionResult> DeleteMember(
+        [FromBody] DeleteMemberRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new DeleteMemberCommand(request.UserId, request.InvitationId);
+
+        Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
     }
 }

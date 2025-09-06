@@ -47,6 +47,11 @@ public static class UserApplicationErrors
         "Users cannot change their own role."
     );
 
+    public static readonly Error CannotDeleteYourself = new(
+        "User.CannotDeleteYourself",
+        "Users cannot delete themselves from the organization."
+    );
+
     public static readonly Error AtLeastOneOwnerRequired = new(
         "User.AtLeastOneOwnerRequired",
         "An organization must have at least one owner."

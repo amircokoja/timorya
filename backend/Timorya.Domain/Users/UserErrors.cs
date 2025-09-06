@@ -38,4 +38,9 @@ public static class UserErrors
         "User.InvalidInvitation",
         "The provided invitation is invalid"
     );
+
+    public static readonly Error NotMemberOfOrganization = new(
+        "User.NotMemberOfOrganization",
+        "User is not a member of the organization"
+    );
 }

@@ -14,6 +14,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { CustomApiError } from "@/src/models/abstractions/api-error";
 import { AxiosError } from "axios";
 import { errorExtractor } from "@/src/services/error-extractor";
+import { DeleteMemberRequest } from "@/src/models/users/delete-member-request";
 
 interface Props {
   members: MemberDto[];
@@ -50,6 +51,12 @@ export default function MembersTable({ members }: Props) {
     url: "/users/change-member-role",
   });
 
+  const { mutateAsync: deleteMemberAsync } = usePost<DeleteMemberRequest, void>(
+    {
+      url: "/users/members/delete",
+    },
+  );
+
   const onChangeRole = (member: MemberDto, newRole: RoleDto) => {
     changeMemberRoleAsync(
       {
@@ -71,31 +78,28 @@ export default function MembersTable({ members }: Props) {
       },
     );
   };
-  // const { mutateAsync: deleteClientAsync } = useDelete<boolean>({
-  //   options: {},
-  // });
-  // const handleDelete = async (member: MemberDto) => {
-  //   const url = "members/" + member.id;
 
-  //   await deleteClientAsync(url, {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["members/" + member.id],
-  //         exact: true,
-  //       });
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["projects"],
-  //       });
+  const handleDelete = async (member: MemberDto) => {
+    await deleteMemberAsync(
+      {
+        userId: member.userId,
+        invitationId: member.invitationId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["users/members"],
+          });
 
-  //       showToast("Project successfully deleted", "success");
-  //       router.push("/app/projects");
-  //     },
-  //     onError: (error: AxiosError<CustomApiError>) => {
-  //       const errorMessage = errorExtractor(error);
-  //       showToast(errorMessage, "error");
-  //     },
-  //   });
-  // };
+          showToast("User successfully deleted", "success");
+        },
+        onError: (error: AxiosError<CustomApiError>) => {
+          const errorMessage = errorExtractor(error);
+          showToast(errorMessage, "error");
+        },
+      },
+    );
+  };
 
   return (
     <div className="overflow-auto rounded-lg border border-gray-200">
@@ -198,14 +202,12 @@ export default function MembersTable({ members }: Props) {
                       />
                     </div>
                   }
-                  items={
-                    [
-                      // {
-                      //   label: "Delete",
-                      //   onClick: () => handleDelete(project),
-                      // },
-                    ]
-                  }
+                  items={[
+                    {
+                      label: "Delete",
+                      onClick: () => handleDelete(member),
+                    },
+                  ]}
                 />
               </td>
             </tr>
