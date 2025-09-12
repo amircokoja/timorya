@@ -13,6 +13,7 @@ using Timorya.Application.Common.Configuration;
 using Timorya.Application.Common.Interfaces;
 using Timorya.Application.Users;
 using Timorya.Infrastructure.Authentication;
+using Timorya.Infrastructure.Authorization;
 using Timorya.Infrastructure.Common.Email;
 using Timorya.Infrastructure.Common.Models;
 using Timorya.Infrastructure.Entities.Users;
@@ -123,10 +124,18 @@ public static class DependencyInjection
 
     private static void AddAuthorization(IServiceCollection services)
     {
+        services.AddScoped<AuthorizationService>();
         services.AddScoped<IResourceAuthorizationService, ResourceAuthorizationService>();
         services.AddScoped<IAuthorizationHandler, ClientAuthorizationHandler>();
         services.AddScoped<IAuthorizationHandler, ProjectAuthorizationHandler>();
         services.AddScoped<IAuthorizationHandler, TimeLogAuthorizationHandler>();
+
+        services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
+        services.AddTransient<
+            IAuthorizationPolicyProvider,
+            PermissionAuthorizationPolicyProvider
+        >();
     }
 
     private static void AddCORSConfig(IServiceCollection services)

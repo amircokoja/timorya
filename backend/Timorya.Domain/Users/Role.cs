@@ -10,8 +10,8 @@ public sealed class Role(int id, string name) : Entity(id)
 
     public string Name { get; init; } = name;
 
-    public ICollection<Permission> Permissions { get; private set; } = [];
-    public ICollection<User> Users { get; private set; } = [];
+    public ICollection<RolePermission> RolePermissions { get; private set; }
+    public ICollection<User> Users { get; private set; }
 
     public static Role FromName(string name)
     {

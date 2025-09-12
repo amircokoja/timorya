@@ -12,7 +12,7 @@ internal sealed class RolePermissionConfiguration : IEntityTypeConfiguration<Rol
 
         builder
             .HasOne(rp => rp.Role)
-            .WithMany()
+            .WithMany(r => r.RolePermissions)
             .HasForeignKey(rp => rp.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -32,6 +32,7 @@ internal sealed class RolePermissionConfiguration : IEntityTypeConfiguration<Rol
                 RolePermission.Create(Role.Owner, Permission.Read),
                 RolePermission.Create(Role.Owner, Permission.Write),
                 RolePermission.Create(Role.Owner, Permission.ManageMembers),
+                RolePermission.Create(Role.Owner, Permission.ManageOrganizations),
             ]
         );
     }

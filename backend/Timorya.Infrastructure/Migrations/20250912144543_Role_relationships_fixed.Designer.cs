@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Timorya.Infrastructure;
@@ -11,9 +12,11 @@ using Timorya.Infrastructure;
 namespace Timorya.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250912144543_Role_relationships_fixed")]
+    partial class Role_relationships_fixed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,11 +280,6 @@ namespace Timorya.Infrastructure.Migrations
                         {
                             Id = 3,
                             Name = "ManageMembers"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "ManageOrganizations"
                         });
                 });
 
@@ -402,11 +400,6 @@ namespace Timorya.Infrastructure.Migrations
                         {
                             RoleId = 3,
                             PermissionId = 3
-                        },
-                        new
-                        {
-                            RoleId = 3,
-                            PermissionId = 4
                         });
                 });
 

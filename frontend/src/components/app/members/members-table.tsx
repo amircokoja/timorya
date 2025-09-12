@@ -15,6 +15,7 @@ import { CustomApiError } from "@/src/models/abstractions/api-error";
 import { AxiosError } from "axios";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { DeleteMemberRequest } from "@/src/models/users/delete-member-request";
+import { UserDataDto } from "@/src/models/users/user-data-dto";
 
 interface Props {
   members: MemberDto[];
@@ -39,6 +40,10 @@ export default function MembersTable({ members }: Props) {
   const [selectedRoleDropdown, setSelectedRoleDropdown] = useState<
     string | null
   >(null);
+
+  const { data: userData } = useGet<UserDataDto>({
+    url: "users/me",
+  });
 
   const { data: roles, isFetching } = useGet<RoleDto[]>({
     url: "users/roles",
@@ -140,7 +145,7 @@ export default function MembersTable({ members }: Props) {
               </td>
               <td className="px-4 py-3">
                 <Button
-                  disabled={isFetching}
+                  disabled={isFetching || userData?.email === member.email}
                   size="sm"
                   additionalClasses="w-24 justify-between!"
                   text={generateRoleText(member.role)}

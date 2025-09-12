@@ -25,6 +25,7 @@ using Timorya.Application.Users.RegisterUser;
 using Timorya.Application.Users.ResetPasswordWithToken;
 using Timorya.Application.Users.SetActiveOrganization;
 using Timorya.Domain.Abstractions;
+using Timorya.Infrastructure.Authorization;
 
 namespace Timorya.Api.Controllers.Users;
 
@@ -267,8 +268,8 @@ public class UsersController(
         return Ok(result.Value);
     }
 
-    [Authorize]
     [HttpDelete("organizations/{id}")]
+    [HasPermission("ManageOrganizations")]
     public async Task<IActionResult> DeleteOrganization(int id, CancellationToken cancellationToken)
     {
         var command = new DeleteOrganizationCommand(id);
