@@ -24,16 +24,14 @@ internal sealed class PermissionAuthorizationHandler : AuthorizationHandler<Perm
             scope.ServiceProvider.GetRequiredService<AuthorizationService>();
 
         var userId = context.User?.GetUserId();
-        var organizationId = context.User?.GetOrganizationId();
 
-        if (userId is null || organizationId is null)
+        if (userId is null)
         {
             return;
         }
 
         HashSet<string> permissions = await authorizationService.GetPermissionsForUserAsync(
-            (int)userId,
-            (int)organizationId
+            (int)userId
         );
 
         if (permissions.Contains(requirement.Permission))

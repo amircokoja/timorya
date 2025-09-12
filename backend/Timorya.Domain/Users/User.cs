@@ -65,7 +65,7 @@ public sealed class User : Entity
         Password = newPassword;
     }
 
-    public void SetCurrentOrganization(Organization organization)
+    public void SetCurrentOrganization(Organization? organization)
     {
         CurrentOrganization = organization;
         CurrentOrganizationId = organization?.Id;

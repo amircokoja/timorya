@@ -5,6 +5,7 @@ using Timorya.Application.Clients.Shared;
 using Timorya.Application.Users;
 using Timorya.Domain.Abstractions;
 using Timorya.Domain.Clients;
+using Timorya.Domain.Users;
 
 namespace Timorya.Application.Clients.GetClients;
 
@@ -21,7 +22,17 @@ internal sealed class GetClientsQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var user = _currentUserService.GetCurrentUser();
+        var currentUser = _currentUserService.GetCurrentUser();
+
+        var user = await _context
+            .Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
+
+        if (user == null)
+        {
+            return Result.Failure<List<ClientDto>>(UserErrors.NotFound);
+        }
+
         var clients = await _context
             .Set<Client>()
             .Where(x => x.OrganizationId == user.CurrentOrganizationId)

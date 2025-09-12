@@ -19,22 +19,31 @@ internal sealed class GetMembersQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var userData = _currentUserService.GetCurrentUser();
+        var currentUser = _currentUserService.GetCurrentUser();
 
-        if (!userData.CurrentOrganizationId.HasValue)
+        var user = await _context
+            .Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
+        if (user == null)
+        {
+            return Result.Failure<IReadOnlyList<MemberResponse>>(UserErrors.NotFound);
+        }
+
+        if (!user.CurrentOrganizationId.HasValue)
         {
             return Result.Failure<IReadOnlyList<MemberResponse>>(UserErrors.NoActiveOrganization);
         }
 
         var organization = await _context
             .Set<Organization>()
+            .Where(o => o.Id == user.CurrentOrganizationId.Value)
             .Include(o => o.UserOrganizations)
             .ThenInclude(uo => uo.User)
             .Include(o => o.UserOrganizations)
             .ThenInclude(uo => uo.Role)
             .Include(o => o.MemberInvitations)
             .ThenInclude(mi => mi.Role)
-            .FirstOrDefaultAsync(o => o.Id == userData.CurrentOrganizationId.Value);
+            .FirstOrDefaultAsync(o => o.Id == user.CurrentOrganizationId.Value);
 
         if (organization == null)
         {

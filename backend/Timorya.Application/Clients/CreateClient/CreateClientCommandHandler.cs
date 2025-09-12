@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Timorya.Application.Abstractions.Interfaces;
 using Timorya.Application.Abstractions.Messaging;
 using Timorya.Application.Clients.Shared;
@@ -22,7 +23,16 @@ internal sealed class CreateClientCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var user = _currentUserService.GetCurrentUser();
+        var currentUser = _currentUserService.GetCurrentUser();
+
+        var user = await _context
+            .Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
+
+        if (user == null)
+        {
+            return Result.Failure<ClientDto>(UserErrors.NotFound);
+        }
 
         var organization = await _context
             .Set<Organization>()

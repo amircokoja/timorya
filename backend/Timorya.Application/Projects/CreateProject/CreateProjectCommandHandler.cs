@@ -24,7 +24,16 @@ internal sealed class CreateProjectCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var user = _currentUserService.GetCurrentUser();
+        var currentUser = _currentUserService.GetCurrentUser();
+
+        var user = await _context
+            .Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
+
+        if (user == null)
+        {
+            return Result.Failure<ProjectDto>(UserErrors.NotFound);
+        }
 
         var organization = await _context
             .Set<Organization>()

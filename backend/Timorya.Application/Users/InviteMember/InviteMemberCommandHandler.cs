@@ -27,7 +27,16 @@ internal sealed class InviteMemberCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        var adminUser = _currentUserService.GetCurrentUser();
+        var currentUser = _currentUserService.GetCurrentUser();
+
+        var adminUser = await _context
+            .Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
+
+        if (adminUser == null)
+        {
+            return Result.Failure<Unit>(UserErrors.NotFound);
+        }
 
         if (adminUser.CurrentOrganizationId is null)
         {
@@ -37,7 +46,7 @@ internal sealed class InviteMemberCommandHandler(
         var adminUserDb = await _context
             .Set<User>()
             .Include(u => u.CurrentOrganization)
-            .FirstOrDefaultAsync(u => u.Id == adminUser.UserId, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == adminUser.Id, cancellationToken);
 
         if (adminUserDb == null)
         {

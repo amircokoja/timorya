@@ -5,6 +5,7 @@ using Timorya.Application.Projects.Shared;
 using Timorya.Application.Users;
 using Timorya.Domain.Abstractions;
 using Timorya.Domain.Projects;
+using Timorya.Domain.Users;
 
 namespace Timorya.Application.Projects.GetProjects;
 
@@ -21,7 +22,16 @@ internal sealed class GetProjectsQueryHandler(
         CancellationToken cancellationToken
     )
     {
-        var user = _currentUserService.GetCurrentUser();
+        var currentUser = _currentUserService.GetCurrentUser();
+
+        var user = await _context
+            .Set<User>()
+            .FirstOrDefaultAsync(u => u.Id == currentUser.UserId, cancellationToken);
+        if (user == null)
+        {
+            return Result.Failure<List<ProjectDto>>(UserErrors.NotFound);
+        }
+
         var projects = await _context
             .Set<Project>()
             .Include(x => x.Client)

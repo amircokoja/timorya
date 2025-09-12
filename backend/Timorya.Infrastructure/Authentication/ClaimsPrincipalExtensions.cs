@@ -16,16 +16,6 @@ public static class ClaimsPrincipalExtensions
             : null;
     }
 
-    public static int? GetOrganizationId(this ClaimsPrincipal principal)
-    {
-        return int.TryParse(
-            principal.FindFirstValue(JwtCustomClaimNames.Organization),
-            out var organizationId
-        )
-            ? organizationId
-            : null;
-    }
-
     public static string? GetRole(this ClaimsPrincipal principal)
     {
         return principal.FindFirstValue(ClaimTypes.Role);

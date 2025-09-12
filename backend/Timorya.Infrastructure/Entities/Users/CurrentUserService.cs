@@ -15,8 +15,6 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
 
         var userId = _httpContextAccessor?.HttpContext?.User?.GetUserId();
 
-        var organizationId = _httpContextAccessor?.HttpContext?.User?.GetOrganizationId();
-
         var role = _httpContextAccessor?.HttpContext?.User?.GetRole();
 
         if (email == null || userId == null)
@@ -28,7 +26,6 @@ public class CurrentUserService(IHttpContextAccessor httpContextAccessor) : ICur
         {
             Email = email,
             UserId = userId.Value,
-            CurrentOrganizationId = organizationId.HasValue ? organizationId.Value : null,
             Role = role ?? string.Empty,
         };
     }

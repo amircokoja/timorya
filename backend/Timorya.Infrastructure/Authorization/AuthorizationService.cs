@@ -12,11 +12,11 @@ internal sealed class AuthorizationService
         _dbContext = dbContext;
     }
 
-    public async Task<HashSet<string>> GetPermissionsForUserAsync(int userId, int organizationId)
+    public async Task<HashSet<string>> GetPermissionsForUserAsync(int userId)
     {
         var permissionNames = await _dbContext
             .Set<UserOrganization>()
-            .Where(uo => uo.UserId == userId && uo.OrganizationId == organizationId)
+            .Where(uo => uo.UserId == userId && uo.OrganizationId == uo.User.CurrentOrganizationId)
             .SelectMany(uo => uo.Role.RolePermissions)
             .Select(rp => rp.Permission.Name)
             .Distinct()

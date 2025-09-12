@@ -11,6 +11,7 @@ import { InviteMemberRequest } from "@/src/models/users/invite-member-request";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
 import { emailValidation } from "../app/data/validation-values/invite-member-validations";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface ModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ export interface InviteMemberForm {
 
 const InviteMembersModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const { showToast } = useToastStore();
+  const queryClient = useQueryClient();
   const { mutateAsync: inviteMemberAsync, isPending } = usePost<
     InviteMemberRequest,
     void
@@ -53,6 +55,9 @@ const InviteMembersModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: ["users/members"],
+          });
           showToast("Member invited successfully", "success");
           onClose();
         },

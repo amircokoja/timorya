@@ -4,6 +4,7 @@ using Timorya.Application.Abstractions.Interfaces;
 using Timorya.Application.Abstractions.Messaging;
 using Timorya.Application.Errors;
 using Timorya.Domain.Abstractions;
+using Timorya.Domain.TimeLogs;
 using Timorya.Domain.Users;
 
 namespace Timorya.Application.Users.DeleteMember;
@@ -39,6 +40,7 @@ internal sealed class DeleteMemberCommandHandler(
                 return Result.Failure<Unit>(UserApplicationErrors.CannotDeleteYourself);
             }
 
+            // fetch user organization for deletion
             var userOrganization = await _context
                 .Set<UserOrganization>()
                 .Where(uo =>
@@ -68,6 +70,28 @@ internal sealed class DeleteMemberCommandHandler(
                 }
             }
 
+            // remove logs for the user
+            var timeLogs = await _context
+                .Set<TimeLog>()
+                .Where(tl =>
+                    tl.UserId == request.UserId && tl.OrganizationId == user.CurrentOrganizationId
+                )
+                .ToListAsync(cancellationToken);
+
+            // nullify current organization for the user if it's their current one
+            var userToUpdate = await _context
+                .Set<User>()
+                .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+            if (
+                userToUpdate != null
+                && userToUpdate.CurrentOrganizationId == user.CurrentOrganizationId
+            )
+            {
+                userToUpdate.SetCurrentOrganization(null);
+                _context.Set<User>().Update(userToUpdate);
+            }
+
+            _context.Set<TimeLog>().RemoveRange(timeLogs);
             _context.Set<UserOrganization>().Remove(userOrganization);
         }
         else if (request.InvitationId != null)
