@@ -35,13 +35,18 @@ internal sealed class GetOrganizationsQueryHandler(
             .Set<Organization>()
             .Include(o => o.UserOrganizations)
             .ThenInclude(uo => uo.Role)
+            .ThenInclude(r => r.RolePermissions)
+            .ThenInclude(rp => rp.Permission)
             .Where(o => o.UserOrganizations.Any(u => u.UserId == user.Id))
             .ToListAsync(cancellationToken);
 
         return organizations
             .Select(o => new OrganizationDto(
                 o,
-                o.UserOrganizations.FirstOrDefault(u => u.UserId == user.Id)!.Role.Name
+                o.UserOrganizations.FirstOrDefault(u => u.UserId == user.Id)!.Role.Name,
+                o.UserOrganizations.FirstOrDefault(u => u.UserId == user.Id)!
+                    .Role.RolePermissions.Select(rp => rp.Permission.Name)
+                    .ToList()
             ))
             .ToList();
     }

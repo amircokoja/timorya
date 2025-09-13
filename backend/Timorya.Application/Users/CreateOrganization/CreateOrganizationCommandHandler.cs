@@ -42,6 +42,6 @@ internal sealed class CreateOrganizationCommandHandler(
         _context.Set<User>().Update(user);
         await _context.SaveChangesAsync(cancellationToken);
 
-        return new OrganizationDto(organization, Role.Owner.Name);
+        return new OrganizationDto(organization, Role.Owner.Name, []);
     }
 }

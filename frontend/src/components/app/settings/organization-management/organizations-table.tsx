@@ -12,6 +12,7 @@ import { getWorkspaceType } from "@/src/models/users/utils";
 import { UserDataDto } from "@/src/models/users/user-data-dto";
 import { useGet } from "@/src/hooks/use-get";
 import { usePut } from "@/src/hooks/use-put";
+import { Permissions } from "@/src/components/auth/permission";
 
 interface Props {
   organizations: OrganizationDto[];
@@ -89,6 +90,10 @@ export default function OrganizationsTable({ organizations }: Props) {
     );
   };
 
+  const hasPermissionToDelete = (organization: OrganizationDto) => {
+    return organization.permissions.includes(Permissions.ManageOrganizations);
+  };
+
   return (
     <div className="overflow-auto rounded-lg border border-gray-200">
       <table className="w-full text-left text-sm text-gray-500">
@@ -134,23 +139,25 @@ export default function OrganizationsTable({ organizations }: Props) {
                 )}
               </td>
               <td className="flex items-center justify-end px-4 py-3">
-                <Dropdown
-                  trigger={
-                    <div className="relative">
-                      <Button
-                        icon={<ThreeDotsIcon />}
-                        size="xs"
-                        color="white"
-                      />
-                    </div>
-                  }
-                  items={[
-                    {
-                      label: "Delete",
-                      onClick: () => handleDelete(organization),
-                    },
-                  ]}
-                />
+                {hasPermissionToDelete(organization) && (
+                  <Dropdown
+                    trigger={
+                      <div className="relative">
+                        <Button
+                          icon={<ThreeDotsIcon />}
+                          size="xs"
+                          color="white"
+                        />
+                      </div>
+                    }
+                    items={[
+                      {
+                        label: "Delete",
+                        onClick: () => handleDelete(organization),
+                      },
+                    ]}
+                  />
+                )}
               </td>
             </tr>
           ))}
