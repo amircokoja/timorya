@@ -1,5 +1,6 @@
 "use client";
 
+import NewOrganization from "@/src/components/app/organizations/new-organization";
 import ProjectsTable from "@/src/components/app/projects/projects-table";
 import { LoadingIcon } from "@/src/components/icons/loading-icon";
 import { PlusIcon } from "@/src/components/icons/plus-icon";
@@ -8,13 +9,16 @@ import Input from "@/src/components/ui/input";
 import LinkButton from "@/src/components/ui/link-button";
 import { useGet } from "@/src/hooks/use-get";
 import { ProjectDto } from "@/src/models/projects/project-dto";
+import { UserDataDto } from "@/src/models/users/user-data-dto";
 import { useState } from "react";
 
 export default function Projects() {
   const { data: projects, isFetching: isFetching } = useGet<ProjectDto[]>({
     url: "projects",
   });
-
+  const { data: userData } = useGet<UserDataDto>({
+    url: "users/me",
+  });
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +42,9 @@ export default function Projects() {
                 <p className="mb-4 text-base font-light text-gray-500">
                   You have no project, please add a new project to get started.
                 </p>
+                {!userData?.currentOrganizationId && (
+                  <NewOrganization context="projects" />
+                )}
               </div>
             </div>
           </section>
@@ -53,7 +60,7 @@ export default function Projects() {
   return (
     <section>
       <div className="overflow-hidden bg-white">
-        <div className="flex flex-col items-center justify-between space-y-3 p-2 py-4 md:flex-row md:space-x-4 md:space-y-0">
+        <div className="flex flex-col items-center justify-between space-y-3 p-2 py-4 md:flex-row md:space-y-0 md:space-x-4">
           <div className="w-full md:w-1/3">
             <form className="flex items-center">
               <div className="relative w-full">
@@ -68,8 +75,9 @@ export default function Projects() {
               </div>
             </form>
           </div>
-          <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
+          <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-y-0 md:space-x-3">
             <LinkButton
+              disabled={!userData?.currentOrganizationId}
               href="/app/projects/add"
               text="Add new project"
               icon={<PlusIcon />}

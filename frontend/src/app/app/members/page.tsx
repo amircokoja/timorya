@@ -1,6 +1,7 @@
 "use client";
 
 import MembersTable from "@/src/components/app/members/members-table";
+import NewOrganization from "@/src/components/app/organizations/new-organization";
 import { LoadingIcon } from "@/src/components/icons/loading-icon";
 import { SearchIcon } from "@/src/components/icons/search-icon";
 import InviteMembersModal from "@/src/components/modals/invite-members-modal";
@@ -50,6 +51,9 @@ export default function Members() {
                   Invite team members to your organization to collaborate on
                   projects. Send them an invite to get started.
                 </p>
+                {!userData?.currentOrganizationId && (
+                  <NewOrganization context="members" />
+                )}
               </div>
             </div>
           </section>
@@ -84,6 +88,7 @@ export default function Members() {
             <Button
               text="Invite members"
               onClick={() => setIsInviteModalOpen(true)}
+              disabled={!userData?.currentOrganizationId}
             />
           </div>
         </div>

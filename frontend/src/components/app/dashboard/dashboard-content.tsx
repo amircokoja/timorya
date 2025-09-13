@@ -10,10 +10,16 @@ import Pagination from "../../ui/pagination";
 import { formatSeconds } from "./utils";
 import { metadata } from "@/src/models/data/metadata";
 import Loading from "../../ui/loading";
+import { UserDataDto } from "@/src/models/users/user-data-dto";
+import NewOrganization from "../organizations/new-organization";
 
 export default function DashboardContent() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [page, setPage] = useState(1);
+
+  const { data: userData } = useGet<UserDataDto>({
+    url: "users/me",
+  });
 
   const { data, isFetching } = useGet<PaginatedResut<TimeLogWeekGroup>>({
     url: "/time-logs?page=" + page + "&pageSize=30",
@@ -71,9 +77,10 @@ export default function DashboardContent() {
         <h2 className="mb-2 text-xl font-semibold text-gray-800">
           No hours logged yet
         </h2>
-        <p className="mb-6 max-w-md text-gray-500">
+        <p className="mb-6 max-w-md text-base font-light text-gray-500">
           Start tracking your working hours to see your time in calendar.
         </p>
+        {!userData?.currentOrganizationId && <NewOrganization context="logs" />}
       </div>
     </div>
   );

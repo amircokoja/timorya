@@ -18,6 +18,7 @@ import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import TimeCounter from "./time-counter";
 import { usePut } from "@/src/hooks/use-put";
 import { TimeLogUpdateDto } from "@/src/models/time-logs/time-log-update-dto";
+import { UserDataDto } from "@/src/models/users/user-data-dto";
 
 interface LogForm {
   description: string;
@@ -34,6 +35,10 @@ export default function TimeLogger({
   setElapsedSeconds,
 }: Props) {
   const animationFrameRef = useRef<number | null>(null);
+
+  const { data: userData } = useGet<UserDataDto>({
+    url: "users/me",
+  });
 
   const { data: activeLog, isFetched: isFetchingActiveLog } =
     useGet<TimeLogDto | null>({
@@ -246,7 +251,9 @@ export default function TimeLogger({
           </div>
           <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 lg:w-auto lg:flex-row lg:items-center lg:space-y-0 lg:space-x-3 lg:pl-4">
             <Button
-              disabled={!isFetchingActiveLog}
+              disabled={
+                !isFetchingActiveLog || !userData?.currentOrganizationId
+              }
               text={activeLog ? "Stop" : "Start"}
               color={activeLog ? "red" : "blue"}
               icon={activeLog ? <StopIcon /> : <PlayIcon />}

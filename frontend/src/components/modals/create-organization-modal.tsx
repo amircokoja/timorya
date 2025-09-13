@@ -94,7 +94,7 @@ const CreateOrganizationModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             Create a personal workspace for yourself or an organization for your
             team. You&apos;ll need this to add clients and projects in the app.
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 text-left">
             <Select
               label="Workspace type"
               options={[

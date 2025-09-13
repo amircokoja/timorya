@@ -17,6 +17,7 @@ interface LinkButtonProps
   size?: "sm" | "md" | "lg";
   href: string;
   additionalClasses?: string;
+  disabled?: boolean;
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({
@@ -27,13 +28,14 @@ const LinkButton: React.FC<LinkButtonProps> = ({
   size = "md",
   href,
   additionalClasses,
+  disabled,
   ...props
 }) => {
   const hasText = !!text;
-  const linkClass = `${baseStyles} ${getButtonStyles(color, variant)} ${getSizeStyles(size, hasText)} ${additionalClasses}`;
+  const linkClass = `${baseStyles} ${getButtonStyles(color, variant)} ${getSizeStyles(size, hasText)} ${additionalClasses} ${disabled ? "pointer-events-none opacity-50" : ""}`;
 
   return (
-    <Link href={href} className={linkClass} {...props}>
+    <Link href={disabled ? "#" : href} className={linkClass} {...props}>
       {icon && <>{icon}</>}
       {text}
     </Link>
