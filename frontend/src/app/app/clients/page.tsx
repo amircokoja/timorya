@@ -48,7 +48,7 @@ export default function Clients() {
                 <p className="mb-4 text-base font-light text-gray-500">
                   You have no clients, please add a new client to get started.
                 </p>
-                {!userData?.currentOrganizationId && (
+                {!userData?.currentOrganization && (
                   <NewOrganization context="clients" />
                 )}
               </div>
@@ -83,7 +83,7 @@ export default function Clients() {
           </div>
           <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-y-0 md:space-x-3">
             <LinkButton
-              disabled={!userData?.currentOrganizationId}
+              disabled={!userData?.currentOrganization}
               href="/app/clients/add"
               text="Add new client"
               icon={<PlusIcon />}

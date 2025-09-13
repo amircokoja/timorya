@@ -21,9 +21,23 @@ internal sealed class GetUserDataQueryHandler(
     {
         var userData = _currentUserService.GetCurrentUser();
 
+        var currentOrgId = await _context
+            .Set<User>()
+            .Where(u => u.Id == userData.UserId)
+            .Select(u => u.CurrentOrganizationId)
+            .FirstOrDefaultAsync(cancellationToken);
+
         var user = await _context
             .Set<User>()
-            .FirstOrDefaultAsync(u => u.Id == userData.UserId, cancellationToken);
+            .AsNoTracking()
+            .Where(u => u.Id == userData.UserId)
+            .Include(u => u.UserOrganizations.Where(uo => uo.OrganizationId == currentOrgId))
+            .ThenInclude(uo => uo.Organization)
+            .Include(u => u.UserOrganizations.Where(uo => uo.OrganizationId == currentOrgId))
+            .ThenInclude(uo => uo.Role)
+            .ThenInclude(r => r.RolePermissions)
+            .ThenInclude(rp => rp.Permission)
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (user == null)
         {

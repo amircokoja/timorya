@@ -49,7 +49,8 @@ public class EmailTemplateService : IEmailTemplateService
     public EmailContent MemberInvitationContent(
         string inviterName,
         string organizationName,
-        string invitationLink
+        string invitationLink,
+        string email
     )
     {
         var template = GetEmailTemplate("MemberInvitation");
@@ -61,7 +62,7 @@ public class EmailTemplateService : IEmailTemplateService
         };
         var content = PopulateTemplate(template, values);
 
-        return EmailContent.CreateForMe("Member Invitation", content);
+        return EmailContent.Create(email, email, "Member Invitation", content);
     }
 
     public EmailContent ContactForm(string email, string subject, string message)

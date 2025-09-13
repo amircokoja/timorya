@@ -95,7 +95,8 @@ internal sealed class InviteMemberCommandHandler(
             _emailTemplateService.MemberInvitationContent(
                 adminUserDb.FirstName.Value + " " + adminUserDb.LastName.Value,
                 adminUserDb.CurrentOrganization.Name.Value,
-                GenerateInvitationLink(memberInvitation.Token)
+                GenerateInvitationLink(memberInvitation.Token),
+                request.Email
             ),
             cancellationToken
         );

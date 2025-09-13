@@ -251,9 +251,7 @@ export default function TimeLogger({
           </div>
           <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 border-l border-gray-200 lg:w-auto lg:flex-row lg:items-center lg:space-y-0 lg:space-x-3 lg:pl-4">
             <Button
-              disabled={
-                !isFetchingActiveLog || !userData?.currentOrganizationId
-              }
+              disabled={!isFetchingActiveLog || !userData?.currentOrganization}
               text={activeLog ? "Stop" : "Start"}
               color={activeLog ? "red" : "blue"}
               icon={activeLog ? <StopIcon /> : <PlayIcon />}

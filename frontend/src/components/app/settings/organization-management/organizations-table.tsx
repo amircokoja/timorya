@@ -124,7 +124,7 @@ export default function OrganizationsTable({ organizations }: Props) {
               <td className="px-4 py-3">{organization.role}</td>
               <td className="px-4 py-3">{getWorkspaceType(organization)}</td>
               <td className="px-4 py-3">
-                {userData?.currentOrganizationId !== organization.id && (
+                {userData?.currentOrganization?.id !== organization.id && (
                   <Button
                     onClick={() => handleSwitchOrganization(organization)}
                     disabled={isFetching || isPending}

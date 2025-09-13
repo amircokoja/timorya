@@ -2,6 +2,8 @@
 
 import MembersTable from "@/src/components/app/members/members-table";
 import NewOrganization from "@/src/components/app/organizations/new-organization";
+import { Can } from "@/src/components/auth/can";
+import { Permissions } from "@/src/components/auth/permission";
 import { LoadingIcon } from "@/src/components/icons/loading-icon";
 import { SearchIcon } from "@/src/components/icons/search-icon";
 import InviteMembersModal from "@/src/components/modals/invite-members-modal";
@@ -21,7 +23,7 @@ export default function Members() {
 
   const { data: members, isFetching } = useGet<MemberDto[]>({
     url: "users/members",
-    enabled: !!userData?.currentOrganizationId,
+    enabled: !!userData?.currentOrganization,
   });
 
   const [searchText, setSearchText] = useState("");
@@ -40,7 +42,7 @@ export default function Members() {
   const generateContent = () => {
     return (
       <>
-        {filteredMembers?.length === 0 || !userData?.currentOrganizationId ? (
+        {filteredMembers?.length === 0 || !userData?.currentOrganization ? (
           <section className="bg-white">
             <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
               <div className="mx-auto max-w-screen-sm text-center">
@@ -51,7 +53,7 @@ export default function Members() {
                   Invite team members to your organization to collaborate on
                   projects. Send them an invite to get started.
                 </p>
-                {!userData?.currentOrganizationId && (
+                {!userData?.currentOrganization && (
                   <NewOrganization context="members" />
                 )}
               </div>
@@ -85,11 +87,13 @@ export default function Members() {
             </form>
           </div>
           <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-y-0 md:space-x-3">
-            <Button
-              text="Invite members"
-              onClick={() => setIsInviteModalOpen(true)}
-              disabled={!userData?.currentOrganizationId}
-            />
+            <Can check={Permissions.ManageMembers}>
+              <Button
+                text="Invite members"
+                onClick={() => setIsInviteModalOpen(true)}
+                disabled={!userData?.currentOrganization}
+              />
+            </Can>
           </div>
         </div>
         {isFetching ? (

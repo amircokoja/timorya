@@ -25,7 +25,7 @@ export default function AppLayout({ children }: Props) {
     useState(false);
 
   useEffect(() => {
-    if (userData && !userData.currentOrganizationId) {
+    if (userData && !userData.currentOrganization) {
       setIsCreateOrganizationModalOpen(true);
     }
   }, [userData]);

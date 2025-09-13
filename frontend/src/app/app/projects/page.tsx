@@ -42,7 +42,7 @@ export default function Projects() {
                 <p className="mb-4 text-base font-light text-gray-500">
                   You have no project, please add a new project to get started.
                 </p>
-                {!userData?.currentOrganizationId && (
+                {!userData?.currentOrganization && (
                   <NewOrganization context="projects" />
                 )}
               </div>
@@ -77,7 +77,7 @@ export default function Projects() {
           </div>
           <div className="flex w-full shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-y-0 md:space-x-3">
             <LinkButton
-              disabled={!userData?.currentOrganizationId}
+              disabled={!userData?.currentOrganization}
               href="/app/projects/add"
               text="Add new project"
               icon={<PlusIcon />}

@@ -80,7 +80,7 @@ export default function DashboardContent() {
         <p className="mb-6 max-w-md text-base font-light text-gray-500">
           Start tracking your working hours to see your time in calendar.
         </p>
-        {!userData?.currentOrganizationId && <NewOrganization context="logs" />}
+        {!userData?.currentOrganization && <NewOrganization context="logs" />}
       </div>
     </div>
   );
