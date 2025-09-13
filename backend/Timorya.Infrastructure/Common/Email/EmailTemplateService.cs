@@ -46,6 +46,24 @@ public class EmailTemplateService : IEmailTemplateService
         return EmailContent.CreateForMe("New User Registration", content);
     }
 
+    public EmailContent MemberInvitationContent(
+        string inviterName,
+        string organizationName,
+        string invitationLink
+    )
+    {
+        var template = GetEmailTemplate("MemberInvitation");
+        var values = new Dictionary<string, string>
+        {
+            { "InviterName", inviterName },
+            { "OrganizationName", organizationName },
+            { "InvitationLink", invitationLink },
+        };
+        var content = PopulateTemplate(template, values);
+
+        return EmailContent.CreateForMe("Member Invitation", content);
+    }
+
     public EmailContent ContactForm(string email, string subject, string message)
     {
         var template = GetEmailTemplate("ContactForm");

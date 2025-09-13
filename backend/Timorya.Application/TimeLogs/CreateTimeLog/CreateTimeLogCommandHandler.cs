@@ -40,6 +40,11 @@ internal sealed class CreateTimeLogCommandHandler(
             return Result.Failure<TimeLogDto>(UserErrors.NotFound);
         }
 
+        if (dbUser.CurrentOrganization == null)
+        {
+            return Result.Failure<TimeLogDto>(UserErrors.NoActiveOrganization);
+        }
+
         var timeLogCheck = await _context
             .Set<TimeLog>()
             .FirstOrDefaultAsync(c => c.UserId == dbUser.Id && c.End == null, cancellationToken);

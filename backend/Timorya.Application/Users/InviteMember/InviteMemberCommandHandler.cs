@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Timorya.Application.Abstractions.Interfaces;
 using Timorya.Application.Abstractions.Messaging;
+using Timorya.Application.Common.Configuration;
 using Timorya.Application.Common.Interfaces;
 using Timorya.Application.Errors;
 using Timorya.Domain.Abstractions;
@@ -14,13 +16,15 @@ internal sealed class InviteMemberCommandHandler(
     IApplicationDbContext context,
     IEmailService emailService,
     IEmailTemplateService emailTemplateService,
-    ICurrentUserService currentUserService
+    ICurrentUserService currentUserService,
+    IOptions<ApplicationSettings> appSettings
 ) : ICommandHandler<InviteMemberCommand, Unit>
 {
     private readonly IApplicationDbContext _context = context;
     private readonly ICurrentUserService _currentUserService = currentUserService;
     private readonly IEmailService _emailService = emailService;
     private readonly IEmailTemplateService _emailTemplateService = emailTemplateService;
+    private readonly ApplicationSettings _appSettings = appSettings.Value;
 
     public async Task<Result<Unit>> Handle(
         InviteMemberCommand request,
@@ -87,8 +91,18 @@ internal sealed class InviteMemberCommandHandler(
         _context.Set<MemberInvitation>().Add(memberInvitation);
         await _context.SaveChangesAsync(cancellationToken);
 
-        // SEND AN EMIAL
+        await _emailService.SendEmailAsync(
+            _emailTemplateService.MemberInvitationContent(
+                adminUserDb.FirstName.Value + " " + adminUserDb.LastName.Value,
+                adminUserDb.CurrentOrganization.Name.Value,
+                GenerateInvitationLink(memberInvitation.Token)
+            ),
+            cancellationToken
+        );
 
         return Unit.Value;
     }
+
+    private string GenerateInvitationLink(string token) =>
+        $"{_appSettings.AppUrl}/invite?token={token}";
 }
