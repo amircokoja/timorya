@@ -36,7 +36,7 @@ const Dropdown: React.FC<Props> = ({
           key={item.label}
           onClick={() => item.onClick && item.onClick()}
         >
-          {item.icon}
+          {item.icon && item.icon}
           {item.label}
         </FlowbiteDropdownItem>
       ))}
