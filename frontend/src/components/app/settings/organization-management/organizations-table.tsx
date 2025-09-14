@@ -72,18 +72,7 @@ export default function OrganizationsTable({ organizations }: Props) {
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ["users/me"],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["time-logs/active"],
-          });
-          queryClient.invalidateQueries({
-            predicate: (query) =>
-              typeof query.queryKey?.[0] === "string" &&
-              query.queryKey[0].startsWith("/time-logs"),
-          });
-
+          queryClient.invalidateQueries();
           showToast("Successfully switched to " + organization.name, "success");
         },
       },

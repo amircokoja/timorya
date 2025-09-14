@@ -43,4 +43,9 @@ public static class UserErrors
         "User.NotMemberOfOrganization",
         "User is not a member of the organization"
     );
+
+    public static readonly Error CannotDeleteAccountAsOnlyOwner = new(
+        "User.CannotDeleteAccountAsOnlyOwner",
+        "Cannot delete account as the only owner of an organization"
+    );
 }

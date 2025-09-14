@@ -39,6 +39,8 @@ export default function Members() {
       member.role.toLowerCase().includes(searchText),
   );
 
+  const isLoading = isFetching || !userData;
+
   const generateContent = () => {
     return (
       <>
@@ -96,7 +98,7 @@ export default function Members() {
             </Can>
           </div>
         </div>
-        {isFetching ? (
+        {isLoading ? (
           <div className="flex h-32 items-center justify-center">
             <LoadingIcon />
           </div>

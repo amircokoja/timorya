@@ -70,7 +70,7 @@ const HeaderDropdown: React.FC = () => {
         </h3>
         <p className="text-sm text-gray-500">{userData?.email}</p>
       </div>
-      <OrganizationListDropdown />
+      {userData?.currentOrganization && <OrganizationListDropdown />}
       <div className="py-4">
         {items.map((item) => (
           <FlowbiteDropdownItem

@@ -7,6 +7,8 @@ import { AxiosError } from "axios";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { ApiError } from "@/src/models/abstractions/api-error";
 import { useRouter } from "next/navigation";
+import { OrganizationDto } from "@/src/models/users/organization-dto";
+import { useGet } from "@/src/hooks/use-get";
 
 interface ModalProps {
   isOpen: boolean;
@@ -16,6 +18,14 @@ interface ModalProps {
 const DeactivateAccountModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   const { showToast } = useToastStore();
   const router = useRouter();
+
+  const { data: organizations, isFetching } = useGet<OrganizationDto[]>({
+    url: "users/organizations",
+  });
+
+  const organizationsWhereOwner = organizations?.filter(
+    (org) => org.role === "Owner",
+  );
 
   const { mutateAsync: deactivateAccountAsync, isPending } = useDelete({});
 
@@ -42,6 +52,21 @@ const DeactivateAccountModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         <p className="text-sm text-gray-600">
           Do you want to proceed? This action cannot be undone.
         </p>
+        <div>
+          {organizationsWhereOwner && organizationsWhereOwner.length > 0 && (
+            <p className="mt-4 text-sm text-red-600">
+              You are the owner of{" "}
+              {organizationsWhereOwner.length > 1
+                ? `${organizationsWhereOwner.length} organizations`
+                : "an organization"}
+              . Please transfer ownership or delete{" "}
+              {organizationsWhereOwner.length > 1
+                ? "these organizations"
+                : "this organization"}{" "}
+              before deactivating your account.
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex justify-end">
         <Button
@@ -54,7 +79,7 @@ const DeactivateAccountModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           text={isPending ? "Deactivating..." : "Yes"}
           onClick={handleDelete}
           color="red"
-          disabled={isPending}
+          disabled={isPending || isFetching}
         />
       </div>
     </ModalLayout>
