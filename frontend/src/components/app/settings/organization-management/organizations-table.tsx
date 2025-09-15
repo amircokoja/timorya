@@ -13,6 +13,8 @@ import { UserDataDto } from "@/src/models/users/user-data-dto";
 import { useGet } from "@/src/hooks/use-get";
 import { usePut } from "@/src/hooks/use-put";
 import { Permissions } from "@/src/components/auth/permission";
+import { useState } from "react";
+import RenameOrganizationModal from "@/src/components/modals/rename-organization-modal";
 
 interface Props {
   organizations: OrganizationDto[];
@@ -20,6 +22,9 @@ interface Props {
 
 export default function OrganizationsTable({ organizations }: Props) {
   const { showToast } = useToastStore();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOrganization, setSelectedOrganization] =
+    useState<OrganizationDto | null>(null);
 
   const { data: userData, isFetching } = useGet<UserDataDto>({
     url: "users/me",
@@ -83,75 +88,93 @@ export default function OrganizationsTable({ organizations }: Props) {
     return organization.permissions.includes(Permissions.ManageOrganizations);
   };
 
+  const handleRename = (organization: OrganizationDto) => {
+    setSelectedOrganization(organization);
+    setIsOpen(true);
+  };
+
   return (
-    <div className="overflow-auto rounded-lg border border-gray-200">
-      <table className="w-full text-left text-sm text-gray-500">
-        <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
-          <tr>
-            <th scope="col" className="px-4 py-3">
-              Name
-            </th>
-            <th scope="col" className="px-4 py-3">
-              Role
-            </th>
-            <th scope="col" className="px-4 py-3">
-              Type
-            </th>
-            <th scope="col" className="px-4 py-3"></th>
-            <th scope="col" className="px-4 py-3">
-              <span className="sr-only">Actions</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {organizations?.map((organization) => (
-            <tr
-              className="border-b border-gray-200 last:border-b-0"
-              key={organization.id}
-            >
-              <th
-                scope="row"
-                className="px-4 py-3 font-medium whitespace-nowrap text-gray-900"
-              >
-                {organization.name}
+    <>
+      <div className="overflow-auto rounded-lg border border-gray-200">
+        <table className="w-full text-left text-sm text-gray-500">
+          <thead className="bg-gray-50 text-xs text-gray-700 uppercase">
+            <tr>
+              <th scope="col" className="px-4 py-3">
+                Name
               </th>
-              <td className="px-4 py-3">{organization.role}</td>
-              <td className="px-4 py-3">{getWorkspaceType(organization)}</td>
-              <td className="px-4 py-3">
-                {userData?.currentOrganization?.id !== organization.id && (
-                  <Button
-                    onClick={() => handleSwitchOrganization(organization)}
-                    disabled={isFetching || isPending}
-                    text="Switch"
-                    size="sm"
-                  />
-                )}
-              </td>
-              <td className="flex items-center justify-end px-4 py-3">
-                {hasPermissionToDelete(organization) && (
-                  <Dropdown
-                    trigger={
-                      <div className="relative">
-                        <Button
-                          icon={<ThreeDotsIcon />}
-                          size="xs"
-                          color="white"
-                        />
-                      </div>
-                    }
-                    items={[
-                      {
-                        label: "Delete",
-                        onClick: () => handleDelete(organization),
-                      },
-                    ]}
-                  />
-                )}
-              </td>
+              <th scope="col" className="px-4 py-3">
+                Role
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Type
+              </th>
+              <th scope="col" className="px-4 py-3"></th>
+              <th scope="col" className="px-4 py-3">
+                <span className="sr-only">Actions</span>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {organizations?.map((organization) => (
+              <tr
+                className="border-b border-gray-200 last:border-b-0"
+                key={organization.id}
+              >
+                <th
+                  scope="row"
+                  className="px-4 py-3 font-medium whitespace-nowrap text-gray-900"
+                >
+                  {organization.name}
+                </th>
+                <td className="px-4 py-3">{organization.role}</td>
+                <td className="px-4 py-3">{getWorkspaceType(organization)}</td>
+                <td className="px-4 py-3">
+                  {userData?.currentOrganization?.id !== organization.id && (
+                    <Button
+                      onClick={() => handleSwitchOrganization(organization)}
+                      disabled={isFetching || isPending}
+                      text="Switch"
+                      size="sm"
+                    />
+                  )}
+                </td>
+                <td className="flex items-center justify-end px-4 py-3">
+                  {hasPermissionToDelete(organization) && (
+                    <Dropdown
+                      trigger={
+                        <div className="relative">
+                          <Button
+                            icon={<ThreeDotsIcon />}
+                            size="xs"
+                            color="white"
+                          />
+                        </div>
+                      }
+                      items={[
+                        {
+                          label: "Rename",
+                          onClick: () => handleRename(organization),
+                        },
+                        {
+                          label: "Delete",
+                          onClick: () => handleDelete(organization),
+                        },
+                      ]}
+                    />
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {selectedOrganization && (
+        <RenameOrganizationModal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          organization={selectedOrganization}
+        />
+      )}
+    </>
   );
 }

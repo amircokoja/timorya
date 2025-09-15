@@ -6,4 +6,8 @@ export interface OrganizationDto {
   permissions: string[];
 }
 
+export interface UpdateOrganizationRequest {
+  name: string;
+}
+
 export type WorkspaceType = "organization" | "personal";

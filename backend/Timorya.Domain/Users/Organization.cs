@@ -28,4 +28,10 @@ public sealed class Organization : Entity
             IsPersonalWorkspace = isPersonalWorkspace,
         };
     }
+
+    public void UpdateName(string name)
+    {
+        var organizationName = new OrganizationName(name);
+        Name = organizationName;
+    }
 }

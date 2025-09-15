@@ -24,6 +24,7 @@ using Timorya.Application.Users.LoginUserWithRefreshToken;
 using Timorya.Application.Users.RegisterUser;
 using Timorya.Application.Users.ResetPasswordWithToken;
 using Timorya.Application.Users.SetActiveOrganization;
+using Timorya.Application.Users.UpdateOrganization;
 using Timorya.Domain.Abstractions;
 using Timorya.Infrastructure.Authorization;
 
@@ -398,6 +399,25 @@ public class UsersController(
         var command = new DeleteMemberCommand(request.UserId, request.InvitationId);
 
         Result<Unit> result = await _sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
+    }
+
+    [HttpPut("organizations/{id}")]
+    [HasPermission("ManageOrganizations")]
+    public async Task<IActionResult> UpdateOrganization(
+        [FromRoute] int id,
+        [FromBody] UpdateOrganizationRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var command = new UpdateOrganizationCommand(id, request.Name);
+
+        Result<OrganizationDto> result = await _sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
