@@ -1,4 +1,4 @@
-import { formatSeconds } from "../app/dashboard/utils";
+import { formatSeconds } from "../app/time-tracker/utils";
 
 interface Props {
   seconds: number;

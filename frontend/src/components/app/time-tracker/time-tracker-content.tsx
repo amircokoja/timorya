@@ -3,7 +3,7 @@
 import TimeLogger from "./time-logger/time-logger";
 import { useGet } from "@/src/hooks/use-get";
 import { TimeLogWeekGroup } from "@/src/models/time-logs/time-log-week-group";
-import DashboardWeek from "./dashboard-week";
+import TimeTrackerWeek from "./time-tracker-week";
 import { PaginatedResut } from "@/src/models/abstractions/paginated-result";
 import { useState, useEffect } from "react";
 import Pagination from "../../ui/pagination";
@@ -13,7 +13,7 @@ import Loading from "../../ui/loading";
 import { UserDataDto } from "@/src/models/users/user-data-dto";
 import NewOrganization from "../organizations/new-organization";
 
-export default function DashboardContent() {
+export default function TimeTrackerContent() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [page, setPage] = useState(1);
 
@@ -49,7 +49,7 @@ export default function DashboardContent() {
     <div className="mt-4 mb-10">
       {renderData?.items?.map((group) => (
         <div key={group.week} className="mb-8 last:mb-0">
-          <DashboardWeek weekGroup={group} elapsedSeconds={elapsedSeconds} />
+          <TimeTrackerWeek weekGroup={group} elapsedSeconds={elapsedSeconds} />
         </div>
       ))}
     </div>

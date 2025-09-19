@@ -11,7 +11,7 @@ const isCurrentWeek = (week: string): boolean => {
   return week === "This week";
 };
 
-export default function DashboardWeek({ weekGroup, elapsedSeconds }: Props) {
+export default function TimeTrackerWeek({ weekGroup, elapsedSeconds }: Props) {
   const weekTotal =
     (weekGroup.dates?.reduce(
       (acc, { timeLogs }) =>

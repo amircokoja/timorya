@@ -2,8 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import TimeTrackerContent from "@/src/components/app/time-tracker/time-tracker-content";
 
-export default function Dashboard() {
+export default function TimeTracker() {
   const router = useRouter();
 
   useEffect(() => {
@@ -14,5 +15,9 @@ export default function Dashboard() {
     }
   }, [router]);
 
-  return <>This is dashboard page</>;
+  return (
+    <>
+      <TimeTrackerContent />
+    </>
+  );
 }

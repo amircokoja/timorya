@@ -6,6 +6,7 @@ import { DashboardIcon } from "@/src/components/icons/sidebar-icons/dashboard-ic
 import { MembersIcon } from "@/src/components/icons/sidebar-icons/members-icon";
 // import { MembersIcon } from "@/src/components/icons/sidebar-icons/members-icon";
 import { ProjectsIcon } from "@/src/components/icons/sidebar-icons/projects-icon";
+import { TimeTrackerIcon } from "@/src/components/icons/sidebar-icons/time-tracker-icon";
 import { JSX } from "react";
 // import { ReportsIcon } from "@/src/components/icons/sidebar-icons/reports-icon";
 // import { SettingsIcon } from "@/src/components/icons/sidebar-icons/settings-icon";
@@ -32,6 +33,11 @@ export const GeneralSidebarGroup: SidebarGroupType = {
       label: "Dashboard",
       icon: DashboardIcon,
       href: "/app/dashboard",
+    },
+    {
+      label: "Time tracker",
+      icon: TimeTrackerIcon,
+      href: "/app/time-tracker",
     },
     {
       label: "Calendar",

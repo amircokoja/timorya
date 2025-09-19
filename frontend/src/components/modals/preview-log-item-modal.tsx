@@ -1,6 +1,6 @@
 import React from "react";
 import ModalLayout from "../layouts/modal-layout";
-import { formatTime } from "../app/dashboard/utils";
+import { formatTime } from "../app/time-tracker/utils";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import Button from "../ui/button";
 

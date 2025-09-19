@@ -10,13 +10,13 @@ import {
   formatTime,
   getTimeDifferenceInSeconds,
   updateTimeForDate,
-} from "../app/dashboard/utils";
+} from "../app/time-tracker/utils";
 import { TimeLogDto } from "@/src/models/time-logs/time-log-dto";
 import { TimeLogCreateDto } from "@/src/models/time-logs/time-log-create-dto";
 import { errorExtractor } from "@/src/services/error-extractor";
 import { useToastStore } from "@/src/store/toast-store";
 import { useQueryClient } from "@tanstack/react-query";
-import { isValidTimeFormat } from "../app/dashboard/time-logger/utils";
+import { isValidTimeFormat } from "../app/time-tracker/time-logger/utils";
 import { usePost } from "@/src/hooks/use-post";
 
 interface ModalProps {
