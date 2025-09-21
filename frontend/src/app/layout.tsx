@@ -1,5 +1,4 @@
 import { Inter } from "next/font/google";
-import { ThemeModeScript } from "flowbite-react";
 import "./globals.css";
 import Providers from "./providers";
 import { metadata } from "../models/data/metadata";
@@ -14,7 +13,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <ThemeModeScript />
         <title>{String(metadata.title ?? "Timorya | Time Tracking App")}</title>
         <meta
           name="description"

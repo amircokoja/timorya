@@ -5,6 +5,7 @@ import { useToastStore } from "@/src/store/toast-store";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools/production";
+import { ThemeConfig } from "flowbite-react";
 
 const queryClient = new QueryClient();
 export default function Providers({
@@ -35,6 +36,7 @@ export default function Providers({
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeConfig mode="light" dark={false} />
       <Toaster position="top-center" reverseOrder={false} />
       {children}
       {isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}

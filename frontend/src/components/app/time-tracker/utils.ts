@@ -1,4 +1,11 @@
-export const formatSeconds = (totalSeconds: number) => {
+export const formatSeconds = (totalSeconds: number | string) => {
+  if (typeof totalSeconds === "string") {
+    totalSeconds = parseInt(totalSeconds, 10);
+  }
+  if (isNaN(totalSeconds) || totalSeconds < 0) {
+    return "00:00:00";
+  }
+
   const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
   const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
   const secs = String(totalSeconds % 60).padStart(2, "0");

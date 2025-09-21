@@ -1,0 +1,63 @@
+.custom-tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  box-shadow: 0px 1px 5px 0px #706f6f0d;
+  z-index: 9999 !important;
+
+  .tooltip-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .tooltip-label {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .tooltip-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+.legend-bar {
+  height: 10px;
+  width: 15px;
+  border-radius: 2px;
+}
+
+.custom-bar-legend {
+  padding: 15px 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    p {
+      color: gray !important;
+    }
+  }
+
+  .legend-bar {
+    height: 12px;
+    width: 18px;
+  }
+}
