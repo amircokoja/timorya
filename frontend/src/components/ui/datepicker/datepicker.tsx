@@ -12,7 +12,6 @@ const DatePicker: React.FC<Props> = ({ startDate, endDate, onChange }) => {
   return (
     <>
       <ReactDatePicker
-        className="timorya-datepicker"
         selected={startDate}
         calendarStartDay={1}
         onChange={onChange}

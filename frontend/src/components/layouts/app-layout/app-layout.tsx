@@ -79,7 +79,7 @@ export default function AppLayout({ children }: Props) {
           isSidebarOpen={isSidebarOpen}
         />
         <div className="flex flex-1 bg-gray-100 p-2 md:p-5">
-          <div className="flex flex-1 flex-col overflow-auto rounded-lg border border-gray-200 bg-white p-2 md:p-8">
+          <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-gray-200 bg-white p-2 md:p-8">
             {children}
           </div>
         </div>
